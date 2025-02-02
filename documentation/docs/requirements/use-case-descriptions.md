@@ -6,12 +6,12 @@ sidebar_position: 5
 
 ## Use Case 1 - ChatBot Question and Answer System
 
-Users should have the ability to ask the chatbot questions related to bioinformatics for adequate responses.
+Users should have the ability to ask the chatbot questions related to bioinformatics and receive adequate responses.
 
-1. The user clicks on the web link to access our front page.
+1. The user clicks on the web link to access the front page.
 2. A question is inputted into the chatbox.
 3. The chatbot processes the question to understand how to answer.
-4. The chatbot determines the answer by the following criteria:
+4. The chatbot determines the answer using the following criteria:
 
     - If the answer is found in the documentation:
         - A tutorial will pop up with the method of choice for the user to use for his or her Bioinformatics Research.
@@ -44,7 +44,7 @@ sequenceDiagram
 
 ## Use Case 2 - Downloading Conversation
 
-As a user, I should have the functionality of downloading the conversation between myself and the chatbot to reference at a later date.
+The user should have the functionality of downloading the conversation between her and the chatbot to reference at a later date.
 
 1. A conversation between the user and the chatbot has finished.
 
@@ -52,7 +52,7 @@ As a user, I should have the functionality of downloading the conversation betwe
 
 3. A notification appears on the screen that the download is ready to be saved to the user's computer.
 
-4. The user presses the "Save" button to save the history of the conversation with the chatbot file to their device.
+4. The user presses the "Save" button to save the history of the conversation with the chatbot file to his device.
 
 ```mermaid
 sequenceDiagram
@@ -112,7 +112,7 @@ sequenceDiagram
 ```
 ## Use Case 4 - Edit Queue/Resend
 
-As a user, I should be allowed to modify previously sent messages or resend messages for another response.
+Users should be able to modify previously sent messages or resend messages for another response.
 
 1. The chatbot gave an answer that the user was unsatisfied with.
 2. The user highlights the question asked.

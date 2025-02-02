@@ -19,13 +19,10 @@ sidebar_position: 4
 
 #### 2. Chat History
 
-- Description: Users can view past conversations and revisit previous messages.
+- Description: Users can view previous messages from the current session by scrolling up.
 - Requirements:
-    - Store conversation history in database.
-    - Display a list of past chats with timestamps.
-    - Allow users to click and restore previous sessions.
-    - Implement pagination or search functionality for long histories.
-
+    - Display a list of previous questions and answers with timestamps from within a session.
+    - Implement pagination or search functionality for long chats.
 
 #### 3. Edit Query / Resend
 - Description: Users can modify and resend a previous message instead of typing it again.
