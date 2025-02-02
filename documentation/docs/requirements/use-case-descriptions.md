@@ -6,14 +6,14 @@ sidebar_position: 5
 
 ## Use Case 1 - ChatBot Question and Answer System
 
-Users should have the ability to ask the chatbot questions related to bioinformatics for adequate responces.
+Users should have the ability to ask the chatbot questions related to bioinformatics for adequate responses.
 
-1. The user clicks on the weblink and is brought to our website's front page.
+1. The user clicks on the web link to access our front page.
 2. A question is inputted into the chatbox.
 3. The chatbot processes the question to understand how to answer.
 4. The chatbot determines the answer by the following criteria:
 
-    - If the answer is found from the documentation:
+    - If the answer is found in the documentation:
         - A tutorial will pop up with the method of choice for the user to use for his or her Bioinformatics Research.
 
     - If the answer is not found in the documentation:
@@ -22,19 +22,19 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 
 ## Use Case 2 - Downloading Conversation
 
-As a user, I should have the functionality of downloading the conversation between myself and the chatbot to refrence at a later date.
+As a user, I should have the functionality of downloading the conversation between myself and the chatbot to reference at a later date.
 
-1. A conversation between the user and chatbot has finished.
+1. A conversation between the user and the chatbot has finished.
 
-2. The user selects the "Download Conversation" button and decides which format (.pdf, .txt, .md, etc) to save the file as.
+2. The user selects the "Download Conversation" button and decides which format (.pdf, .txt, .md, etc) to save the file in.
 
 3. A notification appears on the screen that the download is ready to be saved to the user's computer.
 
-4. The user presses the "Save" button to save the history of the converstation with the chatbot file to their device.
+4. The user presses the "Save" button to save the history of the conversation with the chatbot file to their device.
 
 ## Use Case 3 - Chat History
 
-Users shoud be able view previous conversations with the chatbot.
+Users should be able to view previous conversations with the chatbot.
 
 1. The chatbot and the user are currently in conversation with one another.
 2. The user navigates to the scroll bar.
@@ -45,10 +45,10 @@ Users shoud be able view previous conversations with the chatbot.
 As a user, I should be allowed to modify previously sent messages or resend messages for another response.
 
 1. The chatbot gave an answer that the user was unsatisfied with.
-2. The user highlights over the question asked.
+2. The user highlights the question asked.
 3. He or she selects the edit icon.
-4. The user has the option to update the messaage before resending.
-5. The user clicks send and the chatbot reanwers the question.
+4. The user has the option to update the message before resending.
+5. The user clicks send and the chatbot answers the question.
 
 ## Use Case 5 - New/clear Chat
 
