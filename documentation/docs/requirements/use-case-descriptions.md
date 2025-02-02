@@ -19,6 +19,28 @@ Users should have the ability to ask the chatbot questions related to bioinforma
     - If the answer is not found in the documentation:
         - The chatbot will say "I don't know" as an answer for the user.
 
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot
+    participant C as Database
+    
+    
+    A->>B: Connect to the App
+    activate B
+    A->>B: Ask a question
+    B->>C: Queries data
+    alt data found
+        C-->>B: Returns information
+        B-->>A: Sends reponse
+    else data not found
+        C-->>B: return null
+        B-->>A: display "I dont know"
+    end    
+    
+    deactivate B
+```
+
 
 ## Use Case 2 - Downloading Conversation
 
@@ -32,6 +54,27 @@ As a user, I should have the functionality of downloading the conversation betwe
 
 4. The user presses the "Save" button to save the history of the converstation with the chatbot file to their device.
 
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot
+    participant C as Database
+    
+    
+    A->>B: Connect to the App
+    activate B
+    A->>B: Ask a question
+    B->>C: Queries data
+    C-->>B: Returns information
+    B-->>A: Sends response
+
+    A->>B: Start download process
+    B->>C: initiate phrasing process
+    C-->>B: Send back requested file to Chatbox
+    B-->>A: display download link
+    deactivate B
+```
+
 ## Use Case 3 - Chat History
 
 Users shoud be able view previous conversations with the chatbot.
@@ -40,6 +83,33 @@ Users shoud be able view previous conversations with the chatbot.
 2. The user navigates to the scroll bar.
 3. He or she moves the bar up or down so that the past conversations are shown on the screen.
 
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot
+    participant C as Database
+    
+    
+    A->>B: Connect to the App
+    activate B
+    loop interacting with bot
+        A->>B: Ask a question
+        B->>C: Queries data
+        C-->>B: Returns information
+        B-->>A: Sends response
+    end
+    A->>B: close tab/ disconnect from session
+    deactivate B
+
+    A->>B: Reconnect
+    activate B
+    B->>C: retrieve previous queries
+    C-->>B: return previous conversation related to account
+    B-->>A: display previous conversation
+    
+
+    deactivate B
+```
 ## Use Case 4 - Edit Queue/Resend
 
 As a user, I should be allowed to modify previously sent messages or resend messages for another response.
@@ -49,6 +119,30 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 3. He or she selects the edit icon.
 4. The user has the option to update the messaage before resending.
 5. The user clicks send and the chatbot reanwers the question.
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot
+    participant C as Database
+    
+    
+    A->>B: Connect to the App
+    activate B
+    
+    A->>B: Ask a question
+    activate A
+    B->>C: Queries data
+    C-->>B: Returns information
+    B-->>A: Sends response
+    A->>B: Fixing entered entries
+    B->>C: Queries data
+    C-->>B: Returns information
+    B-->>A: send response
+    Note over A,B: delete pre fixing entries and displaying new one
+    deactivate A
+    A->>B: close tab/ disconnect from session
+    deactivate B
+```
 
 ## Use Case 5 - New/clear Chat
 
