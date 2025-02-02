@@ -24,7 +24,7 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 
 As a user, I should have the functionality of downloading the conversation between myself and the chatbot to refrence at a later date.
 
-1. A conversation between the user and chatbot. has finished
+1. A conversation between the user and chatbot has finished.
 
 2. The user selects the "Download Conversation" button and decides which format (.pdf, .txt, .md, etc) to save the file as.
 
@@ -52,8 +52,8 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 
 ## Use Case 5 - New/clear Chat
 
-Users should have the ability to create a new chat with the chatbot
+Users should have the ability to create a new chat with the chatbot.
 
-1. The user selects the "New Chat" button
-2. An alert message pops up on the screen stating "Creating a new chat also clears the chat. Do you with to continue?".
+1. The user selects the "New Chat" button.
+2. An alert message pops up on the screen stating "Creating a new chat also clears the chat. Do you wish to continue?".
 3. The user selects yes, and the chat is cleared to start a new conversation.
