@@ -175,8 +175,8 @@ Users should have the ability to create a new chat with the chatbot.
 3. The user selects yes, and the chat is cleared to start a new conversation.
 
 ### Diagrams   
-![Figure 9: ChatBot downloading conversation System](../../static/img/history.png)  
-*Figure 9: ChatBot viewing history System*
+![Figure 9: ChatBot open new chat System](../../static/img/newchat.png)  
+*Figure 9: ChatBot open new chat System*
 ```mermaid
 sequenceDiagram
     actor A as User
@@ -209,4 +209,4 @@ sequenceDiagram
     deactivate C
     
 ```
-*Figure 10: ChatBot Question and Answer System Sequence Diagram*
+*Figure 10: ChatBot open new chat System Sequence Diagram*
