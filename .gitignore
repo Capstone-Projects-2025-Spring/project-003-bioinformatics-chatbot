@@ -1,6 +1,8 @@
 # Generated files
 .docusaurus
 
+*.env
+
 # Misc
 .DS_Store
 .env.local
