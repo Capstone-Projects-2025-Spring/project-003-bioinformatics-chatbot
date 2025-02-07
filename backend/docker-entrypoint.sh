@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+# we will need this later just ignore it for now :)
 #while true; do
 #   flask db upgrade
 #   if [[ "$?" == "0" ]]; then
@@ -10,9 +10,14 @@
 #   sleep 5
 #done
 
+# some variables for flask
+# app entrypont
 export FLASK_APP=app
+# debug mode for development
 export FLASK_DEBUG=1
+# host ip
 export FLASK_RUN_HOST=0.0.0.0
+# port number
 export FLASK_RUN_PORT=444
 
 exec python3 -m flask run
