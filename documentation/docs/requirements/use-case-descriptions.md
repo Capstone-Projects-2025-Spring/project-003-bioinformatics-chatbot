@@ -31,7 +31,10 @@ sequenceDiagram
     
     
     A->>B: Connect to the App
+    
     activate B
+    B->>C: Starting backend
+    activate C
     A->>B: Ask a question
     B->>C: Queries data
     alt data found
@@ -41,7 +44,7 @@ sequenceDiagram
         C-->>B: return null
         B-->>A: display "I dont know"
     end    
-    
+    deactivate C
     deactivate B
 ```
 *Figure 2: ChatBot Question and Answer System Sequence Diagram*
@@ -69,7 +72,10 @@ sequenceDiagram
     
     
     A->>B: Connect to the App
+    
     activate B
+    B->>C: Starting backend
+    activate C
     A->>B: Ask a question
     B->>C: Queries data
     C-->>B: Returns information
@@ -80,6 +86,7 @@ sequenceDiagram
     C-->>B: Send back requested file to Chatbox
     B-->>A: display download link
     deactivate B
+    deactivate C
 ```
 *Figure 4: ChatBot Question and Answer System Sequence Diagram*
 ## Use Case 3 - Chat History
@@ -100,7 +107,10 @@ sequenceDiagram
     
     
     A->>B: Connect to the App
+    
     activate B
+    B->>C: Starting backend
+    activate C
     loop interacting with bot
         A->>B: Ask a question
         B->>C: Queries data
@@ -113,6 +123,7 @@ sequenceDiagram
     C-->>B: return previous conversation in current session
     B-->>A: display previous conversation
     deactivate B
+    deactivate C
 ```
 *Figure 6: ChatBot Question and Answer System Sequence Diagram*
 ## Use Case 4 - Edit Queue/Resend
@@ -122,7 +133,7 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 1. The chatbot gave an answer that the user was unsatisfied with.
 2. The user highlights over the question asked.
 3. He or she selects the edit icon.
-4. The user has the option to update the messaage before resending.
+4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
 ### Diagrams   
 ![Figure 7: ChatBot re-edit/ re-send queries System](../../static/img/resending.png)  
@@ -135,10 +146,12 @@ sequenceDiagram
     
     
     A->>B: Connect to the App
-    activate B
     
+    activate B
+    B->>C: Starting backend
+    activate C
     A->>B: Ask a question
-    activate A
+    
     B->>C: Queries data
     C-->>B: Returns information
     B-->>A: Sends response
@@ -147,9 +160,9 @@ sequenceDiagram
     C-->>B: Returns information
     B-->>A: send response
     Note over A,B: delete pre fixing entries and displaying new one
-    deactivate A
-    A->>B: close tab/ disconnect from session
+    
     deactivate B
+    deactivate C
 ```
 *Figure 8: ChatBot re-edit/ re-send queries System Sequence Diagram*
 
@@ -160,3 +173,40 @@ Users should have the ability to create a new chat with the chatbot.
 1. The user selects the "New Chat" button.
 2. An alert message pops up on the screen stating "Creating a new chat also clears the chat. Do you wish to continue?".
 3. The user selects yes, and the chat is cleared to start a new conversation.
+
+### Diagrams   
+![Figure 9: ChatBot downloading conversation System](../../static/img/history.png)  
+*Figure 9: ChatBot viewing history System*
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot
+    participant C as Database
+    
+    
+    A->>B: Connect to the App
+    B->>C: Starting backend
+    activate B
+    activate C
+    loop interacting with bot
+        A->>B: Ask a question
+        B->>C: Queries data
+        C-->>B: Returns information
+        B-->>A: Sends response
+    end
+    A->>B: New Chat button click
+    B->>C: Disconnecting Signal
+    deactivate C
+
+    B-->>A: Reconnect confirmation text
+    
+    deactivate B
+    A->>B: Reconnect
+    activate B
+    deactivate B
+    B->>C: Starting backend
+    activate C
+    deactivate C
+    
+```
+*Figure 10: ChatBot Question and Answer System Sequence Diagram*
