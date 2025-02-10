@@ -1,0 +1,17 @@
+
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    ports:
+      - "444:444"
+    env_file:
+      - ./backend/.env
+    
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/
+          target: /app
+

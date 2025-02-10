@@ -3,6 +3,6 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "The goals of Bioinformatics Chatbot is to provide researchers with a useful AI chatbot that answers inquiries based on provided documentation. Key functionalities include the ability for users to ask queries and recieve valueable information provided by the given documentation, download chat history, and have the AI provide more more critical responses when prompted by the user. Critical constraints include the Chatbot should be free to use. Below are the complete list of features, requirements, diagrams, and use-case descriptions for the project."
+    "description": "The goals of the Bioinformatics Chatbot is to provide researchers with a useful AI chatbot that answers inquiries based on the provided documentation. Key functionalities include the ability for users to ask questions and receive valuable information derived from the given documentation, download chat history, and prompt the AI for more critical, detailed responses. A key constraint is that the Chatbot must be free to use. Below are the complete list of features, requirements, diagrams, and use-case descriptions for the project."
   }
 }
