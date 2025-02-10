@@ -7,7 +7,7 @@ sidebar_position: 1
 ## __Overview__
 ```mermaid
 classDiagram
-direction BT
+direction TT
 	namespace Frontend {
         class Homepage {
 	        +display()
@@ -27,7 +27,6 @@ direction BT
         class User {
 	        +String query_input
 	        +String edit_query_input
-	        +Doc Bioinfo
 	        +edit_query(query_input, edit_query_input)
         }
 
@@ -82,6 +81,8 @@ direction BT
     Homepage *-- chat_history
     Textbox *-- send_button
     Textbox *-- download_button
+
+    Chatbot_frontend --> Chatbot_backend
 
     server *-- Chatbot_backend
     server *-- DB_Bioinfo
