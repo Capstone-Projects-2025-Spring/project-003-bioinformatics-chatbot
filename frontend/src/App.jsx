@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { Link } from "react-router";
 
 function App() {
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Home
-    </h1>
-  )
+	return (
+		<div>
+			<h1 className='text-3xl font-bold underline'>Home</h1>
+			<Link to='/chat'>Chat</Link>
+		</div>
+	);
 }
 
-export default App
+export default App;
