@@ -27,7 +27,8 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 sequenceDiagram
     actor A as User
     participant B as ChatBot
-    participant C as Database
+    participant C as Server
+    participant D as LLM
     
     
     A->>B: Connect to the App
@@ -38,11 +39,15 @@ sequenceDiagram
     A->>B: Ask a question
     B->>C: Queries data
     alt data found
-        C-->>B: Returns information
+        C->>D: Send retrieved documents
+        D-->>C: Return generated answer
+        C-->>B: Returns answer
         B-->>A: Sends reponse
     else data not found
-        C-->>B: return null
-        B-->>A: display "I dont know"
+        C->>D: Send not found documents signal
+        D-->>C: Return generated "I don't know"
+        C-->>B: Return "I don't know"
+        B-->>A: Display "I dont know"
     end    
     deactivate C
     deactivate B
@@ -68,7 +73,8 @@ As a user, I should have the functionality of downloading the conversation betwe
 sequenceDiagram
     actor A as User
     participant B as ChatBot
-    participant C as Database
+    participant C as Server
+    participant D as LLM
     
     
     A->>B: Connect to the App
@@ -78,12 +84,12 @@ sequenceDiagram
     activate C
     A->>B: Ask a question
     B->>C: Queries data
+    C->>D: Send retrieved document
+    D-->>C: return generated answer
     C-->>B: Returns information
     B-->>A: Sends response
 
     A->>B: Start download process
-    B->>C: initiate phrasing process
-    C-->>B: Send back requested file to Chatbox
     B-->>A: display download link
     deactivate B
     deactivate C
@@ -103,7 +109,8 @@ Users shoud be able view previous conversations with the chatbot.
 sequenceDiagram
     actor A as User
     participant B as ChatBot
-    participant C as Database
+    participant C as Server
+    participant D as LLM
     
     
     A->>B: Connect to the App
@@ -111,19 +118,27 @@ sequenceDiagram
     activate B
     B->>C: Starting backend
     activate C
-    loop interacting with bot
-        A->>B: Ask a question
-        B->>C: Queries data
-        C-->>B: Returns information
-        B-->>A: Sends response
-    end
-    A->>B: Scroll upward
     
-    B->>C: retrieve previous queries
-    C-->>B: return previous conversation in current session
+    A->>B: Ask a question
+    B->>C: Queries data
+    C->>D: Send retrieved document
+    D-->>C: return generated answer
+    C-->>B: Returns answer
+    B-->>A: Sends response
+    
+
+    loop History chat interaction
+    A->>B: Ask a question
+    
+    B->>C: Queries data
+    C->>D: Send retrieved documents with chat history
+    D-->>C: Return generated answer
+    C-->>B: Return Answer
     B-->>A: display previous conversation
     deactivate B
     deactivate C
+    end
+
 ```
 *Figure 6: ChatBot Question and Answer System Sequence Diagram*
 ## Use Case 4 - Edit Queue/Resend
@@ -142,8 +157,8 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 sequenceDiagram
     actor A as User
     participant B as ChatBot
-    participant C as Database
-    
+    participant C as Server
+    participant D as LLm
     
     A->>B: Connect to the App
     
@@ -153,11 +168,15 @@ sequenceDiagram
     A->>B: Ask a question
     
     B->>C: Queries data
-    C-->>B: Returns information
+    C->>D: Send retrieved document
+    D-->>C: return generated answer
+    C-->>B: Returns answer
     B-->>A: Sends response
     A->>B: Fixing entered entries
     B->>C: Queries data
-    C-->>B: Returns information
+    C->>D: Send retrieved document
+    D-->>C: return generated answer
+    C-->>B: Returns answer
     B-->>A: send response
     Note over A,B: delete pre fixing entries and displaying new one
     
@@ -181,7 +200,8 @@ Users should have the ability to create a new chat with the chatbot.
 sequenceDiagram
     actor A as User
     participant B as ChatBot
-    participant C as Database
+    participant C as Server
+    participant D as LLM
     
     
     A->>B: Connect to the App
@@ -191,11 +211,13 @@ sequenceDiagram
     loop interacting with bot
         A->>B: Ask a question
         B->>C: Queries data
-        C-->>B: Returns information
+        C->>D: Send retrieved document
+        D-->>C: return generated answer
+        C-->>B: Returns answer
         B-->>A: Sends response
     end
     A->>B: New Chat button click
-    B->>C: Disconnecting Signal
+    
     deactivate C
 
     B-->>A: Reconnect confirmation text
@@ -203,10 +225,11 @@ sequenceDiagram
     deactivate B
     A->>B: Reconnect
     activate B
-    deactivate B
+    
     B->>C: Starting backend
     activate C
     deactivate C
+    deactivate B
     
 ```
 *Figure 10: ChatBot open new chat System Sequence Diagram*
