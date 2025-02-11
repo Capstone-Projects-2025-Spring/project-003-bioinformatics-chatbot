@@ -20,7 +20,7 @@ Users should have the ability to ask the chatbot questions related to bioinforma
         - The chatbot will say "I don't know" as an answer for the user.
 ### Diagrams      
 
-![Figure 1: ChatBot Question and Answer System](../../static/img/Send_reedit.png)  
+![Figure 1: ChatBot Question and Answer System](../../static/img/chatandanswer.png)  
 *Figure 1: ChatBot Question and Answer System*
 
 ```mermaid
@@ -67,7 +67,7 @@ As a user, I should have the functionality of downloading the conversation betwe
 
 4. The user presses the "Save" button to save the history of the converstation with the chatbot file to their device.
 ### Diagrams   
-![Figure 3: ChatBot downloading conversation System](../../static/img/download.png)  
+![Figure 3: ChatBot downloading conversation System](../../static/img/Downloadrevise.png)  
 *Figure 3: ChatBot Question and Answer System*
 ```mermaid
 sequenceDiagram
@@ -97,13 +97,13 @@ sequenceDiagram
 *Figure 4: ChatBot Question and Answer System Sequence Diagram*
 ## Use Case 3 - Chat History
 
-Users shoud be able view previous conversations with the chatbot.
+Users shoud be able view previous conversations with the chatbot and ask new question. New question with answer will use previous queries for refrencing.
 
 1. The chatbot and the user are currently in conversation with one another.
 2. The user navigates to the scroll bar.
 3. He or she moves the bar up or down so that the past conversations are shown on the screen.
 ### Diagrams   
-![Figure 5: ChatBot downloading conversation System](../../static/img/history.png)  
+![Figure 5: ChatBot downloading conversation System](../../static/img/historyrevise.png)  
 *Figure 5: ChatBot viewing history System*
 ```mermaid
 sequenceDiagram
@@ -151,7 +151,7 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
 ### Diagrams   
-![Figure 7: ChatBot re-edit/ re-send queries System](../../static/img/historyrevise.png)  
+![Figure 7: ChatBot re-edit/ re-send queries System](../../static/img/Resendrevise.png)  
 *Figure 7: ChatBot re-edit/ re-send queries System*
 ```mermaid
 sequenceDiagram
@@ -194,7 +194,7 @@ Users should have the ability to create a new chat with the chatbot.
 3. The user selects yes, and the chat is cleared to start a new conversation.
 
 ### Diagrams   
-![Figure 9: ChatBot open new chat System](../../static/img/newchat.png)  
+![Figure 9: ChatBot open new chat System](../../static/img/newchatrevise.png)  
 *Figure 9: ChatBot open new chat System*
 ```mermaid
 sequenceDiagram
