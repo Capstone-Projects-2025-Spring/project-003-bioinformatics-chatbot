@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ChatBox from "../Components/chatBox";
 import UserBubble from "../Components/userBubble";
 import ResponseBubble from "../Components/responseBubble";
@@ -10,6 +10,8 @@ function Chat() {
 
 	// State for storing the messages to display in the messages container
 	const [messages, setMessages] = useState([]);
+
+	const messagesEndRef = useRef(null);
 
 	// State for managing any error messages that need to be shown
 	const [error, setError] = useState({
@@ -42,6 +44,11 @@ function Chat() {
 		setInput("");
 	};
 
+	// Auto-scroll to bottom when messages update
+	useEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [messages]);
+
 	return (
 		<div className='w-full h-screen flex flex-col'>
 			{/* Conditionally render the ErrorBox component if there's an error */}
@@ -61,8 +68,8 @@ function Chat() {
 						<ResponseBubble key={msg.id} text={msg.text} />
 					)
 				)}
+				<div ref={messagesEndRef} />
 			</div>
-
 			{/* Chat input form */}
 			<div className='w-full'>
 				<ChatBox
