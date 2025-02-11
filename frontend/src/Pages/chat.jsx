@@ -11,71 +11,79 @@ function Chat() {
 	// State for storing the messages to display in the messages container
 	const [messages, setMessages] = useState([]);
 
+	// Ref to the bottom of the messages list for auto-scrolling
 	const messagesEndRef = useRef(null);
 
 	// State for managing any error messages that need to be shown
 	const [error, setError] = useState({
-		title: "", // The title of the error
-		body: "", // The body of the error message
+		title: "",
+		body: "",
 	});
 
-	// handleSubmit function will be triggered when the user submits the form (by pressing Enter or clicking the send button)
-	const handleSubmit = (e) => {
-		e.preventDefault(); // Prevent the default form submit behavior (which would reload the page)
+	// Load messages from sessionStorage on component mount
+	useEffect(() => {
+		const savedMessages = sessionStorage.getItem("messages");
+		if (savedMessages) {
+			setMessages(JSON.parse(savedMessages)); // Parse and set the messages
+		}
+	}, []);
 
-		// Error handling: Check if the input is empty (Sample Example for now)
+	// Handle form submission for adding new messages
+	const handleSubmit = (e) => {
+		e.preventDefault(); // Prevent the default form submission behavior (which would reload the page)
 		if (!input.trim()) {
-			// Set an error message if the input is empty
+			// Error handling: If the input is empty, set an error message
 			setError({
 				title: "Empty Query",
 				body: "ChatBox cannot be empty during submission",
 			});
 			return;
 		}
-		// Api call will go here
-		// If there is no error (i.e., input is valid), proceed with adding the new messages
+		// If input is valid, add new messages (a Question and a dummy Response)
 		setMessages([
-			...messages, // Spread the previous messages
-			{ id: Date.now(), text: input, type: "Question" }, // Add the user's input as a "Question" message
-			{ id: Date.now(), text: "I am disconnected", type: "Response" }, // Add a dummy "Response" message as a placeholder
+			...messages,
+			{ id: Date.now(), text: input, type: "Question" },
+			{ id: Date.now(), text: "I am disconnected", type: "Response" },
 		]);
-
-		// Clear the input field after submitting the message
+		// Clear the input field after submission
 		setInput("");
 	};
 
-	// Auto-scroll to bottom when messages update
+	// Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes
 	useEffect(() => {
+		if (messages.length > 0) {
+			sessionStorage.setItem("messages", JSON.stringify(messages));
+		}
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
 	return (
 		<div className='w-full h-screen flex flex-col'>
-			{/* Conditionally render the ErrorBox component if there's an error */}
+			{/* Conditionally render the ErrorBox if there is an error */}
 			{error.title && (
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
 			{/* Chat messages container */}
 			<div className='flex-1 overflow-y-auto p-4 space-y-2 pb-20'>
-				{/* Render the messages dynamically based on their type */}
+				{/* Render messages dynamically based on their type */}
 				{messages.map((msg) =>
 					msg.type === "Question" ? (
-						// If the message type is "Question", display it using the UserBubble component
 						<UserBubble key={msg.id} text={msg.text} />
 					) : (
-						// If the message type is "Response", display it using the ResponseBubble component
 						<ResponseBubble key={msg.id} text={msg.text} />
 					)
 				)}
+				{/* A dummy div to scroll into view */}
 				<div ref={messagesEndRef} />
 			</div>
+
 			{/* Chat input form */}
 			<div className='w-full'>
 				<ChatBox
-					input={input} // Current value of the input field
-					setInput={setInput} // Function to update the input field
-					handleSubmit={handleSubmit} // Function to handle message submission
+					input={input}
+					setInput={setInput}
+					handleSubmit={handleSubmit}
 				/>
 			</div>
 		</div>
