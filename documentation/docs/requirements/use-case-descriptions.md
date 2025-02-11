@@ -151,14 +151,14 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
 ### Diagrams   
-![Figure 7: ChatBot re-edit/ re-send queries System](../../static/img/resending.png)  
+![Figure 7: ChatBot re-edit/ re-send queries System](../../static/img/historyrevise.png)  
 *Figure 7: ChatBot re-edit/ re-send queries System*
 ```mermaid
 sequenceDiagram
     actor A as User
     participant B as ChatBot
     participant C as Server
-    participant D as LLm
+    participant D as LLM
     
     A->>B: Connect to the App
     
