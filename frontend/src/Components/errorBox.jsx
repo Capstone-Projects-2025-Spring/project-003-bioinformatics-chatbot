@@ -10,7 +10,7 @@ ErrorBox.propTypes = {
 export default function ErrorBox({ title, body, setError }) {
 	return (
 		<div
-			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg shadow-lg z-50'
+			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-errorBg text-orange-700 p-4 rounded-lg shadow-lg z-50'
 			role='alert'>
 			<div className='flex items-center justify-between'>
 				<div>
