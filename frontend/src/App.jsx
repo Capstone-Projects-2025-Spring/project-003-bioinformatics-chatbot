@@ -1,10 +1,19 @@
 import { Link } from "react-router";
+import './App.css';
+import BioGPTImage from './images/BioGPT.png'; // Correctly import the image
 
 function App() {
 	return (
-		<div>
-			<h1 className='text-3xl font-bold underline'>Home</h1>
-			<Link to='/chat'>Chat</Link>
+		<div className="Container">
+			<div className="LeftHalf">
+				<h1 className='Home'>Bioinformatics RAG Chatbot</h1>
+				<div className="Chat">
+					<Link to='/chat'>Begin New Chat</Link>
+				</div>
+			</div>
+			<div className="RightHalf">
+				<img src={BioGPTImage} alt="Description" className="CenteredImage" />
+			</div>
 		</div>
 	);
 }
