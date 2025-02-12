@@ -20,6 +20,7 @@ export default function ErrorBox({ title, body, setError }) {
 				{/* Button to dismiss the error message */}
 				<button
 					className='text-orange-700 hover:text-orange-900'
+					data-testid='closeButton'
 					onClick={() => setError({ title: "", body: "" })} // When clicked, reset the error state
 				>
 					&times; {/* The "×" symbol for the close button */}
