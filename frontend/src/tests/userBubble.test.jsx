@@ -4,7 +4,10 @@ import "@testing-library/jest-dom/vitest";
 import UserBubble from "../Components/userBubble";
 
 describe("UserBubble Component", () => {
+	// Clean up the DOM after each test to prevent side effects
 	afterEach(cleanup);
+
+	// Test if the UserBubble component displays given text
 	it("renders with text", () => {
 		render(<UserBubble text={"Test Response Bubble"} />);
 

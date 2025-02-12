@@ -13,17 +13,21 @@ export default function ChatBox({ input, setInput, handleSubmit }) {
 		<form
 			className='flex items-center gap-2 w-full'
 			onSubmit={handleSubmit}
-			data-testid='form'>
+			data-testid='form' // This attribute is for testing to identify the form
+		>
 			{/* Input field for the user to type their message or question */}
 			<input
-				data-testid='input'
+				data-testid='input' // This attribute is for testing to identify the input
 				type='text'
 				placeholder='Ask a question'
 				value={input} // The value of the input field is controlled by the `input` prop
 				onChange={(e) => setInput(e.target.value)} // Calls `setInput` to update the input state as the user types
 				className='w-full py-2 pl-4 pr-10 border rounded-lg'
 			/>
-			<button type='submit' data-testid='submitButton'>
+			<button
+				type='submit'
+				data-testid='submitButton' // This attribute is for testing to identify the submit button
+			>
 				🚀
 			</button>
 		</form>
