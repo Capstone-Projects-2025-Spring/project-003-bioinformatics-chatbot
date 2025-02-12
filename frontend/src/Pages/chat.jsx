@@ -32,7 +32,7 @@ function Chat() {
 	const handleSubmit = (e) => {
 		e.preventDefault(); // Prevent the default form submission behavior (which would reload the page)
 		if (!input.trim()) {
-			// Error handling: If the input is empty, set an error message
+			// Error handling: If the input is empty, set an error message (to be updated)
 			setError({
 				title: "Empty Query",
 				body: "ChatBox cannot be empty during submission",
@@ -40,11 +40,18 @@ function Chat() {
 			return;
 		}
 		// If input is valid, add new messages (a Question and a dummy Response)
-		setMessages([
-			...messages,
-			{ id: Date.now(), text: input, type: "Question" },
-			{ id: Date.now(), text: "I am disconnected", type: "Response" },
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ id: prevMessages.length, text: input, type: "Question" },
 		]);
+
+		// API call will go here
+
+		setMessages((prevMessages) => [
+			...prevMessages,
+			{ id: prevMessages.length, text: "I am disconnected", type: "Response" },
+		]);
+
 		// Clear the input field after submission
 		setInput("");
 	};
