@@ -42,8 +42,8 @@ describe("ChatBox Component", () => {
 		);
 
 		// Select the input element and verify its value
-		const inputElement = screen.getByTestId("input");
-		expect(inputElement.value).toBe("Test value");
+		const inputField = screen.getByTestId("input");
+		expect(inputField.value).toBe("Test value");
 	});
 
 	// Test if typing in the input field correctly updates the value using setInput function
