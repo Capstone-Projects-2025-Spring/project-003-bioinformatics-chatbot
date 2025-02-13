@@ -13,12 +13,14 @@ def index():
     Description: Sample route, currently index endpoint.
     """
 
-    # how to make a simple query
+    # how to make a simple query, "from user select first where username is admin"
     user = User.query.filter_by(username="admin").first()
+    # if user returns as None we create the admin user. (this is just an example we should crate a py script to do this upon docker build)
     if not user:
         user = User(username="admin")
         user.set_password("password")
         db.session.add(user)
         db.session.commit()
 
+    # rendering a template and passing in the user as user
     return render_template("main/index.html", user=user)
