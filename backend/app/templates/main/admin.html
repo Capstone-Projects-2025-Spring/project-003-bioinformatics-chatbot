@@ -1,0 +1,10 @@
+{% extends "core/base.html" %} {% block content %}
+<h1>You are logged in</h1>
+<h2>User: {{user.username}}</h2>
+
+<!-- Logout button -->
+<a href="{{ url_for('main.logout') }}" class="btn btn-danger">Logout</a>  
+
+<h2>Not implement yet</h2>
+<button type="submit">Add Documents</button>
+{% endblock %}
