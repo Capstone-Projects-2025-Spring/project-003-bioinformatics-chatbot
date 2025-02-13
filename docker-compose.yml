@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - "444:444"
+    depends_on:
+      - database
     env_file:
       - ./backend/.env
     
@@ -14,4 +16,12 @@ services:
         - action: sync+restart
           path: ./backend/
           target: /app
+          
+  database:
+    image: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./backend/database.env
+
 
