@@ -73,12 +73,12 @@ Docker Desktop
 - Allows the user to run applications in an isolated environment
 - OS friendly
 
-## Static code analysis tool
+## Static Code Analysis Tool
 ESLint
 - Finds issues in code such as unused variables, syntax errors, etc
 - Fixes errors automatically allowing the user to run code with slight errors 
 
-## Opinionated code formatter
+## Opinionated Code Formatter
 Prettier
 - Ensure that all indention and spacing are kept consistent throughout the code
 
