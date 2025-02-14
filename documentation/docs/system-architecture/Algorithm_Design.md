@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Algorithm Description
 
 ## Indexing
@@ -16,7 +20,7 @@ In order to meaningfully map a user's input to the indexed documents, or knowled
 
 In a similar fashion to document tokenization, the user's query has to be tokenized into individual words of significance, and filler words such as "is" and "a" can be removed. Stemming involves reducing words to their most basic form. 
 
---there's also query expansion and contextual analysis, do not know if we should mention these
+*there's also query expansion and contextual analysis, do not know if we should mention these*
 
 Once the query is translated, it will be used to retrieve the most relevant documents. 
 
@@ -26,7 +30,7 @@ Once the query is translated, it will be used to retrieve the most relevant docu
 
 Retrieval uses the indexed documents described previously as a knowledge base. The translated query will then be compared against the indexed documents using a retrieval method.
 
-*Do we know what type of retrieval we plan on using? (Dense, Sparse, etc.)
+*Do we know what type of retrieval we plan on using? (Dense, Sparse, etc.)*
 
 ### Augmentation
 
