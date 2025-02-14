@@ -12,13 +12,19 @@ This is the method we intend on using to index documents for usage.
 
 ## Query Translation
 
-???
+In order to meaningfully map a user's input to the indexed documents, or knowledge base, some form of query translation has to occur. The general steps for this include tokenization and stemmining. 
+
+In a similar fashion to document tokenization, the user's query has to be tokenized into individual words of significance, and filler words such as "is" and "a" can be removed. Stemming involves reducing words to their most basic form. 
+
+--there's also query expansion and contextual analysis, do not know if we should mention these
+
+Once the query is translated, it will be used to retrieve the most relevant documents. 
 
 ## Retreival Augmented Generation (RAG)
 
 ### Retreival
 
-Retrieval uses the indexed documents described previously as a knowledge base. 
+Retrieval uses the indexed documents described previously as a knowledge base. The translated query will then be compared against the indexed documents using a retrieval method.
 
 *Do we know what type of retrieval we plan on using? (Dense, Sparse, etc.)
 
