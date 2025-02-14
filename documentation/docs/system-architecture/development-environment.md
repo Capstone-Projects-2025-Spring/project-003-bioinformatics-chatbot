@@ -54,24 +54,38 @@ Jest (Version 29.7.0)
 - Good for unit testing Reat.js code
 
 ## Database
-MySQL
-- Holds revelent information for Chabot
+PostgreSQL
+- Holds relevant information for Chabot
 
 
 ## Technique for LLM
 Retrieval-Augmented Generation (RAG)
-- Allows LLMS to make queries using external documentations and training data
+- Allows LLMs to make queries using external documentation and training data
+  
 ## LLM
 Large Language Model Meta AI (Llama)
 - Autoregressive large language model developed by Meta AI
-- Designed to understand and generate human-like resonses
+- Designed to understand and generate human-like responses
 - Finetuned to chat with users
 
+## Development Environment
+Docker Desktop
+- Allows the user to run applications in an isolated environment
+- OS friendly
+
+## Static code analysis tool
+ESLint
+- Finds issues in code such as unused variables, syntax errors, etc
+- Fixes errors automatically allowing the user to run code with slight errors 
+
+## Opinionated code formatter
+Prettier
+- Ensure that all indention and spacing are kept consistent throughout the code
 
 ## Hardware
 A computer with a modern operating system (Windows, MacOS, Linux)
 
-An up to date web browser, such as:
+An up-to-date web browser, such as:
         - Google Chrome: Version 131 or later
         - Mozilla Firefox: Version 133 or later
         - Microsoft Edge: Version 131 or later 
