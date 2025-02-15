@@ -64,7 +64,7 @@ function Chat() {
 
 		else {
 			// Converts the array from the session storage into a string
-			const conversation  = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n` ,'') 
+			const conversation  = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n` ,'') 
 			// Creates a file object
 			const txtfile = new Blob([conversation], {type: 'text/plain'});
 			// Anchor for the link for downloading
@@ -112,9 +112,11 @@ function Chat() {
 				<div ref={messagesEndRef} />
 			</div>
 			{/* Button for Download */}
-			<button onClick={download}>
-				Download Chat History
-			</button>
+			<div className="flex justify-left">
+  			<button onClick={download} className=" py-2 pl-4 pr-10 border rounded-lg">
+    			Download Chat History 📥
+ 			</button>
+			</div>
             
 			{/* Chat input form */}
 			<div className='w-full'>
