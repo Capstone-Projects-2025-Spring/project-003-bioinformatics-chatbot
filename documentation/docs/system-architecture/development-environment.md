@@ -50,7 +50,7 @@ Postman (Version 11.3.2)
 Pytest (Version 8.3.4)
 - Great for unit testing Python code
 
-Jest (Version 29.7.0)
+Vitest (Version 3.0.5)
 - Good for unit testing Reat.js code
 
 ## Database
