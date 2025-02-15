@@ -56,6 +56,31 @@ function Chat() {
 		setInput("");
 	};
 
+	const download = () =>{
+		// Error handling to make sure that the .txt file is not created if the user has not entered a message
+		if (messages.length == 0){
+			alert("Please have a conversation with the chatbot before downloading.")
+		}
+
+		else {
+			// Converts the array from the session storage into a string
+			const conversation  = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n` ,'') 
+			// Creates a file object
+			const txtfile = new Blob([conversation], {type: 'text/plain'});
+			// Anchor for the link for downloading
+			const element = document.createElement("a");
+			// Creats a URL so that the computer starts the download of the file when clicked
+			element.href = URL.createObjectURL(txtfile);
+			// Name of the file
+			element.download = "ChatHistory.txt";
+			// Allows the action of the download to happen when the button is clicked
+			document.body.appendChild(element);
+			// This actually triggers the download
+			element.click();
+		}
+
+	}
+
 	// Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes
 	useEffect(() => {
 		if (messages.length > 0) {
@@ -63,6 +88,8 @@ function Chat() {
 		}
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
+
+	
 
 	return (
 		<div className='w-full h-screen flex flex-col'>
@@ -84,7 +111,11 @@ function Chat() {
 				{/* A dummy div to scroll into view */}
 				<div ref={messagesEndRef} />
 			</div>
-
+			{/* Button for Download */}
+			<button onClick={download}>
+				Download Chat History
+			</button>
+            
 			{/* Chat input form */}
 			<div className='w-full'>
 				<ChatBox
