@@ -28,6 +28,11 @@ function Chat() {
 		}
 	}, []);
 
+	// Function to handle clicking the edit button
+	const handleEdit = (index) => {
+		setInput(messages[index].text); // Fills the input chat box with the text of the message being edited
+	};
+
 	// Handle form submission for adding new messages
 	const handleSubmit = (e) => {
 		e.preventDefault(); // Prevent the default form submission behavior (which would reload the page)
@@ -39,7 +44,8 @@ function Chat() {
 			});
 			return;
 		}
-		// If input is valid, add new messages (a Question and a dummy Response)
+
+	// If input is valid, add new messages (a Question and a dummy Response)
 		setMessages((prevMessages) => [
 			...prevMessages,
 			{ id: prevMessages.length, text: input, type: "Question" },
@@ -51,7 +57,7 @@ function Chat() {
 			...prevMessages,
 			{ id: prevMessages.length, text: "I am disconnected", type: "Response" },
 		]);
-
+	
 		// Clear the input field after submission
 		setInput("");
 	};
@@ -74,9 +80,13 @@ function Chat() {
 			{/* Chat messages container */}
 			<div className='flex-1 overflow-y-auto p-4 space-y-2 pb-20'>
 				{/* Render messages dynamically based on their type */}
-				{messages.map((msg) =>
+				{messages.map((msg, index) =>
 					msg.type === "Question" ? (
-						<UserBubble key={msg.id} text={msg.text} />
+						<UserBubble 
+							key={msg.id} 
+							text={msg.text} 
+							onEdit={() => handleEdit(index)} 
+						/>
 					) : (
 						<ResponseBubble key={msg.id} text={msg.text} />
 					)
