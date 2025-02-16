@@ -1,5 +1,19 @@
 {% extends "core/base.html" %} {% block content %}
 <h1>Congrats you started the container, Welcome to flask</h1>
-<!-- this is how we call a variable passed into jinja -->
-<h2>{{user.username}}</h2>
+
+<h2>Please login in</h2>
+<form method = "POST" action="">
+    {{ form.hidden_tag() }}
+    {{ form.username }}
+    {{ form.password }}
+    {{ form.submit }}
+</form>
+
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+
+
+
+
 {% endblock %}
