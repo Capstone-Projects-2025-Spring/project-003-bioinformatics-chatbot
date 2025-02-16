@@ -2,6 +2,10 @@
 sidebar_position: 1
 ---
 
+#Database Design
+
+This Document is a summary of the database design for the project
+
 ## Entity-Relation Diagram
 
 ```mermaid
