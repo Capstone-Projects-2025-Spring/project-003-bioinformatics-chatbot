@@ -61,7 +61,10 @@ def index():
     return render_template("main/index.html", form=form)
 
 
+
 @bp.route('/logout')
 # Redirect to login page
 def logout():
     return redirect(url_for('main.index'))  
+
+
