@@ -22,13 +22,14 @@ export default function ChatBox({ input, setInput, handleSubmit }) {
 				placeholder='Ask a question'
 				value={input} // The value of the input field is controlled by the `input` prop
 				onChange={(e) => setInput(e.target.value)} // Calls `setInput` to update the input state as the user types
-				className='w-full py-2 pl-4 pr-10 border rounded-lg'
+				className='w-full py-2 pl-4 pr-10 border rounded-lg bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500'
 			/>
 			<button
+				className='py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200'
 				type='submit'
 				data-testid='submitButton' // This attribute is for testing to identify the submit button
 			>
-				🚀
+				<img src="src\assets\send.png" alt="Send Icon" className="w-5 h-5" />
 			</button>
 		</form>
 	);
