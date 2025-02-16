@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+
+@theme {
+    --color-errorBg: oklch(1 0.1 30);
+  }
