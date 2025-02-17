@@ -135,7 +135,7 @@ function Chat() {
 			
             
 			{/* Chat input form */}
-			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800">
+			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800 break-words">
   				<ChatBox
     				input={input}
     				setInput={setInput}

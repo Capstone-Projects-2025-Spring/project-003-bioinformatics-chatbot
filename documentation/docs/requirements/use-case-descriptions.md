@@ -23,36 +23,7 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 ![Figure 1: ChatBot Question and Answer System](../../static/img/chatandanswer.png)  
 *Figure 1: ChatBot Question and Answer System*
 
-```mermaid
-sequenceDiagram
-    actor A as User
-    participant B as ChatBot
-    participant C as Server
-    participant D as LLM
-    
-    
-    A->>B: Connect to the App
-    
-    activate B
-    B->>C: Starting backend
-    activate C
-    A->>B: Ask a question
-    B->>C: Queries data
-    alt data found
-        C->>D: Send retrieved documents
-        D-->>C: Return generated answer
-        C-->>B: Returns answer
-        B-->>A: Sends reponse
-    else data not found
-        C->>D: Send not found documents signal
-        D-->>C: Return generated "I don't know"
-        C-->>B: Return "I don't know"
-        B-->>A: Display "I dont know"
-    end    
-    deactivate C
-    deactivate B
-```
-*Figure 2: ChatBot Question and Answer System Sequence Diagram*
+
 
 
 ## Use Case 2 - Downloading Conversation
@@ -69,32 +40,7 @@ As a user, I should have the functionality of downloading the conversation betwe
 ### Diagrams   
 ![Figure 3: ChatBot downloading conversation System](../../static/img/Downloadrevise.png)  
 *Figure 3: ChatBot Question and Answer System*
-```mermaid
-sequenceDiagram
-    actor A as User
-    participant B as ChatBot
-    participant C as Server
-    participant D as LLM
-    
-    
-    A->>B: Connect to the App
-    
-    activate B
-    B->>C: Starting backend
-    activate C
-    A->>B: Ask a question
-    B->>C: Queries data
-    C->>D: Send retrieved document
-    D-->>C: return generated answer
-    C-->>B: Returns information
-    B-->>A: Sends response
 
-    A->>B: Start download process
-    B-->>A: display download link
-    deactivate B
-    deactivate C
-```
-*Figure 4: ChatBot Question and Answer System Sequence Diagram*
 ## Use Case 3 - Chat History
 
 Users shoud be able view previous conversations with the chatbot and ask new question. New question with answer will use previous queries for refrencing.
