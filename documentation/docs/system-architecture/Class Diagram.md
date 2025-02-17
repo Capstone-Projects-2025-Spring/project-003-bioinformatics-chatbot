@@ -3,6 +3,7 @@ sidebar_position: 1
 ---
 
 <!--Overview Section-->
+# Class Diagram
 
 ## __Overview__
 ```mermaid

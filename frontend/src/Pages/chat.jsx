@@ -104,8 +104,17 @@ function Chat() {
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
+			<nav>
+				<div className='flex justify-center bg-green-600 p-4'>
+					<h1 className='text-2xl text-white'>Chatbot</h1>
+				</div>
+			</nav>
+
+
+
+
 			{/* Chat messages container */}
-			<div className='flex-1 overflow-y-auto p-4 space-y-2 pb-20'>
+			<div className='flex-1 max-w-s overflow-y-auto p-3 space-y-2 pb-20 bg-gray-800 break-words'>
 				{/* Render messages dynamically based on their type */}
 				{messages.map((msg, index) =>
 					msg.type === "Question" ? (
@@ -120,21 +129,26 @@ function Chat() {
 				)}
 				{/* A dummy div to scroll into view */}
 				<div ref={messagesEndRef} />
+
+				
 			</div>
-			{/* Button for Download */}
-			<div className="flex justify-left">
-  			<button onClick={download} className=" py-2 pl-4 pr-10 border rounded-lg">
-    			Download Chat History 📥
- 			</button>
-			</div>
+			
             
 			{/* Chat input form */}
-			<div className='w-full'>
-				<ChatBox
-					input={input}
-					setInput={setInput}
-					handleSubmit={handleSubmit}
-				/>
+			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800 break-words">
+  				<ChatBox
+    				input={input}
+    				setInput={setInput}
+    				handleSubmit={handleSubmit}
+    				className="flex-1 "
+  				/>
+  				<button
+    				onClick={download}
+    				className="py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200"
+  				>
+					<img src="src\assets\downloads.png" alt="Download Icon" className="w-5 h-5" />
+    
+  				</button>
 			</div>
 		</div>
 	);
