@@ -21,3 +21,4 @@ export default function UserBubble({ text, onEdit }) {
 		</div>
 	);
 }
+//comment to make sure commit is from korlovskiy
