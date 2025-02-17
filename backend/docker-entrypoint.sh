@@ -1,14 +1,13 @@
 #!/bin/bash
 
-# we will need this later just ignore it for now :)
-#while true; do
-#   flask db upgrade
-#   if [[ "$?" == "0" ]]; then
-#       break
-#   fi
-#   echo Upgrade command failed, retrying in 5 secs...
-#   sleep 5
-#done
+while true; do
+    flask db upgrade
+    if [[ "$?" == "0" ]]; then
+        break
+    fi
+    echo Upgrade command failed, retrying in 5 secs...
+    sleep 5
+done
 
 # some variables for flask
 # app entrypont
