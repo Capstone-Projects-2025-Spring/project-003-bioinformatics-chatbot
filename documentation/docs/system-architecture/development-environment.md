@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 6
 ---
 
 
@@ -92,3 +92,8 @@ An up-to-date web browser, such as:
         - Apple Safari: Version 18.0 or later
 
 Internet access
+
+## Version Control
+Git and Github
+
+*Branch Configuration: Protected Main Branch, 3 required reviews before merging*
