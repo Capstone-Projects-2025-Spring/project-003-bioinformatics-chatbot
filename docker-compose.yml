@@ -24,4 +24,18 @@ services:
     env_file:
       - ./backend/database.env
 
-
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:5173"  # Vite dev server
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app  # Sync code for live updates
+      - /app/node_modules  # Prevent overwriting node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    command: ["npm", "run", "dev", "--", "--host"]
