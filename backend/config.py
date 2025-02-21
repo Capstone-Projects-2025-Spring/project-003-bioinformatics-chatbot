@@ -18,5 +18,13 @@ class Config:
 
 
 class TestingConfig(Config):
+    """
+    Author: Troy Witmer
+    Date: 02/20/2025
+    Description: Config File for app in testing configuration, called in pytest creation
+
+    param:Config the class above to get all its keys, we add some extra and override some in here
+    """
+
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
