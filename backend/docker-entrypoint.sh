@@ -9,6 +9,9 @@ while true; do
     sleep 5
 done
 
+echo "Pulling Ollama model..."
+curl -X POST http://ollama:11434/api/pull -d '{"name": "deepseek-r1:7b"}'
+
 # some variables for flask
 # app entrypont
 export FLASK_APP=app
