@@ -18,7 +18,7 @@ def create_app(config_class=Config):
     param:config_class : configuration variables for the app
     """
     app = Flask(__name__)
-    CORS(app) 
+    CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
     
     # initializing the database for the app

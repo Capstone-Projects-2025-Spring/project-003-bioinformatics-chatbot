@@ -63,9 +63,9 @@ def index():
 @bp.route("/test", methods=["GET"])
 def test():
     """
-    A dummy route to test the flask and react connection and database query for admin.
+    A route to test the flask and react connection and database query for admin.
     """
-    # Once i log in as an admin, should return the user which it does
+    # Once I log in as an admin, the user (admin) should be returned
     user = User.query.filter_by(username="admin").first()
     if user:
         return jsonify({"message": f"Hello: {user.username}"}), 200
