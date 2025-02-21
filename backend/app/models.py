@@ -1,6 +1,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
+"""
+File where we will store all database models which get turned into database tables
+
+"""
+
+
 # File where we will store all database models which get turned into database tables
 
 
