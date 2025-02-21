@@ -10,7 +10,7 @@ def test_testing(client):
     assert b"title" in response.data
 
 
-def test_user_table(client, app):
+def test_user_table(app):
     """
     Author: Troy Witmer
     Description: Test route to assure User table exists
