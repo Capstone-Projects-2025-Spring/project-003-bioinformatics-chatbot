@@ -7,7 +7,12 @@ from flask_wtf import FlaskForm
 from wtforms.validators import InputRequired, Length
 from wtforms import StringField, PasswordField, SubmitField
 
+from ollama import chat
+from ollama import ChatResponse
+from flask import request, jsonify
 
+import ollama
+# from flask import jsonify
 
 #Logging form that is used in the index.html page
 class LoginForm(FlaskForm):
@@ -67,4 +72,57 @@ def index():
 def logout():
     return redirect(url_for('main.index'))  
 
+# def chat_response():
+#     # data = request.get_json() # For when we're dynamically requesting data
+#     # user_message = data.get('message', "") #For when we're dynamically getting messages
+#     response: ChatResponse = chat(model='deepseek-r1:7b', messages=[
+#         {
+#             'role': 'user',
+#             'content': 'Why is the sky blue?'
+#             # 'content': user_message #For when we're dynamically getting messages
+#         },
+#     ])
+#     print(response.messages[-1]["content"])
+
+#     # llm_response = response.messages[-1]["content"]
+#     # return jsonify({"response": llm_response})
+
+@bp.route("/chat_response", methods=["POST"])
+def chat_response():
+    data = request.get_json()
+    user_message = data.get("message", "Why is the sky blue?")
+
+    response: ChatResponse = chat(model="deepseek-r1:7b", messages=[
+        {"role": "user", "content": user_message}
+    ])
+
+    llm_response = response.messages[-1]["content"]
+    
+    print(llm_response, flush=True)  # <-- Forces immediate log output
+
+    return jsonify({"response": llm_response})
+
+    # response = ollama.chat(
+    #     model='deepseek-r1:7b',
+    #     messages=[
+    #     {
+    #         'role': 'user',
+    #         'content': 'Why is the sky blue?'
+    #     },
+    #     ],
+    #     stream = True
+    # )
+
+    # full_response = ""
+
+    # for chunk in response:
+    #     print(chunk['message']['content'], end='', flush=True)
+    #     full_response += chunk['message']['content']
+
+    #     if chunk['done']:
+    #         break
+
+    # return jsonify({"response": full_response})
+    # print("Received POST request to /chat_response")
+    # return jsonify({"message": "Hello, world!"})
 
