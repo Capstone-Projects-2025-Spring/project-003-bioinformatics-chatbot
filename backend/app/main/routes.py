@@ -84,7 +84,11 @@ def chat_response():
         client = Client(host='http://ollama:11434')
         
         data = request.get_json()
-        user_message = data.get("message", "Why is the sky blue?") # Hard-coded message for testing
+        if not data or "message" not in data:
+            return jsonify({"error": "Missing 'message' field in request body"}), 400
+
+        user_message = data["message"]
+        # user_message = data.get("message", "Why is the sky blue? Please give a short") # Hard-coded message for testing
 
         # Get response from Ollama
         response = client.chat(model="deepseek-r1:7b", messages=[
