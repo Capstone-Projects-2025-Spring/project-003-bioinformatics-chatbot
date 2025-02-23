@@ -20,7 +20,7 @@ describe("UserBubble Component", () => {
 		render(<UserBubble text={"Editable Message"} onEdit={mockOnEdit} />); 
 
 		// Find the edit button and click it
-		const editButton = screen.getByRole("button");
+		const editButton = screen.getByTestId("edit-button");
 		fireEvent.click(editButton);
 
 		// Expect the onEdit function to be called once
