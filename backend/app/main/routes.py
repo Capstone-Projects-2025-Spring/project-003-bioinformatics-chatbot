@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import jsonify, render_template, redirect, url_for
 from app.main import bp
 from app.models import User
 from app import db
@@ -61,6 +61,18 @@ def index():
 
     #Pass the forms here.
     return render_template("main/index.html", form=form)
+
+@bp.route("/test", methods=["GET"])
+def test():
+    """
+    A route to test the flask and react connection and database query for admin.
+    """
+    # Once I log in as an admin, the user (admin) should be returned
+    user = User.query.filter_by(username="admin").first()
+    if user:
+        return jsonify({"message": f"Hello: {user.username}"}), 200
+    else:
+        return jsonify({"message": "No one is here :()."}), 200
 
 
 
