@@ -15,3 +15,16 @@ class Config:
 
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI")
+
+
+class TestingConfig(Config):
+    """
+    Author: Troy Witmer
+    Date: 02/20/2025
+    Description: Config File for app in testing configuration, called in pytest creation
+
+    param:Config the class above to get all its keys, we add some extra and override some in here
+    """
+
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
