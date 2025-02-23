@@ -41,6 +41,7 @@ export default function UserBubble({ text, onEdit }) {
 			{/* Edit button to trigger onEdit function and populate input chat box */}
 			<button
 				onClick={onEdit}
+				data-testid="edit-button" 
 			>
 				✏️
 			</button>
