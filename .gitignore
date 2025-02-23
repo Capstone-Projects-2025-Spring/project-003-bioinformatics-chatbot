@@ -35,3 +35,6 @@ dist-ssr
 
 *.pyc
 __pycache__/
+
+node_modules/.bin/handlebars
+/node_modules
