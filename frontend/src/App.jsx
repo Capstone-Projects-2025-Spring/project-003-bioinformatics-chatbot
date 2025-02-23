@@ -1,5 +1,26 @@
+/**
+ * @file App.jsx
+ * This file contains the main App component which serves as the landing page for the Bioinformatics RAG Chatbot application.
+ */
+
+
 import { Link } from "react-router";
-import BioGPTImage from './images/BioGPT.png';
+import BioGPTImage from './assets/BioGPT.png';
+
+
+/**
+ * App component renders the landing page for the Bioinformatics RAG Chatbot.
+ *
+ * The layout is divided into two main sections:
+ * - **Left Side:** Displays the application title, a button to begin a new chat (which navigates to the chat page), a product description,
+ *   and an authors section.
+ * - **Right Side:** Displays an image related to the application.
+ *
+ * The component uses a flex layout to ensure responsive design and proper alignment of elements.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered landing page component.
+ */
 
 function App() {
 	return (
