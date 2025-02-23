@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-api-specification/Front end" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.3.2">
+<title data-rh="true">Front end | Project 003 Bioinformatics Chatbot</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Front end"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Front end | Project 003 Bioinformatics Chatbot"><meta data-rh="true" name="description" content="App() ⇒ JSX.Element"><meta data-rh="true" property="og:description" content="App() ⇒ JSX.Element"><link data-rh="true" rel="icon" href="/project-003-bioinformatics-chatbot/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Front end"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Front end" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Front end" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-003-bioinformatics-chatbot/assets/css/styles.e4cc120d.css">
+<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.f5c0cc2b.js" defer="defer"></script>
+<script src="/project-003-bioinformatics-chatbot/assets/js/main.d4b947ab.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/project-003-bioinformatics-chatbot/"><div class="navbar__logo"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Project 003 Bioinformatics Chatbot</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a><a class="navbar__item navbar__link" href="/project-003-bioinformatics-chatbot/tutorial/Intro">Docusaurus Tutorial</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/project-003-bioinformatics-chatbot/docs/intro">Introduction</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/requirements-specification">Requirements Specification</a><button aria-label="Expand sidebar category &#x27;Requirements Specification&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/system-architecture">System Architecture</a><button aria-label="Expand sidebar category &#x27;System Architecture&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/project-003-bioinformatics-chatbot/docs/category/api-specification">API Specification</a><button aria-label="Collapse sidebar category &#x27;API Specification&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/design-api-intro">Design Document - Part II API</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/openapi-spec">API 1 - Swagger Petstore</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/calculator-model-generated">CalculatorModel.java</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/Front end">Front end</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/test-procedures">Test Procedures</a><button aria-label="Expand sidebar category &#x27;Test Procedures&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/project-003-bioinformatics-chatbot/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item"><a class="breadcrumbs__link" itemprop="item" href="/project-003-bioinformatics-chatbot/docs/category/api-specification"><span itemprop="name">API Specification</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Front end</span><meta itemprop="position" content="2"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Front end</h1></header><a name="App"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="app--jsxelement">App() ⇒ <code>JSX.Element</code><a href="#app--jsxelement" class="hash-link" aria-label="Direct link to app--jsxelement" title="Direct link to app--jsxelement">​</a></h2>
+<p>App component renders the landing page for the Bioinformatics RAG Chatbot.</p>
+<p>The layout is divided into two main sections:</p>
+<ul>
+<li><strong>Left Side:</strong> Displays the application title, a button to begin a new chat (which navigates to the chat page), a product description,
+and an authors section.</li>
+<li><strong>Right Side:</strong> Displays an image related to the application.</li>
+</ul>
+<p>The component uses a flex layout to ensure responsive design and proper alignment of elements.</p>
+<p><strong>Kind</strong>: global function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered landing page component.<br>
+<strong>Component</strong>:</p>
+<hr>
+<a name="main.jsx
+This is the entry point for the React application. It initializes the React DOM rendering,
+sets up the routing using BrowserRouter, and defines the application routes including the main App component,
+the Chat page, and a fallback 404 page.module_"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="mainjsx">main.jsx<a href="#mainjsx" class="hash-link" aria-label="Direct link to main.jsx" title="Direct link to main.jsx">​</a></h2>
+<p>This is the entry point for the React application. It initializes the React DOM rendering,
+sets up the routing using BrowserRouter, and defines the application routes including the main App component,
+the Chat page, and a fallback 404 page.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="component">Component<a href="#component" class="hash-link" aria-label="Direct link to Component" title="Direct link to Component">​</a></h2>
+<hr>
+<a name="ChatBox
+This file exports the ChatBox component which renders a chat input form.module_"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="chatbox">ChatBox<a href="#chatbox" class="hash-link" aria-label="Direct link to ChatBox" title="Direct link to ChatBox">​</a></h2>
+<p>This file exports the ChatBox component which renders a chat input form.</p>
+<ul>
+<li>[ChatBox
+This file exports the ChatBox component which renders a chat input form.](#ChatBox
+This file exports the ChatBox component which renders a chat input form.module_)<!-- -->
+<ul>
+<li>[module.exports(props)](#exp_ChatBox
+This file exports the ChatBox component which renders a chat input form.module_--module.exports) ⇒ <code>JSX.Element</code> ⏏<!-- -->
+<ul>
+<li>[~ChatBox.propTypes](#ChatBox
+This file exports the ChatBox component which renders a chat input form.module_--module.exports..ChatBox.propTypes)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="exp_ChatBox
+This file exports the ChatBox component which renders a chat input form.module_--module.exports"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsprops--jsxelement-">module.exports(props) ⇒ <code>JSX.Element</code> ⏏<a href="#moduleexportsprops--jsxelement-" class="hash-link" aria-label="Direct link to moduleexportsprops--jsxelement-" title="Direct link to moduleexportsprops--jsxelement-">​</a></h3>
+<p>ChatBox component renders a chat input form with an input field and submit button.</p>
+<p>This component is used to capture the user&#x27;s chat input and submit it via the provided
+event handlers. The form is designed to update the input value on change and call the
+submit handler when the form is submitted.</p>
+<p><strong>Kind</strong>: Exported function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered chat input form.<br>
+<strong>Component</strong>:</p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>props</td><td><code>object</code></td><td>The component props.</td></tr><tr><td>props.input</td><td><code>string</code></td><td>The current text input.</td></tr><tr><td>props.setInput</td><td><code>function</code></td><td>Callback to update the input value.</td></tr><tr><td>props.handleSubmit</td><td><code>function</code></td><td>Callback to handle the form submission.</td></tr></tbody></table>
+<a name="ChatBox
+This file exports the ChatBox component which renders a chat input form.module_--module.exports..ChatBox.propTypes"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportschatboxproptypes">module.exports~ChatBox.propTypes<a href="#moduleexportschatboxproptypes" class="hash-link" aria-label="Direct link to module.exports~ChatBox.propTypes" title="Direct link to module.exports~ChatBox.propTypes">​</a></h4>
+<p>PropTypes for the ChatBox component.</p>
+<p><strong>Kind</strong>: inner property of [<code>module.exports</code>](#exp_ChatBox
+This file exports the ChatBox component which renders a chat input form.module_--module.exports)<br>
+<strong>Properties</strong></p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>input</td><td><code>string</code></td><td>The current input value.</td></tr><tr><td>setInput</td><td><code>function</code></td><td>Callback to update the input value.</td></tr><tr><td>handleSubmit</td><td><code>function</code></td><td>Callback to handle form submission.</td></tr></tbody></table>
+<hr>
+<a name="ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="errorbox">ErrorBox<a href="#errorbox" class="hash-link" aria-label="Direct link to ErrorBox" title="Direct link to ErrorBox">​</a></h2>
+<p>This file exports the ErrorBox component which displays an error message alert.</p>
+<ul>
+<li>[ErrorBox
+This file exports the ErrorBox component which displays an error message alert.](#ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_)<!-- -->
+<ul>
+<li>[module.exports(props)](#exp_ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_--module.exports) ⇒ <code>JSX.Element</code> ⏏<!-- -->
+<ul>
+<li>[~ErrorBox.propTypes](#ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_--module.exports..ErrorBox.propTypes)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="exp_ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_--module.exports"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsprops--jsxelement--1">module.exports(props) ⇒ <code>JSX.Element</code> ⏏<a href="#moduleexportsprops--jsxelement--1" class="hash-link" aria-label="Direct link to moduleexportsprops--jsxelement--1" title="Direct link to moduleexportsprops--jsxelement--1">​</a></h3>
+<p>ErrorBox component displays an error message with a title and a body.</p>
+<p>This component renders a fixed alert box at the top of the page that provides feedback
+about an error. It includes a button that allows the user to dismiss the error message by
+resetting the error state.</p>
+<p><strong>Kind</strong>: Exported function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered error alert box.<br>
+<strong>Component</strong>:</p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>props</td><td><code>object</code></td><td>The component props.</td></tr><tr><td>props.title</td><td><code>string</code></td><td>The title of the error message.</td></tr><tr><td>props.body</td><td><code>string</code></td><td>The detailed error message.</td></tr><tr><td>props.setError</td><td><code>function</code></td><td>Callback function to reset the error state.</td></tr></tbody></table>
+<a name="ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_--module.exports..ErrorBox.propTypes"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportserrorboxproptypes">module.exports~ErrorBox.propTypes<a href="#moduleexportserrorboxproptypes" class="hash-link" aria-label="Direct link to module.exports~ErrorBox.propTypes" title="Direct link to module.exports~ErrorBox.propTypes">​</a></h4>
+<p>PropTypes for the ErrorBox component.</p>
+<p><strong>Kind</strong>: inner property of [<code>module.exports</code>](#exp_ErrorBox
+This file exports the ErrorBox component which displays an error message alert.module_--module.exports)<br>
+<strong>Properties</strong></p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>title</td><td><code>string</code></td><td>The title of the error message.</td></tr><tr><td>body</td><td><code>string</code></td><td>The detailed error message.</td></tr><tr><td>setError</td><td><code>function</code></td><td>Callback to reset the error state.</td></tr></tbody></table>
+<hr>
+<a name="ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="responsebubble">ResponseBubble<a href="#responsebubble" class="hash-link" aria-label="Direct link to ResponseBubble" title="Direct link to ResponseBubble">​</a></h2>
+<p>This file exports the ResponseBubble component which displays a text message in a styled bubble.</p>
+<ul>
+<li>[ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.](#ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_)<!-- -->
+<ul>
+<li>[module.exports(props)](#exp_ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_--module.exports) ⇒ <code>JSX.Element</code> ⏏<!-- -->
+<ul>
+<li>[~ResponseBubble.propTypes](#ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_--module.exports..ResponseBubble.propTypes)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="exp_ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_--module.exports"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsprops--jsxelement--2">module.exports(props) ⇒ <code>JSX.Element</code> ⏏<a href="#moduleexportsprops--jsxelement--2" class="hash-link" aria-label="Direct link to moduleexportsprops--jsxelement--2" title="Direct link to moduleexportsprops--jsxelement--2">​</a></h3>
+<p>ResponseBubble component renders a styled bubble displaying a text message.</p>
+<p><strong>Kind</strong>: Exported function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered response bubble element.<br>
+<strong>Component</strong>:</p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>props</td><td><code>object</code></td><td>The component props.</td></tr><tr><td>props.text</td><td><code>string</code></td><td>The text message to display.</td></tr></tbody></table>
+<a name="ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_--module.exports..ResponseBubble.propTypes"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsresponsebubbleproptypes">module.exports~ResponseBubble.propTypes<a href="#moduleexportsresponsebubbleproptypes" class="hash-link" aria-label="Direct link to module.exports~ResponseBubble.propTypes" title="Direct link to module.exports~ResponseBubble.propTypes">​</a></h4>
+<p>PropTypes for the ResponseBubble component.</p>
+<p><strong>Kind</strong>: inner property of [<code>module.exports</code>](#exp_ResponseBubble
+This file exports the ResponseBubble component which displays a text message in a styled bubble.module_--module.exports)<br>
+<strong>Properties</strong></p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>text</td><td><code>string</code></td><td>The text message to display in the response bubble.</td></tr></tbody></table>
+<hr>
+<a name="UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="userbubble">UserBubble<a href="#userbubble" class="hash-link" aria-label="Direct link to UserBubble" title="Direct link to UserBubble">​</a></h2>
+<p>This file exports the UserBubble component which renders a user message bubble along with an edit button.</p>
+<ul>
+<li>[UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.](#UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_)<!-- -->
+<ul>
+<li>[module.exports(props)](#exp_UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_--module.exports) ⇒ <code>JSX.Element</code> ⏏<!-- -->
+<ul>
+<li>[~UserBubble.propTypes](#UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_--module.exports..UserBubble.propTypes)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="exp_UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_--module.exports"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsprops--jsxelement--3">module.exports(props) ⇒ <code>JSX.Element</code> ⏏<a href="#moduleexportsprops--jsxelement--3" class="hash-link" aria-label="Direct link to moduleexportsprops--jsxelement--3" title="Direct link to moduleexportsprops--jsxelement--3">​</a></h3>
+<p>UserBubble component renders a chat bubble for user messages with an edit option.</p>
+<p>This component displays the user&#x27;s message in a styled bubble and provides an edit button.
+When the edit button is clicked, the <code>onEdit</code> callback is triggered.</p>
+<p><strong>Kind</strong>: Exported function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered user message bubble.<br>
+<strong>Component</strong>:</p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>props</td><td><code>object</code></td><td>The component props.</td></tr><tr><td>props.text</td><td><code>string</code></td><td>The message text to display.</td></tr><tr><td>props.onEdit</td><td><code>function</code></td><td>Callback function to be called when the edit button is clicked.</td></tr></tbody></table>
+<a name="UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_--module.exports..UserBubble.propTypes"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexportsuserbubbleproptypes">module.exports~UserBubble.propTypes<a href="#moduleexportsuserbubbleproptypes" class="hash-link" aria-label="Direct link to module.exports~UserBubble.propTypes" title="Direct link to module.exports~UserBubble.propTypes">​</a></h4>
+<p>PropTypes for the UserBubble component.</p>
+<p><strong>Kind</strong>: inner property of [<code>module.exports</code>](#exp_UserBubble
+This file exports the UserBubble component which renders a user message bubble along with an edit button.module_--module.exports)<br>
+<strong>Properties</strong></p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>text</td><td><code>string</code></td><td>The user message to display.</td></tr><tr><td>onEdit</td><td><code>function</code></td><td>Callback function to handle edits, which typically populates the input chat box.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="pages">Pages<a href="#pages" class="hash-link" aria-label="Direct link to Pages" title="Direct link to Pages">​</a></h2>
+<hr>
+<a name="Chat"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="chat--jsxelement">Chat() ⇒ <code>JSX.Element</code><a href="#chat--jsxelement" class="hash-link" aria-label="Direct link to chat--jsxelement" title="Direct link to chat--jsxelement">​</a></h2>
+<p>Chat component renders a chat interface with messaging capabilities.</p>
+<p><strong>Kind</strong>: global function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered Chat component.<br>
+<strong>Component</strong>:</p>
+<ul>
+<li><a href="#Chat">Chat()</a> ⇒ <code>JSX.Element</code>
+<ul>
+<li><a href="#Chat..messagesEndRef">~messagesEndRef</a></li>
+<li><a href="#Chat..handleEdit">~handleEdit(index)</a></li>
+<li><a href="#Chat..handleSubmit">~handleSubmit(e)</a></li>
+<li><a href="#Chat..download">~download()</a>
+<ul>
+<li><a href="#Chat..download..conversation">~conversation</a></li>
+<li><a href="#Chat..download..txtfile">~txtfile</a></li>
+<li><a href="#Chat..download..element">~element</a>
+<ul>
+<li><a href="#Chat..download..element.href">.href</a></li>
+<li><a href="#Chat..download..element.download">.download</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="Chat..messagesEndRef"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chatmessagesendref">Chat~messagesEndRef<a href="#chatmessagesendref" class="hash-link" aria-label="Direct link to Chat~messagesEndRef" title="Direct link to Chat~messagesEndRef">​</a></h3>
+<p>Ref to the bottom of the messages list for auto-scrolling.</p>
+<p><strong>Kind</strong>: inner constant of <a href="#Chat"><code>Chat</code></a></p>
+<a name="Chat..handleEdit"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chathandleeditindex">Chat~handleEdit(index)<a href="#chathandleeditindex" class="hash-link" aria-label="Direct link to Chat~handleEdit(index)" title="Direct link to Chat~handleEdit(index)">​</a></h3>
+<p>Function to handle clicking the edit button.</p>
+<p><strong>Kind</strong>: inner method of <a href="#Chat"><code>Chat</code></a></p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>index</td><td><code>number</code></td><td>The index of the message to edit.</td></tr></tbody></table>
+<a name="Chat..handleSubmit"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chathandlesubmite">Chat~handleSubmit(e)<a href="#chathandlesubmite" class="hash-link" aria-label="Direct link to Chat~handleSubmit(e)" title="Direct link to Chat~handleSubmit(e)">​</a></h3>
+<p>Handle form submission for adding new messages.</p>
+<p><strong>Kind</strong>: inner method of <a href="#Chat"><code>Chat</code></a></p>
+<table><thead><tr><th>Param</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>e</td><td><code>Event</code></td><td>The event object.</td></tr></tbody></table>
+<a name="Chat..download"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="chatdownload">Chat~download()<a href="#chatdownload" class="hash-link" aria-label="Direct link to Chat~download()" title="Direct link to Chat~download()">​</a></h3>
+<p>Download the chat conversation as a .txt file.</p>
+<p><strong>Kind</strong>: inner method of <a href="#Chat"><code>Chat</code></a></p>
+<ul>
+<li><a href="#Chat..download">~download()</a>
+<ul>
+<li><a href="#Chat..download..conversation">~conversation</a></li>
+<li><a href="#Chat..download..txtfile">~txtfile</a></li>
+<li><a href="#Chat..download..element">~element</a>
+<ul>
+<li><a href="#Chat..download..element.href">.href</a></li>
+<li><a href="#Chat..download..element.download">.download</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<a name="Chat..download..conversation"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="downloadconversation">download~conversation<a href="#downloadconversation" class="hash-link" aria-label="Direct link to download~conversation" title="Direct link to download~conversation">​</a></h4>
+<p>Converts the array from the session storage into a string.</p>
+<p><strong>Kind</strong>: inner constant of <a href="#Chat..download"><code>download</code></a></p>
+<a name="Chat..download..txtfile"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="downloadtxtfile">download~txtfile<a href="#downloadtxtfile" class="hash-link" aria-label="Direct link to download~txtfile" title="Direct link to download~txtfile">​</a></h4>
+<p>Creates a file object.</p>
+<p><strong>Kind</strong>: inner constant of <a href="#Chat..download"><code>download</code></a></p>
+<a name="Chat..download..element"></a>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="downloadelement">download~element<a href="#downloadelement" class="hash-link" aria-label="Direct link to download~element" title="Direct link to download~element">​</a></h4>
+<p>Anchor for the link for downloading.</p>
+<p><strong>Kind</strong>: inner constant of <a href="#Chat..download"><code>download</code></a></p>
+<ul>
+<li><a href="#Chat..download..element">~element</a>
+<ul>
+<li><a href="#Chat..download..element.href">.href</a></li>
+<li><a href="#Chat..download..element.download">.download</a></li>
+</ul>
+</li>
+</ul>
+<a name="Chat..download..element.href"></a>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="elementhref">element.href<a href="#elementhref" class="hash-link" aria-label="Direct link to element.href" title="Direct link to element.href">​</a></h5>
+<p>Creates a URL so that the computer starts the download of the file when clicked.</p>
+<p><strong>Kind</strong>: static property of <a href="#Chat..download..element"><code>element</code></a></p>
+<a name="Chat..download..element.download"></a>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="elementdownload">element.download<a href="#elementdownload" class="hash-link" aria-label="Direct link to element.download" title="Direct link to element.download">​</a></h5>
+<p>Name of the file.</p>
+<p><strong>Kind</strong>: static property of <a href="#Chat..download..element"><code>element</code></a></p>
+<a name="module_404"></a>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="404">404<a href="#404" class="hash-link" aria-label="Direct link to 404" title="Direct link to 404">​</a></h2>
+<a name="exp_module_404--module.exports"></a>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="moduleexports--jsxelement-">module.exports() ⇒ <code>JSX.Element</code> ⏏<a href="#moduleexports--jsxelement-" class="hash-link" aria-label="Direct link to moduleexports--jsxelement-" title="Direct link to moduleexports--jsxelement-">​</a></h3>
+<p>A functional component that renders a 404 &quot;Page Not Found&quot; error page.</p>
+<p>This component displays a 404 error code along with a message and a button that navigates
+the user back to the home page.</p>
+<p><strong>Kind</strong>: Exported function<br>
+<strong>Returns</strong>: <code>JSX.Element</code> - The rendered 404 page.<br>
+<strong>Component</strong>:</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/edit/main/documentation/docs/api-specification/Front end.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>korlovskiy</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-003-bioinformatics-chatbot/docs/api-specification/calculator-model-generated"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">CalculatorModel.java</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-003-bioinformatics-chatbot/docs/category/test-procedures"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Test Procedures</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#app--jsxelement" class="table-of-contents__link toc-highlight">App() ⇒ <code>JSX.Element</code></a></li><li><a href="#mainjsx" class="table-of-contents__link toc-highlight">main.jsx</a></li><li><a href="#component" class="table-of-contents__link toc-highlight">Component</a></li><li><a href="#chatbox" class="table-of-contents__link toc-highlight">ChatBox</a><ul><li><a href="#moduleexportsprops--jsxelement-" class="table-of-contents__link toc-highlight">module.exports(props) ⇒ <code>JSX.Element</code> ⏏</a></li></ul></li><li><a href="#errorbox" class="table-of-contents__link toc-highlight">ErrorBox</a><ul><li><a href="#moduleexportsprops--jsxelement--1" class="table-of-contents__link toc-highlight">module.exports(props) ⇒ <code>JSX.Element</code> ⏏</a></li></ul></li><li><a href="#responsebubble" class="table-of-contents__link toc-highlight">ResponseBubble</a><ul><li><a href="#moduleexportsprops--jsxelement--2" class="table-of-contents__link toc-highlight">module.exports(props) ⇒ <code>JSX.Element</code> ⏏</a></li></ul></li><li><a href="#userbubble" class="table-of-contents__link toc-highlight">UserBubble</a><ul><li><a href="#moduleexportsprops--jsxelement--3" class="table-of-contents__link toc-highlight">module.exports(props) ⇒ <code>JSX.Element</code> ⏏</a></li></ul></li><li><a href="#pages" class="table-of-contents__link toc-highlight">Pages</a></li><li><a href="#chat--jsxelement" class="table-of-contents__link toc-highlight">Chat() ⇒ <code>JSX.Element</code></a><ul><li><a href="#chatmessagesendref" class="table-of-contents__link toc-highlight">Chat~messagesEndRef</a></li><li><a href="#chathandleeditindex" class="table-of-contents__link toc-highlight">Chat~handleEdit(index)</a></li><li><a href="#chathandlesubmite" class="table-of-contents__link toc-highlight">Chat~handleSubmit(e)</a></li><li><a href="#chatdownload" class="table-of-contents__link toc-highlight">Chat~download()</a></li></ul></li><li><a href="#404" class="table-of-contents__link toc-highlight">404</a><ul><li><a href="#moduleexports--jsxelement-" class="table-of-contents__link toc-highlight">module.exports() ⇒ <code>JSX.Element</code> ⏏</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Temple_T_logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU"></div><div class="footer__copyright">Copyright © 2025 Project 003 Bioinformatics Chatbot, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
