@@ -4,40 +4,73 @@ import UserBubble from "../Components/userBubble";
 import ResponseBubble from "../Components/responseBubble";
 import ErrorBox from "../Components/errorBox";
 
+/**
+ * Chat component renders a chat interface with messaging capabilities.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Chat component.
+ */
 function Chat() {
-	// State for managing the text input in the ChatBox
+	/**
+	 * State for managing the text input in the ChatBox.
+	 */
 	const [input, setInput] = useState("");
 
-	// State for storing the messages to display in the messages container
+	/**
+	 * State for storing the messages to display in the messages container.
+	 */
 	const [messages, setMessages] = useState([]);
 
-	// Ref to the bottom of the messages list for auto-scrolling
+	/**
+	 * Ref to the bottom of the messages list for auto-scrolling.
+	 */
 	const messagesEndRef = useRef(null);
 
-	// State for managing any error messages that need to be shown
+	/**
+	 * State for managing any error messages that need to be shown.
+	 */
 	const [error, setError] = useState({
 		title: "",
 		body: "",
 	});
 
-	// Load messages from sessionStorage on component mount
+	/**
+	 * Load messages from sessionStorage on component mount.
+	 */
 	useEffect(() => {
 		const savedMessages = sessionStorage.getItem("messages");
 		if (savedMessages) {
-			setMessages(JSON.parse(savedMessages)); // Parse and set the messages
+			/**
+			 * Parse and set the messages.
+			 */
+			setMessages(JSON.parse(savedMessages));
 		}
 	}, []);
 
-	// Function to handle clicking the edit button
+	/**
+	 * Function to handle clicking the edit button.
+	 * @param {number} index - The index of the message to edit.
+	 */
 	const handleEdit = (index) => {
-		setInput(messages[index].text); // Fills the input chat box with the text of the message being edited
+		/**
+		 * Fills the input chat box with the text of the message being edited.
+		 */
+		setInput(messages[index].text);
 	};
 
-	// Handle form submission for adding new messages
+	/**
+	 * Handle form submission for adding new messages.
+	 * @param {Event} e - The event object.
+	 */
 	const handleSubmit = (e) => {
-		e.preventDefault(); // Prevent the default form submission behavior (which would reload the page)
+		/**
+		 * Prevent the default form submission behavior (which would reload the page).
+		 */
+		e.preventDefault();
 		if (!input.trim()) {
-			// Error handling: If the input is empty, set an error message (to be updated)
+			/**
+			 * Error handling: If the input is empty, set an error message.
+			 */
 			setError({
 				title: "Empty Query",
 				body: "ChatBox cannot be empty during submission",
@@ -45,22 +78,29 @@ function Chat() {
 			return;
 		}
 
-	// If input is valid, add new messages (a Question and a dummy Response)
+		/**
+		 * If input is valid, add new messages (a Question and a dummy Response).
+		 */
 		setMessages((prevMessages) => [
 			...prevMessages,
 			{ id: prevMessages.length, text: input, type: "Question" },
 		]);
 
-		// API call will go here
+		/**
+		 * API call will go here.
+		 */
 
 		setMessages((prevMessages) => [
 			...prevMessages,
 			{ id: prevMessages.length, text: "I am disconnected", type: "Response" },
 		]);
-	
-		// Clear the input field after submission
+
+		/**
+		 * Clear the input field after submission.
+		 */
 		setInput("");
 	};
+
 
 /**
  * Download fucntion that allows the user to download the  chat history as a .txt file. 
@@ -103,11 +143,13 @@ function Chat() {
 			document.body.appendChild(element); // Allows the action of the download to happen when the button is clicked
 			
 			element.click(); // This actually triggers the download
+
 		}
+	};
 
-	}
-
-	// Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes
+	/**
+	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
+	 */
 	useEffect(() => {
 		if (messages.length > 0) {
 			sessionStorage.setItem("messages", JSON.stringify(messages));
@@ -115,47 +157,36 @@ function Chat() {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
-	
-
 	return (
-		<div className='w-full h-screen flex flex-col'>
-			{/* Conditionally render the ErrorBox if there is an error */}
+		<div className="w-full h-screen flex flex-col">
+			{/** Conditionally render the ErrorBox if there is an error. */}
 			{error.title && (
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
 			<nav>
-				<div className='flex justify-center bg-green-600 p-4'>
-					<h1 className='text-2xl text-white'>Chatbot</h1>
+				<div className="flex justify-center bg-green-600 p-4">
+					<h1 className="text-2xl text-white">Chatbot</h1>
 				</div>
 			</nav>
 
-
-
-
-			{/* Chat messages container */}
-			<div className='flex-1 max-w-s overflow-y-auto p-3 space-y-2 pb-20 bg-gray-800 break-words'>
-				{/* Render messages dynamically based on their type */}
+			{/** Chat messages container. */}
+			<div className="flex-1 max-w-s overflow-y-auto p-3 space-y-2 pb-20 bg-gray-800 break-words">
+				{/** Render messages dynamically based on their type. */}
 				{messages.map((msg, index) =>
 					msg.type === "Question" ? (
-						<UserBubble 
-							key={msg.id} 
-							text={msg.text} 
-							onEdit={() => handleEdit(index)} 
-						/>
+						<UserBubble key={msg.id} text={msg.text} onEdit={() => handleEdit(index)} />
 					) : (
 						<ResponseBubble key={msg.id} text={msg.text} />
 					)
 				)}
-				{/* A dummy div to scroll into view */}
+				{/** A dummy div to scroll into view. */}
 				<div ref={messagesEndRef} />
-
-				
 			</div>
-			
-            
-			{/* Chat input form */}
+
+			{/** Chat input form. */}
 			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800 break-words">
+
   				<ChatBox
     				input={input}
     				setInput={setInput}
@@ -170,6 +201,7 @@ function Chat() {
 					<img src="src\assets\downloads.png" alt="Download Icon" className="w-5 h-5" />
     
   				</button>
+
 			</div>
 		</div>
 	);
