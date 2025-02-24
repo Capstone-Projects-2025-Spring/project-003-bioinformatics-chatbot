@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv/pip
+.venv/
+env/
+venv/
+ENV/
+*.egg-info/
+*.egg
+.pytest_cache/
+
+# Distributions / packaging
+.env
+dist/
+build/
+parts/
+eggs/
+.eggs/
+lib/
+lib64/
+sdist/
+*.so
+*.ext
+*.whl
+
+# Flask instance folder
+instance/
+
+# Other temporary files
+tmp/
+*.log
+*.swp
+*~
