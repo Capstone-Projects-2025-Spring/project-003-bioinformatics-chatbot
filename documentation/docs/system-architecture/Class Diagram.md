@@ -55,7 +55,7 @@ direction TB
 
 
         class admin {
-)
+
         }
 
 	}
