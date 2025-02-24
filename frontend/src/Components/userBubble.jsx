@@ -14,6 +14,7 @@ export default function UserBubble({ text, onEdit }) {
 
 			{/* Edit button to trigger onEdit function and populate input chat box */}
 			<button
+				className = 'py-1 pl-2 pr-2 border rounded-xl bg-blue-500 hover:bg-blue-600 hover:text-gray-200'
 				onClick={onEdit}
 			>
 				✏️
