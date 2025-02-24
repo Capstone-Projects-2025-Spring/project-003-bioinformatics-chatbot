@@ -8,21 +8,42 @@ services:
       - "444:444"
     depends_on:
       - database
+      - ollama
     env_file:
       - ./backend/.env
-    
+    networks:
+      - app-network
     develop:
       watch:
         - action: sync+restart
           path: ./backend/
           target: /app
-          
+
   database:
     image: postgres
     ports:
       - "5432:5432"
     env_file:
       - ./backend/database.env
+    networks:
+      - app-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - app-network
+
+volumes:
+  ollama_data:
+
+networks:
+  app-network:
+    driver: bridge
 
   frontend:
     build: ./frontend

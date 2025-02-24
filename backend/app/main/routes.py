@@ -7,9 +7,15 @@ from flask_wtf import FlaskForm
 from wtforms.validators import InputRequired, Length
 from wtforms import StringField, PasswordField, SubmitField
 
+import ollama
+from ollama import chat
+from ollama import ChatResponse
+from flask import request, jsonify
+from ollama import Client
 """
 Places for routes in the backend
 """
+
 
 #Logging form that is used in the index.html page
 class LoginForm(FlaskForm):
@@ -81,4 +87,38 @@ def test():
 def logout():
     return redirect(url_for('main.index'))  
 
+@bp.route("/chat_response", methods=["POST"])
+def chat_response():
+    # WHEN TESTING, THERE STILL NEEDS TO BE A JSON OBJECT PASSED IN, EVEN WITH THE DEFAULT MESSAGE
+    """
+        {
+            "message": "Why is the sky blue?"
+        }
+    """
+    try:
+        # Use the service name 'ollama' as the host
+        client = Client(host='http://ollama:11434')
+        
+        data = request.get_json()
+        if not data or "message" not in data:
+            return jsonify({"error": "Missing 'message' field in request body"}), 400
 
+        user_message = data["message"]
+        # user_message = data.get("message", "Why is the sky blue? Please give a short") # Hard-coded message for testing
+
+        # Get response from Ollama
+        response = client.chat(model="deepseek-r1:7b", messages=[
+            {"role": "user", "content": user_message}
+        ])
+
+        # Extract the response message
+        llm_response = response.message['content']
+        print(llm_response, flush=True)
+        
+        return jsonify({"response": llm_response})
+
+    except Exception as e:
+        print(f"Error: {str(e)}", flush=True)
+        return jsonify({
+            "error": f"An error occurred: {str(e)}"
+        }), 500
