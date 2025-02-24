@@ -1,0 +1,22 @@
+# Use an official Node.js image as the base
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package.json ./
+RUN npm i
+
+# Copy all files (use bind mount in compose for live updates)
+COPY . .
+
+# Expose the Vite development server port (default is 5173)
+EXPOSE 5173
+
+# Enable hot reloading inside the container
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+
+# Run Vite development server
+CMD ["npm", "run", "dev", "--", "--host"]

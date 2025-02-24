@@ -1,12 +1,38 @@
+
+/**
+ * @module ChatBox
+ * This file exports the ChatBox component which renders a chat input form.
+ */
 import PropTypes from "prop-types";
 
-// Define PropTypes for validation
+/**
+ * PropTypes for the ChatBox component.
+ *
+ * @property {string} input - The current input value.
+ * @property {function} setInput - Callback to update the input value.
+ * @property {function} handleSubmit - Callback to handle form submission.
+ */
 ChatBox.propTypes = {
 	input: PropTypes.string.isRequired, // 'input' must be a required prop of type string
 	setInput: PropTypes.func.isRequired, // 'setInput' must be a required prop of type function
 	handleSubmit: PropTypes.func.isRequired, // 'handleSubmit' must be a required prop of type function
 };
 
+
+/**
+ * ChatBox component renders a chat input form with an input field and submit button.
+ *
+ * This component is used to capture the user's chat input and submit it via the provided
+ * event handlers. The form is designed to update the input value on change and call the
+ * submit handler when the form is submitted.
+ *
+ * @component
+ * @param {object} props - The component props.
+ * @param {string} props.input - The current text input.
+ * @param {function} props.setInput - Callback to update the input value.
+ * @param {function} props.handleSubmit - Callback to handle the form submission.
+ * @returns {JSX.Element} The rendered chat input form.
+ */
 export default function ChatBox({ input, setInput, handleSubmit }) {
 	return (
 		// The form is set to submit via the `handleSubmit` function defined in chat.jsx when the user presses Enter or clicks the submit button
