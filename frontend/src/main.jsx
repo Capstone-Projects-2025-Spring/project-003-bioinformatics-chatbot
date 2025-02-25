@@ -16,6 +16,7 @@ import App from "./App.jsx";
 import Chat from "./Pages/chat.jsx";
 import PageNotFound from "./Pages/404.jsx";
 
+
 const root = document.getElementById("root");
 /**
  * Creates a root React node and renders the application wrapped in a BrowserRouter with defined routes.

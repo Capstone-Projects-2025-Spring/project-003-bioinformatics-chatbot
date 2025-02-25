@@ -101,47 +101,49 @@ function Chat() {
 		setInput("");
 	};
 
-	/**
-	 * Download the chat conversation as a .txt file.
-	 */
-	const download = () => {
+
+/**
+ * Download fucntion that allows the user to download the  chat history as a .txt file. 
+ * If no messages were sent the the chatbot, an error message is send instead.
+ */
+
+	const handleDownload = () =>{
+		
+		if (messages.length == 0){
+			setError({
+				title: "Empty Conversation",
+				body: "Please send at least one message",
+			});
+		}
+
+		else {
+			/**
+         * Converts the messages array into a formatted string.
+         * @type {string}
+         */
+			const conversation  = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n` ,'') 
+			/**
+         * Creates a Blob object for the formatted string.
+         * @type {Blob}
+         */
+			const txtfile = new Blob([conversation], {type: 'text/plain'});
+			
 		/**
-		 * Error handling to make sure that the .txt file is not created if the user has not entered a message.
-		 */
-		if (messages.length === 0) {
-			alert("Please have a conversation with the chatbot before downloading.");
-		} else {
-			/**
-			 * Converts the array from the session storage into a string.
-			 */
-			const conversation = messages.reduce(
-				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
-				""
-			);
-			/**
-			 * Creates a file object.
-			 */
-			const txtfile = new Blob([conversation], { type: "text/plain" });
-			/**
-			 * Anchor for the link for downloading.
-			 */
+         * Anchor for the link for downloading
+         * @type {element}
+         */
 			const element = document.createElement("a");
-			/**
-			 * Creates a URL so that the computer starts the download of the file when clicked.
-			 */
-			element.href = URL.createObjectURL(txtfile);
-			/**
-			 * Name of the file.
-			 */
-			element.download = "ChatHistory.txt";
-			/**
-			 * Allows the action of the download to happen when the button is clicked.
-			 */
-			document.body.appendChild(element);
-			/**
-			 * This actually triggers the download.
-			 */
-			element.click();
+
+			
+			element.href = URL.createObjectURL(txtfile); // Creates a URL so that the computer starts the download of the file when clicked
+
+			
+			element.download = "ChatHistory.txt"; // Name of the file
+			
+			document.body.appendChild(element); // Allows the action of the download to happen when the button is clicked
+			
+			element.click(); // This actually triggers the download
+
 		}
 	};
 
@@ -184,18 +186,22 @@ function Chat() {
 
 			{/** Chat input form. */}
 			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800 break-words">
-				<ChatBox
-					input={input}
-					setInput={setInput}
-					handleSubmit={handleSubmit}
-					className="flex-1"
-				/>
-				<button
-					onClick={download}
-					className="py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200"
-				>
-					<img src="src/assets/downloads.png" alt="Download Icon" className="w-5 h-5" />
-				</button>
+
+  				<ChatBox
+    				input={input}
+    				setInput={setInput}
+    				handleSubmit={handleSubmit}
+    				className="flex-1 "
+  				/>
+  				<button
+					data-testid="downloadButton"
+    				onClick={handleDownload}
+    				className="py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200"
+  				>
+					<img src="src\assets\downloads.png" alt="Download Icon" className="w-5 h-5" />
+    
+  				</button>
+
 			</div>
 		</div>
 	);
