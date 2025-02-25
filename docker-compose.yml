@@ -38,12 +38,6 @@ services:
     networks:
       - app-network
 
-volumes:
-  ollama_data:
-
-networks:
-  app-network:
-    driver: bridge
 
   frontend:
     build: ./frontend
@@ -60,3 +54,12 @@ networks:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
     command: ["npm", "run", "dev", "--", "--host"]
+
+volumes:
+  ollama_data:
+
+networks:
+  app-network:
+    driver: bridge
+
+
