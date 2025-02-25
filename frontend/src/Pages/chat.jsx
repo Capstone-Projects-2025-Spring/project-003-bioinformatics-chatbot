@@ -88,7 +88,7 @@ function Chat() {
      /**  
 	  * Send message to Flask backend using axios
 	  */
-	 	axios.post("/chat", { 
+	 	axios.post("http://localhost:444/chat", { 
 			message: input 
 		})
         .then((response) => {
