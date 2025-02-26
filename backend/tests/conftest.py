@@ -1,3 +1,8 @@
+import sys
+import os
+# Add the project root directory to Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from config import TestingConfig
 import pytest
 from app import create_app, db
@@ -7,7 +12,7 @@ from app import create_app, db
 def app():
     """
     Author: Troy Witmer
-    Date: 02/20/2025
+    Dadte: 02/20/2025
     Description: pytest fixture to create a fresh application and database (sqlite in memory)
     for each test. then removes drops all db after test.
     """
