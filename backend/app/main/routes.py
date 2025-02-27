@@ -82,6 +82,26 @@ def test():
 
 
 
+@bp.route("/chat", methods=["POST"])
+def chat_message():
+    try:
+        data = request.get_json()
+        user_message = data.get("message")
+
+        if not user_message:
+            return jsonify({"error": "Message is required"}), 400
+
+        # Store messages in a list (this might need to change)
+        messages = []
+
+        # Store the message in messages list
+        messages.append({"type": "Question", "text": user_message})
+
+        return jsonify({"response": "You're connected to chat!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": "An internal server error occurred"}), 500
+
 @bp.route('/logout')
 # Redirect to login page
 def logout():
