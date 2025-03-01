@@ -20,7 +20,7 @@ services:
           target: /app
 
   database:
-    image: postgres
+    image: pgvector/pgvector:pg17
     ports:
       - "5432:5432"
     env_file:
