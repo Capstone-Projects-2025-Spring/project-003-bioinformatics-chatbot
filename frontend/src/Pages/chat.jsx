@@ -3,6 +3,7 @@ import ChatBox from "../Components/chatBox";
 import UserBubble from "../Components/userBubble";
 import ResponseBubble from "../Components/responseBubble";
 import ErrorBox from "../Components/errorBox";
+import axios from "axios";
 
 /**
  * Chat component renders a chat interface with messaging capabilities.
@@ -62,7 +63,7 @@ function Chat() {
 	 * Handle form submission for adding new messages.
 	 * @param {Event} e - The event object.
 	 */
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		/**
 		 * Prevent the default form submission behavior (which would reload the page).
 		 */
@@ -78,38 +79,48 @@ function Chat() {
 			return;
 		}
 
-		/**
-		 * If input is valid, add new messages (a Question and a dummy Response).
+		/** 
+		 * Add user's message to chat
 		 */
-		setMessages((prevMessages) => [
-			...prevMessages,
-			{ id: prevMessages.length, text: input, type: "Question" },
-		]);
+		const userMessage = { id: messages.length, text: input, type: "Question" };
+		setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-		/**
-		 * API call will go here.
-		 */
-
-		setMessages((prevMessages) => [
-			...prevMessages,
-			{ id: prevMessages.length, text: "I am disconnected", type: "Response" },
-		]);
-
-		/**
-		 * Clear the input field after submission.
-		 */
-		setInput("");
+     /**  
+	  * Send message to Flask backend using axios
+	  */
+	 	axios.post("http://localhost:444/chat", { 
+			message: input 
+		})
+        .then((response) => {
+            const botResponse = {
+                id: messages.length + 1,
+                text: response.data.response, 
+                type: "Response",
+            };
+            setMessages((prevMessages) => [...prevMessages, botResponse]);
+        })
+        .catch((error) => {
+            console.error("Error fetching chatbot response:", error);
+            setError({
+                title: "Chatbot Error",
+                body: "Failed to fetch response from the chatbot.",
+            });
+        });
+    /**
+	 * Clear the input field after submission
+	 */
+    setInput("");
 	};
 
 
-/**
- * Download fucntion that allows the user to download the  chat history as a .txt file. 
- * If no messages were sent the the chatbot, an error message is send instead.
- */
+	/**
+	 * Download fucntion that allows the user to download the  chat history as a .txt file. 
+	 * If no messages were sent the the chatbot, an error message is send instead.
+	 */
 
-	const handleDownload = () =>{
-		
-		if (messages.length == 0){
+	const handleDownload = () => {
+
+		if (messages.length == 0) {
 			setError({
 				title: "Empty Conversation",
 				body: "Please send at least one message",
@@ -118,30 +129,30 @@ function Chat() {
 
 		else {
 			/**
-         * Converts the messages array into a formatted string.
-         * @type {string}
-         */
-			const conversation  = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n` ,'') 
+		 * Converts the messages array into a formatted string.
+		 * @type {string}
+		 */
+			const conversation = messages.reduce((acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`, '')
 			/**
-         * Creates a Blob object for the formatted string.
-         * @type {Blob}
-         */
-			const txtfile = new Blob([conversation], {type: 'text/plain'});
-			
-		/**
-         * Anchor for the link for downloading
-         * @type {element}
-         */
+		 * Creates a Blob object for the formatted string.
+		 * @type {Blob}
+		 */
+			const txtfile = new Blob([conversation], { type: 'text/plain' });
+
+			/**
+			 * Anchor for the link for downloading
+			 * @type {element}
+			 */
 			const element = document.createElement("a");
 
-			
+
 			element.href = URL.createObjectURL(txtfile); // Creates a URL so that the computer starts the download of the file when clicked
 
-			
+
 			element.download = "ChatHistory.txt"; // Name of the file
-			
+
 			document.body.appendChild(element); // Allows the action of the download to happen when the button is clicked
-			
+
 			element.click(); // This actually triggers the download
 
 		}
@@ -187,20 +198,20 @@ function Chat() {
 			{/** Chat input form. */}
 			<div className="w-full flex items-center space-x-2 p-3 bg-gray-800 break-words">
 
-  				<ChatBox
-    				input={input}
-    				setInput={setInput}
-    				handleSubmit={handleSubmit}
-    				className="flex-1 "
-  				/>
-  				<button
+				<ChatBox
+					input={input}
+					setInput={setInput}
+					handleSubmit={handleSubmit}
+					className="flex-1 "
+				/>
+				<button
 					data-testid="downloadButton"
-    				onClick={handleDownload}
-    				className="py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200"
-  				>
+					onClick={handleDownload}
+					className="py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200"
+				>
 					<img src="src\assets\downloads.png" alt="Download Icon" className="w-5 h-5" />
-    
-  				</button>
+
+				</button>
 
 			</div>
 		</div>
