@@ -1,32 +1,19 @@
-from flask import jsonify, render_template, redirect, url_for
+from flask import jsonify, render_template, redirect, url_for, request
 from app.main import bp
 from app.models import User
 from app import db
-
-from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired, Length
-from wtforms import StringField, PasswordField, SubmitField
 
 import ollama
 from ollama import chat
 from ollama import ChatResponse
 from flask import request, jsonify
 from ollama import Client
+
+from app.main.forms import LoginForm, PDFUploadForm
+
 """
 Places for routes in the backend
 """
-
-
-#Logging form that is used in the index.html page
-class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[InputRequired(), Length(min=5, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Login')
-
-
-
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -80,7 +67,25 @@ def test():
     else:
         return jsonify({"message": "No one is here :()."}), 200
 
+@bp.route("/upload", methods=["GET", "POST"])
+def upload_pdf():
+    """
+    Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
+    Keith will implement the actual database storage.
+    """
+    form = PDFUploadForm()
 
+    if form.validate_on_submit():
+        uploaded_file = form.pdf_file.data
+        if uploaded_file:
+            print(f"Received file: {uploaded_file.filename}")
+
+            return jsonify({"message": f"File '{uploaded_file.filename}' uploaded successfully!"}), 200
+        else:
+            return jsonify({"error": "No file uploaded"}), 400
+
+    # Handle case where form validation fails (no valid data)
+    return jsonify({"error": "Invalid form data"}), 400
 
 @bp.route("/chat", methods=["POST"])
 def chat_message():
