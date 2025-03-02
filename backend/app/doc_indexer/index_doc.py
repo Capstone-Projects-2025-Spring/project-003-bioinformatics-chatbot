@@ -10,11 +10,12 @@ def index_and_add_to_db(chunks: list[Document]):
 
     # existing_ids = set(existing_items["ids"])
     # print(f"Number of existing documents in DB: {len(existing_ids)}")
-
+    existing_ids = set([id_tuple[0] for id_tuple in db.session.query(vector_db.EmbeddingStore.id).all()])
     # # Only add documents that don't exist in the DB.
     new_chunks = []
     for chunk in chunks_with_ids:
-        new_chunks.append(chunk)
+        if chunk.metadata["id"] not in existing_ids:
+            new_chunks.append(chunk)
 
     if len(new_chunks):
         print(f"👉 Adding new documents: {len(new_chunks)}")
@@ -22,9 +23,6 @@ def index_and_add_to_db(chunks: list[Document]):
         vector_db.add_documents(new_chunks, ids=new_chunk_ids)
     else:
         print("✅ No new documents to add")
-    
-    existing_items = db.session.query(vector_db.EmbeddingStore.document).all()  # IDs are always included by default
-    print(existing_items)
 
 def calculate_chunk_ids(chunks):
     # This will create IDs like "data/monopoly.pdf:6:2"
