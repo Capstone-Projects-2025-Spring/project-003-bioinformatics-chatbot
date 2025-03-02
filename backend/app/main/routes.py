@@ -132,7 +132,7 @@ def chat_response():
         # user_message = data.get("message", "Why is the sky blue? Please give a short") # Hard-coded message for testing
 
         # Get response from Ollama
-        response = client.chat(model="deepseek-r1:7b", messages=[
+        response = client.chat(model="llama3.2", messages=[
             {"role": "user", "content": user_message}
         ])
 
