@@ -1,32 +1,51 @@
 import os
 import re
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-#path to the data_txt folder
-folder_path = './data_txt'
 
-#Store sentences from the data_txt 
-sentences = []
+FILE_PATH = "data"
 
-#Loop through each file in data_txt's folder and read
-for filename in os.listdir(folder_path):
-    file_path = os.path.join(folder_path, filename)
+def parse_txt(FILE_PATH):
 
-    # Check if it's a file (not a directory)
-    if os.path.isfile(file_path):
+    """
+    Parse a txt files into chunks
 
-        # Open and read the content of the file
-        with open(file_path, 'r') as file:
-            content = file.read()
+    Args:
+        FILE_PATH (_type_): file path for pdf file
 
-            #add the file name into sentences for clarity
-            sentences.append(filename)
+    Returns:
+        LIST (_type_): A list of chucks
+    """
+    # Check if the file exists
+    if not os.path.isfile(FILE_PATH):
+        print(f"Error: The file '{FILE_PATH}' does not exist.")
+        return []
 
-            # Split content into sentences (simple sentence split based on periods, question marks, etc.)
-            sentence = re.split(r'(?<=[.!?])\s+', content.strip())
 
-            # Add the sentences from this file to the list
-            sentences.extend(sentence)
+    chunks =[]
 
-# Output the list of sentences
-for idx, sentence in enumerate(sentences, 1):
-    print(f"Sentence {idx}: {sentence}")
+    with open(FILE_PATH, "r", encoding="utf-8") as file:
+        # Read entire file and strip extra spaces
+        content = file.read().strip()  
+
+
+        # Use a text splitter to break the content into chunks
+        text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,  # Number of characters per chunk
+        chunk_overlap=50  # Overlap for better continuity
+        )
+        chunks.extend(text_splitter.split_text(content))
+    
+        return chunks
+
+
+def main():
+    chunks = parse_txt(FILE_PATH)
+    # Output the list of sentences
+    for idx, sentence in enumerate(chunks, 1):
+        print(f"Sentence {idx}: {sentence}")
+
+if __name__ == "__main__":
+    main()
+
+
