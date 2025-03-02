@@ -14,46 +14,47 @@ from flask import request, jsonify
 from ollama import Client
 
 
-
 """
 Places for routes in the backend
 """
 
 
-#Logging form that is used in the index.html page
+# Logging form that is used in the index.html page
 class LoginForm(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+    username = StringField(
+        validators=[InputRequired(), Length(min=4, max=20)],
+        render_kw={"placeholder": "Username"},
+    )
 
-    password = PasswordField(validators=[InputRequired(), Length(min=5, max=20)], render_kw={"placeholder": "Password"})
+    password = PasswordField(
+        validators=[InputRequired(), Length(min=5, max=20)],
+        render_kw={"placeholder": "Password"},
+    )
 
-    submit = SubmitField('Login')
-
-
+    submit = SubmitField("Login")
 
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
-
-
 def index():
     """
-    Author: Troy Witmer 
+    Author: Troy Witmer
     Date: 02/06/2025
     Description: Sample route, currently index endpoint.
 
-    Author: Justin Truong 
+    Author: Justin Truong
     Date: 02/12/2025
     Description: Added a admin login.
 
     """
-    #login form
+    # login form
     form = LoginForm()
 
-    #Check for correct password/username
+    # Check for correct password/username
     if form.validate_on_submit():
         if form.username.data == "admin" and form.password.data == "admin":
 
-            # how to make a simple query 
+            # how to make a simple query
             user = User.query.filter_by(username="admin").first()
             if not user:
                 user = User(username="admin")
@@ -62,14 +63,16 @@ def index():
                 db.session.commit()
 
             # Render admin page if login is successful
-            return render_template("main/admin.html", user=user)  
+            return render_template("main/admin.html", user=user)
         else:
-            #return error to index page
-            return render_template("main/index.html", form=form, error="Invalid username or password") 
+            # return error to index page
+            return render_template(
+                "main/index.html", form=form, error="Invalid username or password"
+            )
 
-
-    #Pass the forms here.
+    # Pass the forms here.
     return render_template("main/index.html", form=form)
+
 
 @bp.route("/test", methods=["GET"])
 def test():
@@ -82,7 +85,6 @@ def test():
         return jsonify({"message": f"Hello: {user.username}"}), 200
     else:
         return jsonify({"message": "No one is here :()."}), 200
-
 
 
 @bp.route("/chat", methods=["POST"])
@@ -105,23 +107,25 @@ def chat_message():
     except Exception as e:
         return jsonify({"error": "An internal server error occurred"}), 500
 
-@bp.route('/logout')
+
+@bp.route("/logout")
 # Redirect to login page
 def logout():
-    return redirect(url_for('main.index'))  
+    return redirect(url_for("main.index"))
+
 
 @bp.route("/chat_response", methods=["POST"])
 def chat_response():
     # WHEN TESTING, THERE STILL NEEDS TO BE A JSON OBJECT PASSED IN, EVEN WITH THE DEFAULT MESSAGE
     """
-        {
-            "message": "Why is the sky blue?"
-        }
+    {
+        "message": "Why is the sky blue?"
+    }
     """
     try:
         # Use the service name 'ollama' as the host
-        client = Client(host='http://ollama:11434')
-        
+        client = Client(host="http://ollama:11434")
+
         data = request.get_json()
         if not data or "message" not in data:
             return jsonify({"error": "Missing 'message' field in request body"}), 400
@@ -130,29 +134,34 @@ def chat_response():
         # user_message = data.get("message", "Why is the sky blue? Please give a short") # Hard-coded message for testing
 
         # Get response from Ollama
-        response = client.chat(model="llama3.2", messages=[
-            {"role": "user", "content": user_message}
-        ])
+        response = client.chat(
+            model="llama3.2", messages=[{"role": "user", "content": user_message}]
+        )
 
         # Extract the response message
-        llm_response = response.message['content']
+        llm_response = response.message["content"]
         print(llm_response, flush=True)
-        
+
         return jsonify({"response": llm_response})
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
-        return jsonify({
-            "error": f"An error occurred: {str(e)}"
-        }), 500
-    
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
 
 from app.doc_parsers.parse_pdf import load_documents
 from app.doc_parsers.parse_pdf import split_documents
 from app.doc_indexer.index_doc import index_and_add_to_db
+from app.doc_indexer.retrieve_document import query_database
+
 
 @bp.route("/test_indexing", methods=["GET"])
 def test_indexing():
     documents = load_documents()
     chunks = split_documents(documents)
     index_and_add_to_db(chunks)
+    doc = query_database("cell cycle")
+    print(doc)
+
+    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
+
