@@ -163,9 +163,11 @@ describe("Chat Page", () => {
 	
 	  it("downloads chatbot conversation when there is at least one message", async () => {
 		// Creating a dummy url for test
-		const createObjectURL = vi.fn().mockReturnValue('mocked-url');
-		
+		const createObjectURL = vi.fn().mockReturnValue("mocked-url");
+		const revokeObjectURL = vi.fn();
+
 		global.URL.createObjectURL = createObjectURL;
+		global.URL.revokeObjectURL = revokeObjectURL;
 	  
 		render(<Chat />);
 	  

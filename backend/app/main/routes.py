@@ -1,6 +1,6 @@
 from flask import jsonify, render_template, redirect, url_for
 from app.main import bp
-from app.models import User
+from app.models import User, Document
 from app import db
 
 from flask_wtf import FlaskForm
@@ -122,3 +122,27 @@ def chat_response():
         return jsonify({
             "error": f"An error occurred: {str(e)}"
         }), 500
+    
+@bp.route("/upload", methods=["GET", "POST"])
+def upload_file():
+    if request.method == "POST":
+        
+        
+        file = request.files["myfile"]
+        
+        
+        
+        
+        new_document = Document(
+            document_name=file.filename,
+            document_type=file.filename.split(".")[-1],  
+            file_contents=file.read()  
+        )
+        
+        db.session.add(new_document)
+        db.session.commit()
+
+        
+        return redirect(url_for("main.index"))  
+
+    return render_template("admin.html") 

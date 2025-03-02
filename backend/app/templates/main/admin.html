@@ -5,6 +5,10 @@
 <!-- Logout button -->
 <a href="{{ url_for('main.logout') }}" class="btn btn-danger">Logout</a>  
 
-<h2>Not implement yet</h2>
-<button type="submit">Add Documents</button>
+<form action="{{ url_for('main.upload_file') }}" method="POST" enctype="multipart/form-data">
+    <label for="myfile">Select a file:</label>
+    <input type="file" id="myfile" name="myfile" required />
+    <br /><br />
+    <input type="submit" value="Upload File" />
+</form>
 {% endblock %}
