@@ -30,30 +30,23 @@ def index():
     Description: Added a admin login.
 
     """
-    #login form
     form = LoginForm()
 
-    #Check for correct password/username
     if form.validate_on_submit():
         if form.username.data == "admin" and form.password.data == "admin":
-
-            # how to make a simple query 
             user = User.query.filter_by(username="admin").first()
             if not user:
                 user = User(username="admin")
                 user.set_password("password")
                 db.session.add(user)
                 db.session.commit()
-
-            # Render admin page if login is successful
-            return render_template("main/admin.html", user=user)  
+            
+            return render_template("main/admin.html", user=user)
         else:
-            #return error to index page
             return render_template("main/index.html", form=form, error="Invalid username or password") 
 
-
-    #Pass the forms here.
     return render_template("main/index.html", form=form)
+
 
 @bp.route("/test", methods=["GET"])
 def test():
@@ -75,17 +68,29 @@ def upload_pdf():
     """
     form = PDFUploadForm()
 
-    if form.validate_on_submit():
-        uploaded_file = form.pdf_file.data
-        if uploaded_file:
+    if request.method == "POST":  # Handle form submission
+        if form.validate_on_submit():
+            uploaded_file = form.pdf_file.data
+
+            # Check if a file was uploaded
+            if not uploaded_file:
+                return jsonify({"error": "No file uploaded"}), 400
+
+            # Check if the uploaded file is a PDF (MIME type and file extension)
+            if uploaded_file.mimetype != 'application/pdf' or not uploaded_file.filename.lower().endswith('.pdf'):
+                return jsonify({"error": "Invalid file type. Only PDFs are allowed."}), 400
+
+            # Simulate "processing" the file
             print(f"Received file: {uploaded_file.filename}")
 
+            # Pretend processing complete and return success
             return jsonify({"message": f"File '{uploaded_file.filename}' uploaded successfully!"}), 200
-        else:
-            return jsonify({"error": "No file uploaded"}), 400
 
-    # Handle case where form validation fails (no valid data)
-    return jsonify({"error": "Invalid form data"}), 400
+        else:
+            return jsonify({"error": "Invalid form data. Please ensure all fields are filled correctly."}), 400
+
+    # If it's a GET request, render the upload.html template
+    return render_template("main/upload.html", form=form)
 
 @bp.route("/chat", methods=["POST"])
 def chat_message():
