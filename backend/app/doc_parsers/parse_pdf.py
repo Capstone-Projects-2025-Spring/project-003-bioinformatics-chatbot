@@ -1,11 +1,10 @@
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
+import os
 
 
-
-
-DATA_PATH = "data"
+DATA_PATH = os.path.abspath("/app/app/doc_parsers/data")
 
 # load the pdf files 
 def load_documents():
@@ -21,10 +20,4 @@ def split_documents(documents: list[Document]):
         is_separator_regex=False,
     )
     return text_splitter.split_documents(documents)
-
-
-documents= load_documents()
-chucks = split_documents(documents)
-print(chucks[0])
-
 

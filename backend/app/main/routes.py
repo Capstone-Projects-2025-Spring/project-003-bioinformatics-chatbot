@@ -12,6 +12,9 @@ from ollama import chat
 from ollama import ChatResponse
 from flask import request, jsonify
 from ollama import Client
+
+
+
 """
 Places for routes in the backend
 """
@@ -142,3 +145,14 @@ def chat_response():
         return jsonify({
             "error": f"An error occurred: {str(e)}"
         }), 500
+    
+
+from app.doc_parsers.parse_pdf import load_documents
+from app.doc_parsers.parse_pdf import split_documents
+from app.doc_indexer.index_doc import index_and_add_to_db
+
+@bp.route("/test_indexing", methods=["GET"])
+def test_indexing():
+    documents = load_documents()
+    chunks = split_documents(documents)
+    index_and_add_to_db(chunks)
