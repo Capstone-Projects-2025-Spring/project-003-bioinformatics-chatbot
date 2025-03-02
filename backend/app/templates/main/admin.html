@@ -1,0 +1,11 @@
+{% extends "core/base.html" %} {% block content %}
+<h1>You are logged in</h1>
+<h2>User: {{user.username}}</h2>
+
+<!-- Logout button -->
+<a href="{{ url_for('main.logout') }}" class="btn btn-danger">Logout</a>  
+
+<h2>Upload PDF Documents</h2>
+<a href="{{ url_for('main.upload_pdf') }}" class="btn btn-primary">Upload PDF</a> 
+
+{% endblock %}
