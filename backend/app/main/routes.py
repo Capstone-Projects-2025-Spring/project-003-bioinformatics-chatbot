@@ -65,7 +65,7 @@ def test():
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
-    Keith will implement the actual database storage.
+    Keith will implement the actual database storage (done).
     """
     form = PDFUploadForm()
 
@@ -81,13 +81,13 @@ def upload_pdf():
             if uploaded_file.mimetype != 'application/pdf' or not uploaded_file.filename.lower().endswith('.pdf'):
                 return jsonify({"error": "Invalid file type. Only PDFs are allowed."}), 400
 
-            # Instance of model created
+            # Instance of Document model created
             new_document = Document(
-                document_name = uploaded_file.filename.split(".")[0], # Name of the file
-                document_type = uploaded_file.filename.split(".")[-1],  # Splits the name by "." and gets the ending (pdf does worked for any file type)
+                document_name = uploaded_file.filename.split(".")[0], # Name of the file without the extenstion
+                document_type = uploaded_file.filename.split(".")[-1],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
                 file_contents = uploaded_file.read() # This is the binary data of the pdf file
                 )
-            
+            # Storing the document into the database
             db.session.add(new_document)
             db.session.commit()
             
