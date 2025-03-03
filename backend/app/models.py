@@ -27,3 +27,14 @@ class User(db.Model):
     # check password to check if a hash matches with an inputes password
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Document(db.Model):
+    # table for documents
+    # id: Integer, and is the primary key of the table
+    id = db.Column(db.Integer, primary_key=True)
+    # column document_name, string length unkown, and every document should have a name
+    document_name = db.Column(db.String(), nullable=False)
+    # column document_type, string length unkown, and every document has an extension
+    document_type = db.Column(db.String(), nullable=False)
+    # column file_contents, string length unkown, and every document shoould have binary data attached to it
+    file_contents = db.Column(db.LargeBinary, nullable=False)
