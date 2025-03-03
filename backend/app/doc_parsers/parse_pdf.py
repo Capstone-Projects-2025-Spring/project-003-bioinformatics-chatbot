@@ -5,7 +5,7 @@ import os
 
 
 FILE_PATH = "data"
-DATA_PATH = os.path.abspath("/app/app/doc_parsers/data")
+DATA_PATH = os.path.abspath("./app/doc_parsers/data/Dna.pdf")
 
 
 # Parse any file in pdf
