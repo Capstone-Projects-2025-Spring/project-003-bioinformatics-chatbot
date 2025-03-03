@@ -1,12 +1,22 @@
 from flask import Flask, request
 from flask_cors import CORS
+from langchain_ollama import OllamaEmbeddings
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from langchain_postgres.vectorstores import PGVector
+from langchain_core.embeddings import DeterministicFakeEmbedding
 
 # the two functions we call when initalizing app db and migrations
 db = SQLAlchemy()
 migrate = Migrate()
+vector_db = PGVector(
+    # embeddings=OllamaEmbeddings(model="llama3.2", base_url="http://ollama:11434"),
+    embeddings=DeterministicFakeEmbedding(size=4096),
+    collection_name='vectorized_docs',
+    connection=Config.SQLALCHEMY_DATABASE_URI,
+    use_jsonb=True,
+    )
 
 
 def create_app(config_class=Config):

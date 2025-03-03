@@ -1,10 +1,11 @@
-import os 
+import os
 
 from parse_txt import parse_txt
 from parse_pdf import parse_pdf
 
-#Data Directory 
-DIRECTORY = './data'
+# Data Directory
+DIRECTORY = "./data"
+
 
 def file_sorter(DIRECTORY):
     """
@@ -31,7 +32,9 @@ def file_sorter(DIRECTORY):
             chunks = parse_txt(filepath)
             # Output the list of sentences
             print(chunks[0])
-        else: 
+        else:
             print("Can't Process that file type")
 
+
 file_sorter(DIRECTORY)
+

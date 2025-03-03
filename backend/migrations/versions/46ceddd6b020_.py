@@ -28,7 +28,7 @@ def upgrade():
     )
     with op.batch_alter_table("user", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_user_username"), ["username"], unique=True)
-
+    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
     # ### end Alembic commands ###
 
 
@@ -38,4 +38,5 @@ def downgrade():
         batch_op.drop_index(batch_op.f("ix_user_username"))
 
     op.drop_table("user")
+    op.execute("DROP EXTENSION IF EXISTS vector")
     # ### end Alembic commands ###
