@@ -3,4 +3,13 @@ sidebar_position: 2
 ---
 # Integration tests
 
-Tests to demonstrate each use-case based on the use-case descriptions and the sequence diagrams. External input should be provided via mock objects and results verified via mock objects. Integration tests should not require manual entry of data nor require manual interpretation of results.
+## Backend 
+Pytest and Flask provide easy integration testing py providing test clients to
+make calls on a built application. Python makes it easy to mock any data we
+might need to test via the unittest module.
+
+## Frontend
+Viteest allows us to test components in a way that tests their functionality with
+the backend. With axios we can make real requests to the backend using front
+end components and validate the data returned.
+
