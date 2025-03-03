@@ -3,6 +3,7 @@ from werkzeug.datastructures import FileStorage
 
 def test_upload_pdf_valid(client, app):
     app.config['WTF_CSRF_ENABLED'] = False;
+    
     # Prepare the test PDF content and create a FileStorage object
     pdf_content = b"%PDF-1.7\nTest PDF content"
     pdf_file = FileStorage(
