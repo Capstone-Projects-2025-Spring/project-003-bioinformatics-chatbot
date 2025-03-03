@@ -2,6 +2,7 @@ from flask import jsonify, render_template, redirect, url_for, request
 from app.main import bp
 from app.models import User
 from app import db
+from app.models import Document 
 
 import ollama
 from ollama import chat
@@ -64,7 +65,7 @@ def test():
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
-    Keith will implement the actual database storage.
+    Keith will implement the actual database storage (done).
     """
     form = PDFUploadForm()
 
@@ -80,8 +81,18 @@ def upload_pdf():
             if uploaded_file.mimetype != 'application/pdf' or not uploaded_file.filename.lower().endswith('.pdf'):
                 return jsonify({"error": "Invalid file type. Only PDFs are allowed."}), 400
 
-            # Simulate "processing" the file
-            print(f"Received file: {uploaded_file.filename}")
+            # Instance of Document model created
+            new_document = Document(
+                document_name = uploaded_file.filename.split(".")[0], # Name of the file without the extenstion
+                document_type = uploaded_file.filename.split(".")[-1],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
+                file_contents = uploaded_file.read() # This is the binary data of the pdf file
+                )
+            # Storing the document into the database
+            db.session.add(new_document)
+            db.session.commit()
+            
+                
+
 
             # Pretend processing complete and return success
             return jsonify({"message": f"File '{uploaded_file.filename}' uploaded successfully!"}), 200
