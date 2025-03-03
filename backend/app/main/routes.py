@@ -2,7 +2,7 @@ from flask import jsonify, render_template, redirect, url_for, request
 from app.main import bp
 from app.models import User
 from app import db
-from app.models import Document 
+from app.models import Document
 
 import ollama
 from ollama import chat
@@ -47,7 +47,6 @@ def index():
                 db.session.add(user)
                 db.session.commit()
 
-
             # Render admin page if login is successful
             return render_template("main/admin.html", user=user)
         else:
@@ -73,6 +72,7 @@ def test():
     else:
         return jsonify({"message": "No one is here :()."}), 200
 
+
 @bp.route("/upload", methods=["GET", "POST"])
 def upload_pdf():
     """
@@ -90,30 +90,52 @@ def upload_pdf():
                 return jsonify({"error": "No file uploaded"}), 400
 
             # Check if the uploaded file is a PDF (MIME type and file extension)
-            if uploaded_file.mimetype != 'application/pdf' or not uploaded_file.filename.lower().endswith('.pdf'):
-                return jsonify({"error": "Invalid file type. Only PDFs are allowed."}), 400
+            if (
+                uploaded_file.mimetype != "application/pdf"
+                or not uploaded_file.filename.lower().endswith(".pdf")
+            ):
+                return (
+                    jsonify({"error": "Invalid file type. Only PDFs are allowed."}),
+                    400,
+                )
 
             # Instance of Document model created
             new_document = Document(
-                document_name = uploaded_file.filename.split(".")[0], # Name of the file without the extenstion
-                document_type = uploaded_file.filename.split(".")[-1],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
-                file_contents = uploaded_file.read() # This is the binary data of the pdf file
-                )
+                document_name=uploaded_file.filename.split(".")[
+                    0
+                ],  # Name of the file without the extenstion
+                document_type=uploaded_file.filename.split(".")[
+                    -1
+                ],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
+                file_contents=uploaded_file.read(),  # This is the binary data of the pdf file
+            )
             # Storing the document into the database
             db.session.add(new_document)
             db.session.commit()
-            
-                
-
 
             # Pretend processing complete and return success
-            return jsonify({"message": f"File '{uploaded_file.filename}' uploaded successfully!"}), 200
+            return (
+                jsonify(
+                    {
+                        "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+                    }
+                ),
+                200,
+            )
 
         else:
-            return jsonify({"error": "Invalid form data. Please ensure all fields are filled correctly."}), 400
+            return (
+                jsonify(
+                    {
+                        "error": "Invalid form data. Please ensure all fields are filled correctly."
+                    }
+                ),
+                400,
+            )
 
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
+
 
 @bp.route("/chat", methods=["POST"])
 def chat_message():
@@ -177,7 +199,7 @@ def chat_response():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
-from app.doc_parsers.parse_pdf import load_documents
+from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
 from app.doc_parsers.parse_pdf import split_documents
 from app.doc_indexer.index_doc import index_and_add_to_db
 from app.doc_indexer.retrieve_document import query_database
@@ -185,11 +207,10 @@ from app.doc_indexer.retrieve_document import query_database
 
 @bp.route("/test_indexing", methods=["GET"])
 def test_indexing():
-    documents = load_documents()
+    documents = load_documents(DATA_PATH)
     chunks = split_documents(documents)
     index_and_add_to_db(chunks)
     doc = query_database("cell cycle")
     print(doc)
 
     return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
-

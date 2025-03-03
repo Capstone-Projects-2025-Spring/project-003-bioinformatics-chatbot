@@ -1,18 +1,55 @@
-from langchain_community.document_loaders import PyPDFDirectoryLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 import os
 
 
+FILE_PATH = "data"
 DATA_PATH = os.path.abspath("/app/app/doc_parsers/data")
 
-# load the pdf files 
-def load_documents():
-    document_loader = PyPDFDirectoryLoader(DATA_PATH)
+
+# Parse any file in pdf
+def parse_pdf(FILE_PATH):
+    """
+    Parse a pdf files into chunks
+
+    Args:
+        FILE_PATH (_type_): file path for pdf file
+
+    Returns:
+        LIST (_type_): A list of chucks
+    """
+    documents = load_documents(FILE_PATH)
+    chunks = split_documents(documents)
+    return chunks
+
+
+# load the pdf files
+def load_documents(FILE_PATH):
+    """
+       A function to load the pdf documnet.
+
+    Args:
+         FILE_PATH (_type_): file path for pdf file
+
+    Returns:
+        LIST (_type_): List of Document object for each page
+    """
+    document_loader = PyPDFLoader(FILE_PATH)
     return document_loader.load()
 
-#Split the pdf pages into chuck for easier use and clearness
+
+# Split the pdf pages into chuck for easier use and clearness
 def split_documents(documents: list[Document]):
+    """
+    Split the pdf pages into chuck for easier use and clearness
+
+    Args:
+        documents (list[Document]): List of Pages
+
+    Returns:
+        LIST (_type_): List of chunks object for pdf file
+    """
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=800,
         chunk_overlap=80,
@@ -21,3 +58,12 @@ def split_documents(documents: list[Document]):
     )
     return text_splitter.split_documents(documents)
 
+
+"""
+def main():
+    chunks = parse_pdf(FILE_PATH)
+    print(chunks[0])
+
+if __name__ == "__main__":
+    main()
+"""
