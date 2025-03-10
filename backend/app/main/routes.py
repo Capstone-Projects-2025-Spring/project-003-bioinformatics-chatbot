@@ -136,59 +136,23 @@ def upload_pdf():
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
 
-
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
-        data = request.get_json()
-        user_message = data.get("message")
-
-        if not user_message:
-            return jsonify({"error": "Message is required"}), 400
-
-        # Store messages in a list (this might need to change)
-        messages = []
-
-        # Store the message in messages list
-        messages.append({"type": "Question", "text": user_message})
-
-        return jsonify({"response": "You're connected to chat!"}), 200
-
-    except Exception as e:
-        return jsonify({"error": "An internal server error occurred"}), 500
-
-
-@bp.route("/logout")
-# Redirect to login page
-def logout():
-    return redirect(url_for("main.index"))
-
-
-@bp.route("/chat_response", methods=["POST"])
-def chat_response():
-    # WHEN TESTING, THERE STILL NEEDS TO BE A JSON OBJECT PASSED IN, EVEN WITH THE DEFAULT MESSAGE
-    """
-    {
-        "message": "Why is the sky blue?"
-    }
-    """
-    try:
-        # Use the service name 'ollama' as the host
         client = Client(host="http://ollama:11434")
 
         data = request.get_json()
+        
         if not data or "message" not in data:
-            return jsonify({"error": "Missing 'message' field in request body"}), 400
-
+            return jsonify({"error": "Message is required"}), 400
+        
         user_message = data["message"]
-        # user_message = data.get("message", "Why is the sky blue? Please give a short") # Hard-coded message for testing
 
-        # Get response from Ollama
+        # Store the message in messages list
         response = client.chat(
             model="llama3.2", messages=[{"role": "user", "content": user_message}]
         )
 
-        # Extract the response message
         llm_response = response.message["content"]
         print(llm_response, flush=True)
 
@@ -196,7 +160,12 @@ def chat_response():
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500 
+
+@bp.route("/logout")
+# Redirect to login page
+def logout():
+    return redirect(url_for("main.index"))
 
 
 from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
