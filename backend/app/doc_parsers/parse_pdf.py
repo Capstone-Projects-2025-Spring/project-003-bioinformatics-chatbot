@@ -4,8 +4,8 @@ from langchain.schema.document import Document
 import os
 
 
-FILE_PATH = "data"
-DATA_PATH = os.path.abspath("./app/doc_parsers/data/Dna.pdf")
+
+DATA_PATH = os.path.abspath("./app/data/Dna.pdf")
 
 
 # Parse any file in pdf
