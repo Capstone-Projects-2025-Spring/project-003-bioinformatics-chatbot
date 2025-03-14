@@ -11,6 +11,7 @@ from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
+from app.doc_parsers.process_uploaded_file import process_uploaded_file
 
 """
 Places for routes in the backend
@@ -99,19 +100,9 @@ def upload_pdf():
                     400,
                 )
 
-            # Instance of Document model created
-            new_document = Document(
-                document_name=uploaded_file.filename.split(".")[
-                    0
-                ],  # Name of the file without the extenstion
-                document_type=uploaded_file.filename.split(".")[
-                    -1
-                ],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
-                file_contents=uploaded_file.read(),  # This is the binary data of the pdf file
-            )
-            # Storing the document into the database
-            db.session.add(new_document)
-            db.session.commit()
+
+            #Process the upload file to the parser and index 
+            process_uploaded_file(uploaded_file)
 
             # Pretend processing complete and return success
             return (
