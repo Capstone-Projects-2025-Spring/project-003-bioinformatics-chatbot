@@ -3,7 +3,7 @@ import re
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
-FILE_PATH = "data"
+
 
 
 def parse_txt(FILE_PATH):
