@@ -20,7 +20,8 @@ This project proposes the creation of a Generative AI and RAG-powered chatbot me
 
 ## Project Abstract
 
-The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. Using innovative learning technology and human-like behavior, the chatbot serves to guide the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. No matter if you are a first-time user or an experienced researcher, the Bioinformatics Chabot will streamline the problem-solving process and guide you toward success.
+The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. Using innovative learning technology and human-like behavior, the chatbot serves to guide the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. By harnessing the strength of AI, the web application is transforming the way researchers tackle heartfelt problems leading to rapid advancements.  No matter if you are a first-time user or an experienced researcher, the Bioinformatics Chabot will streamline the problem-solving process and guide you toward success.
+
 
 ## High Level Requirement
 
