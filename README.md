@@ -16,7 +16,7 @@ Section #, as well as any words that quickly give your peers insights into the a
 
 ## Project Overview
 
-This project proposes the creation of a Generative AI and RAG-powered chatbot meant specifically to answer questions and provide tutorials for solving bioinformatics problems based on numerous pre-provided methods.
+This project proposes the creation of a Generative AI and RAG-powered chatbot designed to support bioinformatics researchers in overcoming intricate challenges. The chatbot will provide accurate answers with thorough tutorials for solving bioinformatics problems, utilizing numerous pre-defined methods to acquire appropriate solutions.
 
 ## Project Abstract
 
