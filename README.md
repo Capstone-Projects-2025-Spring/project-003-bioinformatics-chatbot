@@ -20,7 +20,7 @@ This project proposes the creation of a Generative AI and RAG-powered chatbot me
 
 ## Project Abstract
 
-This document proposes a novel application of a text message (SMS or Email) read-out and hands-free call interacted between an Android Smartphone and an infotainment platform (headunit) in a car environment. When a phone receives an SMS or Email, the text message is transferred from the phone to the headunit through a Bluetooth connection. On the headunit, user can control which and when the received SMS or E-mail to be read out through the in-vehicle audio system. The user may press one button on the headunit to activate the hands-free feature to call back the SMS sender.
+The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. Using innovative learning technology and human-like behavior, the chatbot serves to guide the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. No matter if you are a first-time user or an experienced researcher, the Bioinformatics Chabot will streamline the problem-solving process and guide you toward success.
 
 ## High Level Requirement
 
