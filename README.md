@@ -20,12 +20,17 @@ This project aims to create a chatbot powered by Generative AI and RAG to help b
 
 ## Project Abstract
 
-The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. Using innovative learning technology and human-like behavior, the chatbot serves to guide the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. By harnessing the strength of AI, the web application is transforming the way researchers tackle heartfelt problems leading to rapid advancements.  No matter if you are a first-time user or an experienced researcher, the Bioinformatics Chabot will streamline the problem-solving process and guide you toward success.
+The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. The application enables users to ask the chatbot questions and receive relevant, accurate answers. Using innovative learning technology and human-like behavior, the chatbot guides the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. By harnessing the strength of AI, the web application is transforming how researchers tackle heartfelt problems leading to rapid advancements. 
 
 
 ## High Level Requirement
 
-Describe the requirements – i.e., what the product does and how it does it from a user point of view – at a high level.
+Once the user accesses the link to our web application, they will come into view of our welcome page that briefly summarizes the application's purpose. The welcome page also details the users who have worked on bringing the Bioinformatics Chatbot to life. To begin using the chatbot, the user clicks on the "Begin New Chat" button which activates the interface for the chatbot.
+
+The chat interface is the crux of our application. The user can ask the chatbot questions are receive answers that are based on user-provided documentation. The interface also allows the user to edit their queries if they did not like the response from the chatbot, or if the user wanted to change their question. Additionally, once the user is done conversing with the chatbot, they have the option to download the conversation history for later reference.
+
+For the chatbot to deliver quality answers tailored towards Bioinformatics, there is a backend application where users can upload relevant documentation. After logging in, users can navigate to the documentation upload page by clicking on the "Upload PDF" button. Once on the page, the user can upload their bioinformatics documentation which is stored inside of our database for the LLM to reference when producing accurate responses.  
+
 
 ## Conceptual Design
 
