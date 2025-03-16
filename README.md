@@ -27,9 +27,10 @@ The Bioinformatics Chatbot is a cutting-edge web application designed to assist 
 
 Once the user accesses the link to our web application, they will come into view of our welcome page that briefly summarizes the application's purpose. The welcome page also details the users who have worked on bringing the Bioinformatics Chatbot to life. To begin using the chatbot, the user clicks on the "Begin New Chat" button which activates the interface for the chatbot.
 
-The chat interface is the crux of our application. The user can ask the chatbot questions are receive answers that are based on user-provided documentation. The interface also allows the user to edit their queries if they did not like the response from the chatbot, or if the user wanted to change their question. Additionally, once the user is done conversing with the chatbot, they have the option to download the conversation history for later reference.
+The chat interface is the crux of our application. The user can ask the chatbot questions and receive answers that are based on user-provided documentation, which can be submitted by clicking the black paper plane icon. The interface also allows the user to edit their queries if they do not like the response from the chatbot, or if the user wants to change their question. This is done by clicking on the pencil icon. Additionally, once the user is done conversing with the chatbot, they have the option to download the conversation history for later reference by pressing the download button in the bottom right-hand corner.
 
-For the chatbot to deliver quality answers tailored towards Bioinformatics, there is a backend application where users can upload relevant documentation. After logging in, users can navigate to the documentation upload page by clicking on the "Upload PDF" button. Once on the page, the user can upload their bioinformatics documentation which is stored inside of our database for the LLM to reference when producing accurate responses.  
+For the chatbot to deliver quality answers tailored towards Bioinformatics, there is a backend application where users can upload relevant documentation. After logging in, users can navigate to the documentation upload page by clicking on the "Upload PDF" link. Once on the page, the user can upload their bioinformatics documentation which is stored inside of our database for the LLM to reference when producing accurate responses.  
+ 
 
 
 ## Conceptual Design
