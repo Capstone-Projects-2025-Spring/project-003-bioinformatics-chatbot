@@ -1,0 +1,52 @@
+name: CI - Run Tests in Docker
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository # Checkout current version of repo
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: .env setup
+        run: |
+          echo "DATABASE_URI=${{ secrets.DATABASE_URI }}" > backend/.env
+
+      - name: database.env setup
+        run: |
+          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" > backend/database.env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> backend/database.env
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> backend/database.env
+          echo "POSTGRES_HOST_AUTH_METHOD=${{ secrets.POSTGRES_HOST_AUTH_METHOD }}" >> backend/database.env
+
+      - name: Set executable permissions for docker-entrypoint.sh
+        run: chmod +x ./backend/docker-entrypoint.sh
+
+      - name: Build and start containers
+        run: docker-compose up -d --build  # Runs in detached mode, so it is independent
+
+      - name: Wait for services to be ready
+        run: sleep 10 
+
+      - name: Run backend tests
+        run: docker-compose exec -T backend pytest tests  # Runs in detached mode, so it is independent, runs pytest in backend/tests
+
+      - name: Run frontend tests
+        run: docker-compose exec -T frontend npm run test # Runs in detached mode, so it is independent, runs node testing
+
+      - name: Stop and clean up containers
+        run: docker-compose down # Finish tests

@@ -13,7 +13,6 @@ def test_chat_message_valid(client):
 def test_chat_message_missing(client):
     # Test sending a request with no message
     response = client.post("/chat", json={})
-
     # Check for status code and error response
     assert response.status_code == 400
     json_data = response.get_json()
