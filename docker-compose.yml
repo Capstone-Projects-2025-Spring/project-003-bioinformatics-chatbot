@@ -13,8 +13,11 @@ services:
       - ./backend/.env
     networks:
       - app-network
-    volumes:
-      - ./backend:/app
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/
+          target: /app
 
   database:
     image: pgvector/pgvector:pg17
