@@ -1,4 +1,4 @@
-from flask import jsonify, render_template, redirect, url_for, request
+from flask import jsonify, render_template, redirect, url_for, request, session
 from app.main import bp
 from app.models import User
 from app import db
@@ -139,14 +139,22 @@ def chat_message():
         
         user_message = data["message"]
 
+        chat_history = session.get("chat_history", [])
+
+        chat_history.append({"role": "user", "content": user_message})
+
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": user_message}]
+            model="llama3.2", messages=chat_history
         )
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
 
+        chat_history.append({"role": "assistant", "content": llm_response})
+
+        session["chat_history"] = chat_history
+        
         return jsonify({"response": llm_response})
 
     except Exception as e:
