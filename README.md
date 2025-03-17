@@ -12,7 +12,7 @@
 
 ## Keywords
 
-Section #, as well as any words that quickly give your peers insights into the application like programming language, development platform, type of application, etc.
+**Section 003, React.js, JavaScript, HTML, CSS, Python, Flask, Ollama, Retrieval-Augmented Generation (RAG), Generative AI, Large Language Model (LLM)**
 
 ## Project Overview
 
@@ -35,15 +35,26 @@ For the chatbot to deliver quality answers tailored towards Bioinformatics, ther
 
 ## Conceptual Design
 
-Describe the initial design concept: Hardware/software architecture, programming language, operating system, etc.
+The frontend user interface of this app will be built using **React.js, JavaScript, HTML, and CSS**. This will allow for the creation of a clean and lightweight application for UI components, a satisfying user interface, and one that can handle user interactions well. It will also be responsible for sending user queries to the AI system, holding the chat history for context, and allowing users to download their conversation so that the method tutorial can be saved. The backend will be built using **Python** and **Flask**. The chatbot will be powered by **Retrieval-Augmented Generation (RAG)** to retrieve the correct method for the problem given by the user, and an **LLM** to use the provided method from the RAG to create a tutorial for the user.
 
 ## Background
 
-The background will contain a more detailed description of the product and a comparison to existing similar projects/products. A literature search should be conducted and the results listed. Proper citation of sources is required. If there are similar open-source products, you should state whether existing source will be used and to what extent. If there are similar closed-source/proprietary products, you should state how the proposed product will be similar and different.
+Bioinformatics is a rapidly growing field that is using breakthroughs in Computer Science and Machine Learning to study and solve biological problems. Multiple Nobel Prizes in the past few years have been won in the fields of Biology and Chemistry by computer scientists. However, given the differences between both the content and the people in the respective fields, clear and effective communication can be a challenge. With the breakthroughs in the AI field and the rise of Large Language Models, the ability to bridge this gap has never been easier, allowing researchers on both sides of the academic 'fence' to easily learn about and work in the field of Bioinformatics. With that in mind, this Chatbot is meant to help bridge that communication gap, with the ability to customize answers and answer specific questions surrounding bioinformatics.
 
 ## Required Resources
+### Hardware Requirements
+- A computer with a modern operating system (Windows, macOS, or Linux)
+- At least **8 GB of RAM**
+- At least **2 GB of free disk space**
 
-Discuss what you need to develop this project. This includes background information you will need to acquire, hardware resources, and software resources. If these are not part of the standard Computer Science Department lab resources, these must be identified early and discussed with the instructor.
+### Software Requirements
+- An up-to-date web browser:
+  - **Google Chrome**: Version **131** or later
+  - **Mozilla Firefox**: Version **133** or later
+  - **Microsoft Edge**: Version **131** or later
+  - **Apple Safari**: Version **18.0** or later
+- **Docker Desktop** (handles all required dependencies for development)
+- **Internet access**
 
 ## Collaborators
 
@@ -51,19 +62,55 @@ Discuss what you need to develop this project. This includes background informat
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/ApplebaumIan">
-            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="ApplebaumIan"/>
+        <a href="https://github.com/kBunn411">
+            <img src="https://avatars.githubusercontent.com/u/117461180?s=88&v=4" width="100;" alt="kBunn411"/>
             <br />
-            <sub><b>Ian Tyler Applebaum</b></sub>
+            <sub><b>Keith C Bunn</b></sub>
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/leighflagg">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
+        <a href="https://github.com/ahgoldmeer">
+            <img src="https://avatars.githubusercontent.com/u/95256721?s=88&v=4" width="100;" alt="ahgoldmeer"/>
             <br />
-            <sub><b>Null</b></sub>
+            <sub><b>Amitai Goldmeer</b></sub>
         </a>
-    </td></tr>
+    </td>
+        <td align="center">
+        <a href="https://github.com/ishmam02">
+            <img src="https://avatars.githubusercontent.com/u/66305504?s=88&v=4" width="100;" alt="ishmam02"/>
+            <br />
+            <sub><b>Ishmam Kabir</b></sub>
+        </a>
+    </td>
+        <td align="center">
+        <a href="https://github.com/khanhquocng2801">
+            <img src="https://avatars.githubusercontent.com/u/102694034?s=88&v=4" width="100;" alt="khanhquocng2801"/>
+            <br />
+            <sub><b>Khanh Q Nguyen</b></sub>
+        </a>
+    </td>
+        <td align="center">
+        <a href="https://github.com/korlovskiy">
+            <img src="https://avatars.githubusercontent.com/u/117465477?s=88&v=4" width="100;" alt="korlovskiy"/>
+            <br />
+            <sub><b>Katerina Orlovskiy</b></sub>
+        </a>
+    </td>
+        <td align="center">
+        <a href="https://github.com/JustinTruong456">
+            <img src="https://avatars.githubusercontent.com/u/111546803?s=88&v=4" width="100;" alt="JustinTruong456"/>
+            <br />
+            <sub><b>Justin Truong</b></sub>
+        </a>
+    </td>
+        <td align="center">
+        <a href="https://github.com/chroy2">
+            <img src="https://avatars.githubusercontent.com/u/91856253?s=88&v=4" width="100;" alt="chroy2"/>
+            <br />
+            <sub><b>Troy K Witmer</b></sub>
+        </a>
+    </td>
+</tr>
 </table>
 
 [//]: # ( readme: collaborators -end )
