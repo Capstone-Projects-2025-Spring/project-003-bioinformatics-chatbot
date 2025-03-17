@@ -29,9 +29,9 @@ jobs:
       - name: database.env setup
         run: |
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" > backend/database.env
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > backend/database.env
-          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" > backend/database.env
-          echo "POSTGRES_HOST_AUTH_METHOD=${{ secrets.POSTGRES_HOST_AUTH_METHOD }}" > backend/database.env
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> backend/database.env
+          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> backend/database.env
+          echo "POSTGRES_HOST_AUTH_METHOD=${{ secrets.POSTGRES_HOST_AUTH_METHOD }}" >> backend/database.env
 
       - name: Set executable permissions for docker-entrypoint.sh
         run: chmod +x ./backend/docker-entrypoint.sh
