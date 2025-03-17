@@ -150,6 +150,19 @@ def upload_pdf():
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
 
+"Template for how the question shouldbe formatted"
+CHROMA_PATH = "chroma"
+
+PROMPT_TEMPLATE = """
+Answer the question based only on the following context:
+
+{context}
+
+---
+
+Answer the question based on the above context: {question}
+"""
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -162,10 +175,22 @@ def chat_message():
         
         user_message = data["message"]
 
+         # Getting the documentation (chunks) based on the query
+        Documents = query_database(user_message)
+        
+
+        # Joining the chunks together
+        context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+
+        # Formatting the question so that the LLM has proper context for the question
+        prompt = PROMPT_TEMPLATE.format(context=context_text, question=user_message)
+
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": user_message}]
+            model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
+
+        
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
