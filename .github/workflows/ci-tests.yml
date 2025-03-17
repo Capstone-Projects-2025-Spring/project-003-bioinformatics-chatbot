@@ -24,7 +24,7 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "DATABASE_URI=${{ secrets.DATABASE_URI }}" >> $GITHUB_ENV
+          echo "DATABASE_URI=${{ secrets.DATABASE_URI }}" > backend/.env
 
       - name: Build and start containers
         run: docker-compose up -d --build  # Runs in detached mode, so it is independent
