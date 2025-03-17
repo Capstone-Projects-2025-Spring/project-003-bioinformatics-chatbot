@@ -150,6 +150,8 @@ def upload_pdf():
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
 
+
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -162,10 +164,28 @@ def chat_message():
         
         user_message = data["message"]
 
+         # Getting the documentation (chunks) based on the query
+        Documents = query_database(user_message)
+
+        print("Chunks:")
+        for doc, score in Documents:
+            print(f"Document content: {doc.page_content}")
+            print(f"Score: {score}")
+            print("---")
+        
+
+        # Joining the chunks together
+        chunks = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+
+        # Formatting the question so that the LLM has proper context for the question
+        prompt = f"{chunks}\n\nUser question: {user_message}"
+
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": user_message}]
+            model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
+
+        
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
