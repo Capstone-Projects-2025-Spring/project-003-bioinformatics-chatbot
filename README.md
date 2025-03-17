@@ -16,15 +16,22 @@ Section #, as well as any words that quickly give your peers insights into the a
 
 ## Project Overview
 
-This project proposes the creation of a Generative AI and RAG-powered chatbot meant specifically to answer questions and provide tutorials for solving bioinformatics problems based on numerous pre-provided methods.
+This project aims to create a chatbot powered by Generative AI and RAG to help bioinformatics researchers solve problems by providing accurate answers and tutorials using predefined methods.
 
 ## Project Abstract
 
-This document proposes a novel application of a text message (SMS or Email) read-out and hands-free call interacted between an Android Smartphone and an infotainment platform (headunit) in a car environment. When a phone receives an SMS or Email, the text message is transferred from the phone to the headunit through a Bluetooth connection. On the headunit, user can control which and when the received SMS or E-mail to be read out through the in-vehicle audio system. The user may press one button on the headunit to activate the hands-free feature to call back the SMS sender.
+The Bioinformatics Chatbot is a cutting-edge web application designed to assist bioinformatics researchers with complex problems more efficiently. The application enables users to ask the chatbot questions and receive relevant, accurate answers. Using innovative learning technology and human-like behavior, the chatbot guides the researchers with step-by-step tutorials (answers) for complex bioinformatics questions. The methods provided to the chatbot will serve as the foundation for generating precise responses, enabling users to save time and focus on advancing their research. By harnessing the strength of AI, the web application is transforming how researchers tackle heartfelt problems leading to rapid advancements. 
+
 
 ## High Level Requirement
 
-Describe the requirements – i.e., what the product does and how it does it from a user point of view – at a high level.
+Once the user accesses the link to our web application, they will come into view of our welcome page that briefly summarizes the application's purpose. The welcome page also details the users who have worked on bringing the Bioinformatics Chatbot to life. To begin using the chatbot, the user clicks on the "Begin New Chat" button which activates the interface for the chatbot.
+
+The chat interface is the crux of our application. The user can ask the chatbot questions and receive answers that are based on user-provided documentation, which can be submitted by clicking the black paper plane icon. The interface also allows the user to edit their queries if they do not like the response from the chatbot, or if the user wants to change their question. This is done by clicking on the pencil icon. Additionally, once the user is done conversing with the chatbot, they have the option to download the conversation history for later reference by pressing the download button in the bottom right-hand corner.
+
+For the chatbot to deliver quality answers tailored towards Bioinformatics, there is a backend application where users can upload relevant documentation. After logging in, users can navigate to the documentation upload page by clicking on the "Upload PDF" link. Once on the page, the user can upload their bioinformatics documentation which is stored inside of our database for the LLM to reference when producing accurate responses.  
+ 
+
 
 ## Conceptual Design
 
