@@ -1,4 +1,4 @@
-name: CI - Run Tests in Docker
+name: CI/CD-Tests
 
 on:
   pull_request:
