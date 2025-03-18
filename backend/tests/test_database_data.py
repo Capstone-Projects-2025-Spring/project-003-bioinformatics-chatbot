@@ -3,6 +3,7 @@ from app.models import Document
 from werkzeug.datastructures import FileStorage
 import os
 
+import pypdf 
 
 def test_content_file(client, app):
     app.config["WTF_CSRF_ENABLED"] = (
@@ -37,7 +38,18 @@ def test_content_file(client, app):
 
         uploaded_file = Document.query.filter_by(document_name="test").first()
         assert uploaded_file.document_type == "pdf"
-        assert uploaded_file.file_contents == b"I like candy"
+
+        # Extracts text from a PDF given its binary content
+        with io.BytesIO(uploaded_file.file_contents) as file:
+            reader = pypdf.PdfReader(file)
+            text = ""
+            for page in reader.pages:
+
+                # Handle cases where extract_text() returns None
+                text += page.extract_text() or ""  
+            extracted_text = text.strip()
+        
+        assert extracted_text == "I like candy"
 
 
 def test_validation(client, app):
