@@ -58,5 +58,11 @@ jobs:
       - name: Wait for tests to complete
         run: wait
 
+      - name: Check backend logs
+        run: docker-compose logs backend
+
+      - name: Check frontend logs
+        run: docker-compose logs frontend
+
       - name: Stop and clean up containers
         run: docker-compose down # Finish tests
