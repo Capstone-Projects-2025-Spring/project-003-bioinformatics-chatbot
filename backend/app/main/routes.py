@@ -4,6 +4,8 @@ from app.models import User
 from app import db
 from app.models import Document
 
+from langchain.prompts import ChatPromptTemplate
+
 import ollama
 from ollama import chat
 from ollama import ChatResponse
@@ -17,6 +19,13 @@ from app.doc_parsers.process_doc import process_doc
 Places for routes in the backend
 """
 
+PROMPT_TEMPLATE = """
+Answer this question based only on the following text:
+{context}
+---
+Answer the question in details and give me quotes based on the above context: {question}
+
+"""
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -166,6 +175,11 @@ def chat_message():
 
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
+        
+        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        prompt =    prompt_template.format(context= Documents, question = user_message)
+        
+        print(prompt)
 
         print("Chunks:")
         for doc, score in Documents:
