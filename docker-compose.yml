@@ -28,6 +28,15 @@ services:
     networks:
       - app-network
 
+  test-database:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "5555:5432"
+    env_file:
+      - ./backend/database.env
+    networks:
+      - app-network
+
   ollama:
     image: ollama/ollama:latest
     container_name: ollama

@@ -4,6 +4,8 @@ from app.models import User
 from app import db
 from app.models import Document
 
+from langchain.prompts import ChatPromptTemplate
+
 import ollama
 from ollama import chat
 from ollama import ChatResponse
@@ -11,12 +13,19 @@ from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
-from app.doc_parsers.process_uploaded_file import process_uploaded_file
+from app.doc_parsers.process_doc import process_doc
 
 """
 Places for routes in the backend
 """
 
+PROMPT_TEMPLATE = """
+Answer this question based only on the following text:
+{context}
+---
+Answer the question in details and give me quotes based on the above context: {question}
+
+"""
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -100,9 +109,32 @@ def upload_pdf():
                     400,
                 )
 
+            # Instance of Document model created
+            new_document = Document(
+                document_name=uploaded_file.filename.split(".")[
+                    0
+                ],  # Name of the file without the extenstion
+                document_type=uploaded_file.filename.split(".")[
+                    -1
+                ],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
+                file_contents=uploaded_file.read(),  # This is the binary data of the pdf file
+            )
+            # Storing the document into the database
+            db.session.add(new_document)
+            db.session.commit()
 
-            #Process the upload file to the parser and index 
-            process_uploaded_file(uploaded_file)
+            # fetch all document from database 
+            documents = db.session.query(Document).all()
+
+            # loop through each document and process to upload file and to the parser 
+            for doc in documents: 
+                print(f"ID: {doc.id}")
+                print(f"Name: {doc.document_name}")
+                print(f"Type: {doc.document_type}")
+                print(f"Size: {len(doc.file_contents)} bytes")  # Size of binary data
+
+                #Process the upload doc to the parser and index 
+                process_doc(doc)
 
             # Pretend processing complete and return success
             return (
@@ -127,6 +159,8 @@ def upload_pdf():
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
 
+
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -139,14 +173,33 @@ def chat_message():
         
         user_message = data["message"]
 
-        chat_history = session.get("chat_history", [])
+         # Getting the documentation (chunks) based on the query
+        Documents = query_database(user_message)
+        
+        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        prompt =    prompt_template.format(context= Documents, question = user_message)
+        
+        print(prompt)
 
-        chat_history.append({"role": "user", "content": user_message})
+        print("Chunks:")
+        for doc, score in Documents:
+            print(f"Document content: {doc.page_content}")
+            print(f"Score: {score}")
+            print("---")
+        
+
+        # Joining the chunks together
+        chunks = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+
+        # Formatting the question so that the LLM has proper context for the question
+        prompt = f"{chunks}\n\nUser question: {user_message}"
 
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=chat_history
+            model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
+
+        
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)

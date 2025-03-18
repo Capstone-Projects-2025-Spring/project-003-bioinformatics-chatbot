@@ -7,17 +7,18 @@ sidebar_position: 6
 
 
 
-## IDE/Editor
+
 Visual Studio Code (Version: 1.96.4)
      
 
 
-## Programming Languages, Compilers/Interpreters, Frameworks, and Libraries
 
 
 
-### Frontend
-React.js (Version: 18.2.0)
+### Frontend and Backend
+#### Frontend:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;React.js (Version: 18.2.0)
 - Library for web applications
 - Creates user interfaces
 - Reusable components for flexibility
@@ -25,11 +26,8 @@ React.js (Version: 18.2.0)
 
 
 
-
-
-
-### Backend
-Python (Version: 3.12.3)
+#### Backend
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Python (Version: 3.12.3)
  - Flask (Version: 3.0.0)  
     - Used to handle API calls
     - Very flexible compared to other frameworks
@@ -39,22 +37,11 @@ Python (Version: 3.12.3)
  
 
 
-## Documentation
-Docusaurus (Version: 3.7.0)
-- Creates a customizable documentation website
+#### Documentation
 
-## Testing
-Postman (Version 11.3.2)
-- Used to test API calls
-
-Pytest (Version 8.3.4)
-- Great for unit testing Python code
-
-Vitest (Version 3.0.5)
-- Good for unit testing Reat.js code
 
 ## Database
-PostgreSQL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL
 - Holds relevant information for Chabot
 
 
@@ -82,6 +69,18 @@ ESLint
 Prettier
 - Ensure that all indention and spacing are kept consistent throughout the code
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Docusaurus (Version: 3.7.0)
+- Creates a customizable documentation website
+---
+## Testing
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Postman (Version 11.3.2)
+- Used to test API calls
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pytest (Version 8.3.4)
+- Great for unit testing Python code
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vitest (Version 3.0.5)
+- Good for unit testing Reat.js code
 ## Hardware
 A computer with a modern operating system (Windows, MacOS, Linux)
 

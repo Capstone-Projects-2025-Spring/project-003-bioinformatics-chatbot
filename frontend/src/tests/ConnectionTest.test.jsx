@@ -1,10 +1,9 @@
-
 import { describe, it, expect, afterEach } from "vitest";
 import "@testing-library/jest-dom/vitest";
 
 // Testing Flask to React
 describe("Flask to React", () => {
- 
+
   it("Should get data from backend if the user has logged in at least once", async () => {
     const username = "admin"; // Right now we are only using the admin login
 
@@ -25,8 +24,4 @@ describe("Flask to React", () => {
     expect(data.message).toBeOneOf([`Hello: ${username}`, `No one is here :().`]);
   });
 
- 
-
-
 });
-
