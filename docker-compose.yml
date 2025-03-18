@@ -13,13 +13,25 @@ services:
       - ./backend/.env
     networks:
       - app-network
-    volumes:
-      - ./backend:/app
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/
+          target: /app
 
   database:
     image: pgvector/pgvector:pg17
     ports:
       - "5432:5432"
+    env_file:
+      - ./backend/database.env
+    networks:
+      - app-network
+
+  test-database:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "5555:5432"
     env_file:
       - ./backend/database.env
     networks:

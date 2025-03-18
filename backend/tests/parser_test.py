@@ -16,7 +16,7 @@ def test_parse_pdf():
     test the parse_pdf
 
     """
-    FILE_PATH = "./app/doc_parsers/data/Dna.pdf"
+    FILE_PATH = "./tests/test_data/Dna.pdf"
 
     # Call the function you want to test
     result = parse_pdf(FILE_PATH)
@@ -35,7 +35,7 @@ def test_parse_txt():
 
     """
 
-    FILE_PATH = "./app/doc_parsers/data/Dna.txt"
+    FILE_PATH = "./tests/test_data/Dna.txt"
 
     # Call the function you want to test
     result = parse_txt(FILE_PATH)

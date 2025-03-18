@@ -27,3 +27,4 @@ def test_chat_response_no_message(client):
     data = json.loads(response.data)
     assert "error" in data
     assert data["error"] == "Message is required"
+
