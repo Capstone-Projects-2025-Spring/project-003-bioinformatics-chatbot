@@ -9,8 +9,8 @@ sidebar_position: 4
 ### Features
 
 #### 1. Ask and Answer System
-- The system can allow users to ask and receive answers related to Bioinformatics topics from the chatbot.
-- The system can provide tutorials related to the question being asked, as provided by the admin.
+- The system can allow users to ask questions related to Bioinformatics topics from the chatbot.
+- The system can provide users with a relevant answer to their query.
 - The system can indicate when a question is unclear by responding with "I don't know."
 
 #### 2. Chat History
