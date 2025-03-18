@@ -167,15 +167,22 @@ def chat_message():
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
+         # Filter documents with similarity score ≥ 0.999
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.999]
+
+        # If no document meets the threshold, return a message to the frontend
+        if not filtered_docs:
+            return jsonify({"response": "No document found", "message": "No relevant information available."}), 200
+
+        # Print the filtered documents
         print("Chunks:")
-        for doc, score in Documents:
+        for doc, score in filtered_docs:
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
-        
 
-        # Joining the chunks together
-        chunks = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+        # Joining the filtered chunks together
+        chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
         # Formatting the question so that the LLM has proper context for the question
         prompt = f"{chunks}\n\nUser question: {user_message}"
@@ -184,8 +191,6 @@ def chat_message():
         response = client.chat(
             model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
-
-        
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
