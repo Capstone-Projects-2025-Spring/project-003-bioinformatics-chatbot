@@ -1,12 +1,20 @@
 from langchain.schema.document import Document
-from app import vector_db, db
+from app import db
+from flask import current_app
+
 
 def index_and_add_to_db(chunks: list[Document]):
     # Calculate Page IDs.
     chunks_with_ids = calculate_chunk_ids(chunks)
+    vector_db = current_app.vector_db
 
     # Add or Update the documents.
-    existing_ids = set([id_tuple[0] for id_tuple in db.session.query(vector_db.EmbeddingStore.id).all()])
+    existing_ids = set(
+        [
+            id_tuple[0]
+            for id_tuple in db.session.query(vector_db.EmbeddingStore.id).all()
+        ]
+    )
     # # Only add documents that don't exist in the DB.
     new_chunks = []
     for chunk in chunks_with_ids:
@@ -16,6 +24,7 @@ def index_and_add_to_db(chunks: list[Document]):
     if len(new_chunks):
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         vector_db.add_documents(new_chunks, ids=new_chunk_ids)
+
 
 def calculate_chunk_ids(chunks):
     # This will create IDs like "data/monopoly.pdf:6:2"
@@ -42,4 +51,3 @@ def calculate_chunk_ids(chunks):
         chunk.metadata["id"] = chunk_id
 
     return chunks
-
