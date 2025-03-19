@@ -1,20 +1,25 @@
 import io
 from werkzeug.datastructures import FileStorage
+import os
 
 def test_upload_pdf_valid(client, app):
     app.config['WTF_CSRF_ENABLED'] = False;
     
-    # Prepare the test PDF content and create a FileStorage object
-    pdf_content = b"%PDF-1.7\nTest PDF content"
-    pdf_file = FileStorage(
-        stream=io.BytesIO(pdf_content),
-        filename="test.pdf",
-        content_type="application/pdf",
-    )
+    # Path to the test file inside the test_data folder
+    file_path = os.path.join(os.path.dirname(__file__), 'test_data', 'test.pdf')
 
-    # Send the file upload request with the FileStorage object
+    # Open the file in binary read mode
+    with open(file_path, 'rb') as f:
+        # Create a FileStorage object from the file content
+        pdf_file = FileStorage(
+            stream=io.BytesIO(f.read()),
+            filename="test.pdf",
+            content_type="application/pdf",
+        )
+        
+    # Prepare the data dictionary with the file for upload
     data = {
-        'pdf_file': pdf_file
+        "pdf_file": (io.BytesIO(pdf_file.read()), "test.pdf"),
     }
     
     # Make the POST request to the upload route

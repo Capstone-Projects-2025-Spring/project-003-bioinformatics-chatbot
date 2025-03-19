@@ -8,6 +8,7 @@ from config import TestingConfig
 import pytest
 from app import create_app, db
 from sqlalchemy.sql import text
+from time import sleep
 
 
 @pytest.fixture()

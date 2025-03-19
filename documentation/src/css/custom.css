@@ -41,3 +41,14 @@
 #atlwdg-trigger.atlwdg-trigger.atlwdg-RIGHT{
   background-color: #9d2235;
 }
+
+
+
+ul ul {
+  margin-left: 2rem; /* Adjust this value as needed */
+}
+
+
+ul {
+  margin-left: 2rem; /* Adjust this value as needed */
+}
