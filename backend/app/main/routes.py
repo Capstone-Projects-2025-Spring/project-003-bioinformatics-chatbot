@@ -176,17 +176,18 @@ def chat_message():
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
         
-        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt =    prompt_template.format(context= Documents, question = user_message)
-        
-        print(prompt)
-
-         # Filter documents with similarity score ≥ 0.999
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.999]
+        # Filter documents with similarity score ≥ 0.90
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.90]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
             return jsonify({"response": "No document found", "message": "No relevant information available."}), 200
+        
+
+        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        prompt = prompt_template.format(context= filtered_docs, question = user_message)
+        
+        print(prompt)
 
         # Print the filtered documents
         print("Chunks:")
@@ -208,7 +209,7 @@ def chat_message():
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
-
+        chat_history =[]
         chat_history.append({"role": "assistant", "content": llm_response})
 
         session["chat_history"] = chat_history
