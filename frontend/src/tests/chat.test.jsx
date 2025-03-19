@@ -10,6 +10,9 @@ import Chat from "../Pages/chat";
 import "@testing-library/jest-dom/vitest";
 import axios from "axios";
 
+
+vi.mock('axios');
+
 describe("Chat Page", () => {
   // Runs before each test to set up mock functions
   beforeEach(() => {
