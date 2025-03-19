@@ -184,6 +184,8 @@ def chat_message():
             session["chat_history"] = []
 
         session["chat_history"].append({"role": "user", "content": user_message})
+        session.modified = True 
+        print(session)
 
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
@@ -219,6 +221,8 @@ def chat_message():
         print(llm_response, flush=True)
 
         session["chat_history"].append({"role": "assistant", "content": llm_response})
+        session.modified = True 
+        print(session)
         
         return jsonify({"response": llm_response})
 
