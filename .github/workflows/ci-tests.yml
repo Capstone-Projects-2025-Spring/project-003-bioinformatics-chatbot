@@ -44,7 +44,7 @@ jobs:
         run: sleep 10 
 
       - name: Run backend tests
-        run: docker-compose run -T backend pytest tests &  # Runs in detached mode, so it is independent, runs pytest in backend/tests
+        run: docker-compose run -T backend python -m pytest -vv  # Runs in detached mode, so it is independent, runs pytest in backend/tests
         continue-on-error: false # Continue running the pipeline even if backend tests fail
 
 
