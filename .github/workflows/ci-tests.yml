@@ -45,7 +45,7 @@ jobs:
 
       - name: Run backend tests
         run: docker-compose run -T backend pytest tests &  # Runs in detached mode, so it is independent, runs pytest in backend/tests
-        continue-on-error: true # Continue running the pipeline even if backend tests fail
+        continue-on-error: false # Continue running the pipeline even if backend tests fail
 
 
       - name: Run frontend tests
