@@ -65,6 +65,7 @@ describe("Chat Page", () => {
   //  Test to ensure message submission works and response is added (to be updated later)
   it("submits a message and adds response", async () => {
     render(<Chat />);
+    axios.post.mockResolvedValue({ data: { response: "this is a response" } });
 
     // Select the input field and submit button
     const inputField = screen.getByTestId("input");
