@@ -49,7 +49,7 @@ jobs:
 
   
       - name: Run frontend tests
-        run: docker-compose exec -T frontend npm run test  # Runs in detached mode, so it is independent, runs node testing
+        run: docker-compose exec -T frontend npm run test -- --ci
         env:
           CI: true
         continue-on-error: false # Continue running the pipeline even if backend tests fail
