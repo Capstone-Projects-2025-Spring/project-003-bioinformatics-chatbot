@@ -23,8 +23,15 @@ PROMPT_TEMPLATE = """
 Answer this question based only on the following text:
 {context}
 ---
-Answer the question in details and give me quotes based on the above context: {question}
 
+Conversation history:
+{chat_history}
+
+User's current question:
+{question}
+
+---
+Answer the question in details and give me quotes based on the above context
 """
 
 @bp.route("/", methods=["GET", "POST"])
@@ -173,11 +180,20 @@ def chat_message():
         
         user_message = data["message"]
 
+        if "chat_history" not in session:
+            session["chat_history"] = []
+
+        session["chat_history"].append({"role": "user", "content": user_message})
+
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
+
+        formatted_chat_history = "\n".join( #ChatGPT, but meant to properly format the history ig
+            [f"{msg['role'].capitalize()}: {msg['content']}" for msg in session["chat_history"]]
+        )
         
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt =    prompt_template.format(context= Documents, question = user_message)
+        prompt = prompt_template.format(context= Documents, chat_history = formatted_chat_history, question = user_message)
         
         print(prompt)
 
@@ -199,14 +215,10 @@ def chat_message():
             model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
 
-        
-
         llm_response = response.message["content"]
         print(llm_response, flush=True)
 
-        chat_history.append({"role": "assistant", "content": llm_response})
-
-        session["chat_history"] = chat_history
+        session["chat_history"].append({"role": "assistant", "content": llm_response})
         
         return jsonify({"response": llm_response})
 

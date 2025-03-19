@@ -25,6 +25,9 @@ def create_app(config_class=Config):
     CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
 
+    import os
+    app.secret_key = os.urandom(24)
+
     # initializing the database for the app
     db.init_app(app)
     # initalizing the database migrations for the app
