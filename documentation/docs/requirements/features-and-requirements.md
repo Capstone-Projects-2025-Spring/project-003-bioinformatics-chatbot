@@ -47,8 +47,15 @@ sidebar_position: 4
 - The system can use modular and well-documented code for easy updates.
 - The system can ensure backward compatibility when upgrading features.
 
-#### 4. Usability
+#### 4. Appearence
+- The system will feature a simple and modern UI.
+
+#### 5. Usability
 - The system can provide a responsive design.
+
+
+
+
 
 
 
