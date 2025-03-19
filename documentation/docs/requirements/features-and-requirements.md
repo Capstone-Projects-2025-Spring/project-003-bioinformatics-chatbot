@@ -43,16 +43,13 @@ sidebar_position: 4
 #### 2. Performance
 - The system can load messages instantly without noticeable delay.
 
-#### 3. Scalability
-- The system can ensure cloud or database scaling to support a large user base.
-
-#### 4. Maintanability
+#### 3. Maintanability
 - The system can use modular and well-documented code for easy updates.
 - The system can ensure backward compatibility when upgrading features.
 
-#### 5. Usability
-- The system can provide a mobile-friendly and responsive design.
-- The system can offer accessibility features such as screen reader compatibility.
+#### 4. Usability
+- The system can provide a responsive design.
+
 
 
 
