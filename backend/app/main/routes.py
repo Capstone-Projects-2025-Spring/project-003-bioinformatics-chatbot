@@ -204,6 +204,8 @@ def chat_message():
         llm_response = response.message["content"]
         print(llm_response, flush=True)
 
+        chat_history = []
+        
         chat_history.append({"role": "assistant", "content": llm_response})
 
         session["chat_history"] = chat_history

@@ -1,4 +1,3 @@
-
 /**
  * @module ErrorBox
  * This file exports the ErrorBox component which displays an error message alert.
@@ -9,15 +8,14 @@ import PropTypes from "prop-types";
  *
  * @property {string} title - The title of the error message.
  * @property {string} body - The detailed error message.
- * @property {function} setError - Callback to reset the error state.
+ * @property {function} handleError - Callback to reset the error state.
  */
 
 ErrorBox.propTypes = {
 	title: PropTypes.string.isRequired, // `title` must be a required prop of type string
 	body: PropTypes.string.isRequired, // `body` must be a required prop of type string
-	setError: PropTypes.func.isRequired, // `setError` must be a required prop of type function
+	handleError: PropTypes.func.isRequired, // `handleError` must be a required prop of type function
 };
-
 
 /**
  * ErrorBox component displays an error message with a title and a body.
@@ -30,10 +28,10 @@ ErrorBox.propTypes = {
  * @param {object} props - The component props.
  * @param {string} props.title - The title of the error message.
  * @param {string} props.body - The detailed error message.
- * @param {function} props.setError - Callback function to reset the error state.
+ * @param {function} props.handleError - Callback function to reset the error state.
  * @returns {JSX.Element} The rendered error alert box.
  */
-export default function ErrorBox({ title, body, setError }) {
+export default function ErrorBox({ title, body, handleError }) {
 	return (
 		<div
 			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-errorBg text-orange-700 p-4 rounded-lg shadow-lg z-50'
@@ -47,7 +45,7 @@ export default function ErrorBox({ title, body, setError }) {
 				<button
 					className='text-orange-700 hover:text-orange-900'
 					data-testid='closeButton' // This attribute is for testing to identify the close Button
-					onClick={() => setError({ title: "", body: "" })} // When clicked, reset the error state
+					onClick={() => handleError({ title: "", body: "" })} // When clicked, reset the error state
 				>
 					&times; {/* The "×" symbol for the close button */}
 				</button>
