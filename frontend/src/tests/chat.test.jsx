@@ -18,17 +18,10 @@ describe("Chat Page", () => {
 
 		// Mock scrollIntoView to prevent errors in a test environment
 		Element.prototype.scrollIntoView = vi.fn();
-
-		// Mock timers using Vitest
-		vi.useFakeTimers();
 	});
 
 	// Clean up the DOM after each test to prevent side effects
-	afterEach(() => {
-		cleanup();
-		// Restore real timers
-		vi.useRealTimers();
-	});
+	afterEach(cleanup);
 
 	// Test to check if the chat input and submit button are rendered correctly
 	it("renders chat input and messages container", () => {
@@ -209,9 +202,9 @@ describe("Chat Page", () => {
 		delete global.URL.createObjectURL;
 	});
 
-	it("should display error and clear it after 5 seconds", async () => {
+	it("Error message resets after 5 seconds", async () => {
+		const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 		render(<Chat />);
-
 		// Select the submit button
 		const submitButton = screen.getByTestId("submitButton");
 
@@ -222,11 +215,9 @@ describe("Chat Page", () => {
 		expect(
 			await screen.findByText("ChatBox cannot be empty during submission")
 		).toBeInTheDocument();
-
-		vi.advanceTimersByTime(5000);
-
+		await sleep(5000);
 		expect(
-			await screen.findByText("ChatBox cannot be empty during submission")
+			screen.queryByText("ChatBox cannot be empty during submission")
 		).not.toBeInTheDocument();
-	});
+	}, 6000);
 });
