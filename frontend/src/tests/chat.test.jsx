@@ -1,206 +1,232 @@
 import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  cleanup,
+	render,
+	screen,
+	fireEvent,
+	waitFor,
+	cleanup,
 } from "@testing-library/react";
 import { vi, describe, it, expect, afterEach, beforeEach } from "vitest";
 import Chat from "../Pages/chat";
 import "@testing-library/jest-dom/vitest";
 
 describe("Chat Page", () => {
-  // Runs before each test to set up mock functions
-  beforeEach(() => {
-    // Mock sessionStorage methods to prevent actual storage interactions
-    Storage.prototype.getItem = vi.fn(() => null); // No saved messages initially
-    Storage.prototype.setItem = vi.fn();
+	// Runs before each test to set up mock functions
+	beforeEach(() => {
+		// Mock sessionStorage methods to prevent actual storage interactions
+		Storage.prototype.getItem = vi.fn(() => null); // No saved messages initially
+		Storage.prototype.setItem = vi.fn();
 
-    // Mock scrollIntoView to prevent errors in a test environment
-    Element.prototype.scrollIntoView = vi.fn();
-  });
+		// Mock scrollIntoView to prevent errors in a test environment
+		Element.prototype.scrollIntoView = vi.fn();
 
-  // Clean up the DOM after each test to prevent side effects
-  afterEach(cleanup);
+		// Mock timers using Vitest
+		vi.useFakeTimers();
+	});
 
-  // Test to check if the chat input and submit button are rendered correctly
-  it("renders chat input and messages container", () => {
-    render(<Chat />);
+	// Clean up the DOM after each test to prevent side effects
+	afterEach(() => {
+		cleanup();
+		// Restore real timers
+		vi.useRealTimers();
+	});
 
-    // Verify that the input field and submit button are present in the document
-    expect(screen.getByTestId("input")).toBeInTheDocument();
-    expect(screen.getByTestId("submitButton")).toBeInTheDocument();
-  });
+	// Test to check if the chat input and submit button are rendered correctly
+	it("renders chat input and messages container", () => {
+		render(<Chat />);
 
-  //  Test to ensure user can type in the input field
-  it("allows user to type in chat input", () => {
-    render(<Chat />);
+		// Verify that the input field and submit button are present in the document
+		expect(screen.getByTestId("input")).toBeInTheDocument();
+		expect(screen.getByTestId("submitButton")).toBeInTheDocument();
+	});
 
-    // Select input field
-    const inputField = screen.getByTestId("input");
+	//  Test to ensure user can type in the input field
+	it("allows user to type in chat input", () => {
+		render(<Chat />);
 
-    // Simulate typing into the input field
-    fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
+		// Select input field
+		const inputField = screen.getByTestId("input");
 
-    // Verify that the input field's value has changed
-    expect(inputField.value).toBe("Hello, chatbot!");
-  });
+		// Simulate typing into the input field
+		fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
 
-  //  Test to display an error when trying to submit an empty message (to be updated later)
-  it("displays error when submitting empty input", async () => {
-    render(<Chat />);
+		// Verify that the input field's value has changed
+		expect(inputField.value).toBe("Hello, chatbot!");
+	});
 
-    // Select the submit button
-    const submitButton = screen.getByTestId("submitButton");
+	//  Test to display an error when trying to submit an empty message (to be updated later)
+	it("displays error when submitting empty input", async () => {
+		render(<Chat />);
 
-    // Click the submit button without entering any text
-    fireEvent.click(submitButton);
+		// Select the submit button
+		const submitButton = screen.getByTestId("submitButton");
 
-    // Expect an error message to be displayed
-    expect(
-      await screen.findByText("ChatBox cannot be empty during submission")
-    ).toBeInTheDocument();
-  });
+		// Click the submit button without entering any text
+		fireEvent.click(submitButton);
 
-  //  Test to ensure message submission works and response is added (to be updated later)
-  it("submits a message and adds response", async () => {
-    render(<Chat />);
+		// Expect an error message to be displayed
+		expect(
+			await screen.findByText("ChatBox cannot be empty during submission")
+		).toBeInTheDocument();
+	});
 
-    // Select the input field and submit button
-    const inputField = screen.getByTestId("input");
-    const submitButton = screen.getByTestId("submitButton");
+	//  Test to ensure message submission works and response is added (to be updated later)
+	it("submits a message and adds response", async () => {
+		render(<Chat />);
 
-    // Type a message
-    fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
+		// Select the input field and submit button
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
 
-    // Submit the message
-    fireEvent.click(submitButton);
+		// Type a message
+		fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
 
-    const spinner = screen.getByTestId('spinner')
-    expect(spinner).toBeInTheDocument();
+		// Submit the message
+		fireEvent.click(submitButton);
 
-    // Wait for the new messages to appear
-    await waitFor(() => {
-      // Verify that both the user's message and the chatbot's response are displayed
-      expect(screen.getByText("Hello, chatbot!")).toBeInTheDocument();
-      //expect(screen.getByText("I am disconnected")).toBeInTheDocument();
-    });
+		const spinner = screen.getByTestId("spinner");
+		expect(spinner).toBeInTheDocument();
 
-    // Check if input is cleared after submission
-    expect(inputField.value).toBe("");
-  });
+		// Wait for the new messages to appear
+		await waitFor(() => {
+			// Verify that both the user's message and the chatbot's response are displayed
+			expect(screen.getByText("Hello, chatbot!")).toBeInTheDocument();
+			//expect(screen.getByText("I am disconnected")).toBeInTheDocument();
+		});
 
-  //  Test to ensure messages are stored in sessionStorage after submission
-  it("stores messages in sessionStorage", async () => {
-    render(<Chat />);
+		// Check if input is cleared after submission
+		expect(inputField.value).toBe("");
+	});
 
-    // Select input field and submit button
-    const inputField = screen.getByTestId("input");
-    const submitButton = screen.getByTestId("submitButton");
+	//  Test to ensure messages are stored in sessionStorage after submission
+	it("stores messages in sessionStorage", async () => {
+		render(<Chat />);
 
-    // Type a message and submit it
-    fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
-    fireEvent.click(submitButton);
+		// Select input field and submit button
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
 
-    // Wait for sessionStorage.setItem to be called
-    await waitFor(() => {
-      expect(sessionStorage.setItem).toHaveBeenCalled();
-    });
-  });
+		// Type a message and submit it
+		fireEvent.change(inputField, { target: { value: "Hello, chatbot!" } });
+		fireEvent.click(submitButton);
 
-  //  Test to ensure previous messages are loaded from sessionStorage
-  it("renders previous messages from sessionStorage", () => {
-    // Mock sessionStorage to return a saved conversation
-    Storage.prototype.getItem = vi.fn(() =>
-      JSON.stringify([
-        { id: 1, text: "Previous message", type: "Question" },
-        { id: 2, text: "Previous response", type: "Response" },
-      ])
-    );
+		// Wait for sessionStorage.setItem to be called
+		await waitFor(() => {
+			expect(sessionStorage.setItem).toHaveBeenCalled();
+		});
+	});
 
-    // Render the Chat component
-    render(<Chat />);
+	//  Test to ensure previous messages are loaded from sessionStorage
+	it("renders previous messages from sessionStorage", () => {
+		// Mock sessionStorage to return a saved conversation
+		Storage.prototype.getItem = vi.fn(() =>
+			JSON.stringify([
+				{ id: 1, text: "Previous message", type: "Question" },
+				{ id: 2, text: "Previous response", type: "Response" },
+			])
+		);
 
-    // Check if previous messages are displayed on page load
-    expect(screen.getByText("Previous message")).toBeInTheDocument();
-    expect(screen.getByText("Previous response")).toBeInTheDocument();
-  });
+		// Render the Chat component
+		render(<Chat />);
 
-  //  Test to ensure auto-scrolling works when messages update
-  it("calls scrollIntoView when messages state updates", () => {
-    // Mock scrollIntoView
-    const scrollIntoViewMock = vi.fn();
-    Element.prototype.scrollIntoView = scrollIntoViewMock;
+		// Check if previous messages are displayed on page load
+		expect(screen.getByText("Previous message")).toBeInTheDocument();
+		expect(screen.getByText("Previous response")).toBeInTheDocument();
+	});
 
-    // Render the Chat component
-    render(<Chat />);
+	//  Test to ensure auto-scrolling works when messages update
+	it("calls scrollIntoView when messages state updates", () => {
+		// Mock scrollIntoView
+		const scrollIntoViewMock = vi.fn();
+		Element.prototype.scrollIntoView = scrollIntoViewMock;
 
-    // Select input field and submit button
-    const inputField = screen.getByTestId("input");
-    const submitButton = screen.getByTestId("submitButton");
+		// Render the Chat component
+		render(<Chat />);
 
-    // Simulate user typing a message
-    fireEvent.change(inputField, { target: { value: "Test message" } });
+		// Select input field and submit button
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
 
-    // Simulate form submission
-    fireEvent.submit(submitButton);
+		// Simulate user typing a message
+		fireEvent.change(inputField, { target: { value: "Test message" } });
 
-    // Check if scrollIntoView is called when new messages are added
-    expect(scrollIntoViewMock).toHaveBeenCalled();
-  });
+		// Simulate form submission
+		fireEvent.submit(submitButton);
 
-  it("displays error when downloading empty conversation", async () => {
-    render(<Chat />);
+		// Check if scrollIntoView is called when new messages are added
+		expect(scrollIntoViewMock).toHaveBeenCalled();
+	});
 
-    // click the download button
-    const downloadButton = screen.getByTestId("downloadButton");
-    fireEvent.click(downloadButton);
+	it("displays error when downloading empty conversation", async () => {
+		render(<Chat />);
 
-    // Waiting for ErrorBox component to appear
-    await waitFor(() => screen.getByText(/Empty Conversation/));
+		// click the download button
+		const downloadButton = screen.getByTestId("downloadButton");
+		fireEvent.click(downloadButton);
 
-    // Checks to see if error message has popped up
-    expect(screen.getByText(/Please send at least one message/)).toBeInTheDocument();
+		// Waiting for ErrorBox component to appear
+		await waitFor(() => screen.getByText(/Empty Conversation/));
 
-  });
+		// Checks to see if error message has popped up
+		expect(
+			screen.getByText(/Please send at least one message/)
+		).toBeInTheDocument();
+	});
 
-  it("downloads chatbot conversation when there is at least one message", async () => {
-    // Creating a dummy url for test
-    const createObjectURL = vi.fn().mockReturnValue('mocked-url');
+	it("downloads chatbot conversation when there is at least one message", async () => {
+		// Creating a dummy url for test
+		const createObjectURL = vi.fn().mockReturnValue("mocked-url");
 
-    global.URL.createObjectURL = createObjectURL;
+		global.URL.createObjectURL = createObjectURL;
 
-    render(<Chat />);
+		render(<Chat />);
 
-    // placeholder values
-    const inputField = screen.getByPlaceholderText("Ask a question");
-    const sendButton = screen.getByTestId("submitButton");
+		// placeholder values
+		const inputField = screen.getByPlaceholderText("Ask a question");
+		const sendButton = screen.getByTestId("submitButton");
 
-    // Sending a message
-    fireEvent.change(inputField, { target: { value: "I like candy" } });
-    fireEvent.click(sendButton);
+		// Sending a message
+		fireEvent.change(inputField, { target: { value: "I like candy" } });
+		fireEvent.click(sendButton);
 
-    // Waiting to get the message
-    await waitFor(() => screen.getByText("I like candy"));
+		// Waiting to get the message
+		await waitFor(() => screen.getByText("I like candy"));
 
-    // Clicking the download button
-    const downloadButton = screen.getByTestId("downloadButton");
-    fireEvent.click(downloadButton);
+		// Clicking the download button
+		const downloadButton = screen.getByTestId("downloadButton");
+		fireEvent.click(downloadButton);
 
-    // Making sure that the file is being generated
-    await waitFor(() => {
-      const link = document.querySelector("a");
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("download", "ChatHistory.txt");
-    });
+		// Making sure that the file is being generated
+		await waitFor(() => {
+			const link = document.querySelector("a");
+			expect(link).toBeInTheDocument();
+			expect(link).toHaveAttribute("download", "ChatHistory.txt");
+		});
 
-    // Makes sure that the download link was made
-    expect(createObjectURL).toHaveBeenCalled();
+		// Makes sure that the download link was made
+		expect(createObjectURL).toHaveBeenCalled();
 
-    // Deleting after its been used
-    delete global.URL.createObjectURL;
-  });
+		// Deleting after its been used
+		delete global.URL.createObjectURL;
+	});
 
+	it("should display error and clear it after 5 seconds", async () => {
+		render(<Chat />);
 
+		// Select the submit button
+		const submitButton = screen.getByTestId("submitButton");
 
+		// Click the submit button without entering any text
+		fireEvent.click(submitButton);
+
+		// Expect an error message to be displayed
+		expect(
+			await screen.findByText("ChatBox cannot be empty during submission")
+		).toBeInTheDocument();
+
+		vi.advanceTimersByTime(5000);
+
+		expect(
+			await screen.findByText("ChatBox cannot be empty during submission")
+		).not.toBeInTheDocument();
+	});
 });

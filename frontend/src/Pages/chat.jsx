@@ -33,6 +33,11 @@ function Chat() {
 	const messagesEndRef = useRef(null);
 
 	/**
+	 * Ref to the setTimeout function in handleError.
+	 */
+	const timeoutRef = useRef(null);
+
+	/**
 	 * State for managing any error messages that need to be shown.
 	 */
 	const [error, setError] = useState({
@@ -53,10 +58,27 @@ function Chat() {
 		}
 	}, []);
 
+	/**
+	 * Function to set error to be shown using the errorBox.jsx with timed reset
+	 * @param {object} error - The error object.
+	 * @param {string} error.title - The title of the error message.
+	 * @param {string} error.body - The detailed error message.
+	 */
 	const handleError = (error) => {
 		setError({ title: error.title, body: error.body });
-		setInterval(() => {
+
+		/**
+		 * Clear any existing timeout to prevent multiple timeouts
+		 */
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
+		/**
+		 * Set a new timeout
+		 */
+		timeoutRef.current = setTimeout(() => {
 			setError({ title: "", body: "" });
+			timeoutRef.current = null; // Reset the ref after clearing the error
 		}, 5000);
 	};
 
@@ -184,11 +206,7 @@ function Chat() {
 		<div className='w-full h-screen flex flex-col'>
 			{/** Conditionally render the ErrorBox if there is an error. */}
 			{error.title && (
-				<ErrorBox
-					title={error.title}
-					body={error.body}
-					handleError={handleError}
-				/>
+				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
 			<nav>
