@@ -19,6 +19,8 @@ from app.doc_parsers.process_doc import process_doc
 Places for routes in the backend
 """
 
+# test
+
 PROMPT_TEMPLATE = """
 Answer this question based only on the following text:
 {context}
@@ -33,6 +35,7 @@ User's current question:
 ---
 Answer the question in details and give me quotes based on the above context
 """
+
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -130,17 +133,17 @@ def upload_pdf():
             db.session.add(new_document)
             db.session.commit()
 
-            # fetch all document from database 
+            # fetch all document from database
             documents = db.session.query(Document).all()
 
-            # loop through each document and process to upload file and to the parser 
-            for doc in documents: 
+            # loop through each document and process to upload file and to the parser
+            for doc in documents:
                 print(f"ID: {doc.id}")
                 print(f"Name: {doc.document_name}")
                 print(f"Type: {doc.document_type}")
                 print(f"Size: {len(doc.file_contents)} bytes")  # Size of binary data
 
-                #Process the upload doc to the parser and index 
+                # Process the upload doc to the parser and index
                 process_doc(doc)
 
             # Pretend processing complete and return success
@@ -167,14 +170,13 @@ def upload_pdf():
     return render_template("main/upload.html", form=form)
 
 
-
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
         client = Client(host="http://ollama:11434")
 
         data = request.get_json()
-        
+
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
         
@@ -184,22 +186,38 @@ def chat_message():
         user_message = data["message"]
         history = data["conversationHistory"]
          # Getting the documentation (chunks) based on the query
+
         Documents = query_database(user_message)
-        
+
+        # Filter documents with similarity score ≥ 0.90
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.90]
+
+        # If no document meets the threshold, return a message to the frontend
+        if not filtered_docs:
+            return (
+                jsonify(
+                    {
+                        "response": "No document found",
+                        "message": "No relevant information available.",
+                    }
+                ),
+                200,
+            )
+
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= Documents, chat_history = history, question = user_message)
+        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
         
         print(prompt)
 
+        # Print the filtered documents
         print("Chunks:")
-        for doc, score in Documents:
+        for doc, score in filtered_docs:
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
-        
 
-        # Joining the chunks together
-        chunks = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+        # Joining the filtered chunks together
+        chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
         # Formatting the question so that the LLM has proper context for the question
         prompt = f"{chunks}\n\nUser question: {user_message}"
@@ -211,12 +229,13 @@ def chat_message():
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
-        
+
         return jsonify({"response": llm_response})
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500 
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
 
 @bp.route("/logout")
 # Redirect to login page
