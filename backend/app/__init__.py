@@ -6,6 +6,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+print(os.getenv("SESSION_SECRET_KEY"))
 
 # the two functions we call when initalizing app db and migrations
 db = SQLAlchemy()
@@ -25,8 +30,8 @@ def create_app(config_class=Config):
     CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
 
-    import os
-    app.secret_key = os.urandom(24)
+    app.secret_key = os.getenv("SESSION_SECRET_KEY")
+    app.config['SESSION_PERMANENT'] = True
 
     # initializing the database for the app
     db.init_app(app)
