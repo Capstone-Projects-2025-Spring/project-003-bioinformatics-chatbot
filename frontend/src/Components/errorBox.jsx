@@ -1,4 +1,3 @@
-
 /**
  * @module ErrorBox
  * This file exports the ErrorBox component which displays an error message alert.
@@ -18,7 +17,6 @@ ErrorBox.propTypes = {
 	setError: PropTypes.func.isRequired, // `setError` must be a required prop of type function
 };
 
-
 /**
  * ErrorBox component displays an error message with a title and a body.
  *
@@ -37,7 +35,8 @@ export default function ErrorBox({ title, body, setError }) {
 	return (
 		<div
 			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-errorBg text-orange-700 p-4 rounded-lg shadow-lg z-50'
-			role='alert'>
+			role='alert'
+			data-testid='errorBox'>
 			<div className='flex items-center justify-between'>
 				<div>
 					<p className='font-bold'>{title}</p> {/* Displays the error title */}
