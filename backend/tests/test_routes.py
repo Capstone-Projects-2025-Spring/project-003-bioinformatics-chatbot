@@ -12,7 +12,7 @@ def test_chat_response_success(client):
             "content": "The sky is blue because of MAGIC!"
         }
 
-        response = client.post("/chat", json={"message": "Why is the sky blue?"})
+        response = client.post("/chat", json={"message": "Why is the sky blue?", "conversationHistory": []})
 
         assert response.status_code == 200
 

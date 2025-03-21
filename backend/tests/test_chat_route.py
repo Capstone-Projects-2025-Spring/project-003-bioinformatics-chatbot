@@ -1,6 +1,6 @@
 def test_chat_message_valid(client):
     # Test sending a valid message to the chat route
-    response = client.post("/chat", json={"message": "Hello, chatbot!"})
+    response = client.post("/chat", json={"message": "Hello, chatbot!", "conversationHistory": []})
 
     # Check for status code and response
     assert response.status_code == 200
