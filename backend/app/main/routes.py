@@ -178,24 +178,16 @@ def chat_message():
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
         
+        if not data or "conversationHistory" not in data:
+            return jsonify({"error": "conversationHistory is required"}), 400
+        
         user_message = data["message"]
-
-        if "chat_history" not in session:
-            session["chat_history"] = []
-
-        session["chat_history"].append({"role": "user", "content": user_message})
-        session.modified = True 
-        print(session)
-
+        history = data["conversationHistory"]
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
-
-        formatted_chat_history = "\n".join( #ChatGPT, but meant to properly format the history ig
-            [f"{msg['role'].capitalize()}: {msg['content']}" for msg in session["chat_history"]]
-        )
         
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= Documents, chat_history = formatted_chat_history, question = user_message)
+        prompt = prompt_template.format(context= Documents, chat_history = history, question = user_message)
         
         print(prompt)
 
@@ -219,10 +211,6 @@ def chat_message():
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
-
-        session["chat_history"].append({"role": "assistant", "content": llm_response})
-        session.modified = True 
-        print(session)
         
         return jsonify({"response": llm_response})
 
