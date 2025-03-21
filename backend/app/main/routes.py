@@ -186,20 +186,28 @@ def chat_message():
          # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
         
+        # Filter documents with similarity score ≥ 0.90
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.90]
+
+        # If no document meets the threshold, return a message to the frontend
+        if not filtered_docs:
+            return jsonify({"response": "No document found", "message": "No relevant information available."}), 200
+        
+
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= Documents, chat_history = history, question = user_message)
+        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
         
         print(prompt)
 
+        # Print the filtered documents
         print("Chunks:")
-        for doc, score in Documents:
+        for doc, score in filtered_docs:
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
-        
 
-        # Joining the chunks together
-        chunks = "\n\n---\n\n".join([doc.page_content for doc, _score in Documents])
+        # Joining the filtered chunks together
+        chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
         # Formatting the question so that the LLM has proper context for the question
         prompt = f"{chunks}\n\nUser question: {user_message}"
