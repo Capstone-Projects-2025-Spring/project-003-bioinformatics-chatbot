@@ -43,16 +43,16 @@ jobs:
       - name: Wait for services to be ready
         run: sleep 10 
 
-      - name: Run backend tests
-        run: docker-compose run -T backend pytest tests &  # Runs in detached mode, so it is independent, runs pytest in backend/tests
-        continue-on-error: true # Continue running the pipeline even if backend tests fail
+      - name: Start backend tests
+        run: docker-compose exec -T backend python -m pytest -vv
+        continue-on-error: false # Continue running the pipeline even if backend tests fail
 
-
+  
       - name: Run frontend tests
-        run: docker-compose run -T frontend npm run test & # Runs in detached mode, so it is independent, runs node testing
+        run: docker-compose exec -T frontend npm run test
         env:
           CI: true
-        continue-on-error: true # Continue running the pipeline even if backend tests fail
+        continue-on-error: false # Continue running the pipeline even if backend tests fail
 
       # Wait for both tests to complete
       - name: Wait for tests to complete
