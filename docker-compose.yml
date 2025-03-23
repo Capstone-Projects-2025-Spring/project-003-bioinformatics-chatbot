@@ -15,6 +15,15 @@ services:
       - app-network
     volumes:
       - ./backend:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
 
   database:
     image: pgvector/pgvector:pg17
@@ -43,6 +52,15 @@ services:
       - ollama_data:/root/.ollama
     networks:
       - app-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
 
 
   frontend:
