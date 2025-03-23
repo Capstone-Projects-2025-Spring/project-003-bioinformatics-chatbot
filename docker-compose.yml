@@ -14,7 +14,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./backend:/app
+      - ./backend:/backend_app
 
   database:
     image: pgvector/pgvector:pg17
