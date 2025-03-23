@@ -14,7 +14,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./backend:/app
+      - ./backend:/backend_app
     deploy:
       resources:
         reservations:
@@ -24,6 +24,9 @@ services:
               capabilities: [gpu]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
+
+      
+
 
   database:
     image: pgvector/pgvector:pg17
