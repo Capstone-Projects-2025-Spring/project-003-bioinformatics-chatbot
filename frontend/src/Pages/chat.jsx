@@ -13,6 +13,7 @@ import axios from "axios";
  * @returns {JSX.Element} The rendered Chat component.
  */
 function Chat() {
+
 	/**
 	 * State for managing the text input in the ChatBox.
 	 */
@@ -116,9 +117,18 @@ function Chat() {
 		/**
 		 * Add user's message to chat
 		 */
-		const userMessage = { id: messages.length, text: input, type: "Question" };
-		setMessages((prevMessages) => [...prevMessages, userMessage]);
+    const userMessage = { 
+      id: messages.length, 
+      text: input, 
+      type: "Question",
+      sender: "User",
+    };
+		
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
 
+    // setMessages((prevMessages) => [...prevMessages, userMessage]);
+    
 		/**
 		 * Send message to Flask backend using axios
 		 */
@@ -126,12 +136,14 @@ function Chat() {
 		axios
 			.post("http://localhost:444/chat", {
 				message: input,
+        conversationHistory: updatedMessages
 			})
 			.then((response) => {
 				const botResponse = {
 					id: messages.length + 1,
 					text: response.data.response,
 					type: "Response",
+          sender: "Chatbot",
 				};
 				setMessages((prevMessages) => [...prevMessages, botResponse]);
 				setLoading(false);
@@ -255,6 +267,7 @@ function Chat() {
 			</div>
 		</div>
 	);
+
 }
 
 export default Chat;

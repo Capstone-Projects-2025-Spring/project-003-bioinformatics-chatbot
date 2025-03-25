@@ -25,8 +25,15 @@ PROMPT_TEMPLATE = """
 Answer this question based only on the following text:
 {context}
 ---
-Answer the question in details and give me quotes based on the above context: {question}
 
+Conversation history:
+{chat_history}
+
+User's current question:
+{question}
+
+---
+Answer the question in details and give me quotes based on the above context
 """
 
 
@@ -172,10 +179,14 @@ def chat_message():
 
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
-
+        
+        if not data or "conversationHistory" not in data:
+            return jsonify({"error": "conversationHistory is required"}), 400
+        
         user_message = data["message"]
+        history = data["conversationHistory"]
+         # Getting the documentation (chunks) based on the query
 
-        # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
         # Filter documents with similarity score ≥ 0.90
@@ -194,8 +205,8 @@ def chat_message():
             )
 
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context=filtered_docs, question=user_message)
-
+        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
+        
         print(prompt)
 
         # Print the filtered documents
@@ -218,10 +229,6 @@ def chat_message():
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)
-        chat_history = []
-        chat_history.append({"role": "assistant", "content": llm_response})
-
-        session["chat_history"] = chat_history
 
         return jsonify({"response": llm_response})
 
