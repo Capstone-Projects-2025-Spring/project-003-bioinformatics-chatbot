@@ -8,6 +8,7 @@ from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
 from dotenv import load_dotenv
 import os
+from flask_login import LoginManager
 
 # load_dotenv()
 # print(os.getenv("SESSION_SECRET_KEY"))
@@ -15,6 +16,8 @@ import os
 # the two functions we call when initalizing app db and migrations
 db = SQLAlchemy()
 migrate = Migrate()
+login_manager = LoginManager()
+login_manager.login_view = "main.index"
 
 
 def create_app(config_class=Config):
@@ -50,3 +53,8 @@ def create_app(config_class=Config):
     app.register_blueprint(main_bp)
 
     return app
+
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models import User
+    return User.query.get(int(user_id))

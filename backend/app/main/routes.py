@@ -15,6 +15,8 @@ from ollama import Client
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 
+from flask_login import login_required, current_user, logout_user, login_user
+
 """
 Places for routes in the backend
 """
@@ -66,6 +68,9 @@ def index():
                 user.set_password("password")
                 db.session.add(user)
                 db.session.commit()
+            
+            login_user(user)
+            User.user.is_active = True
 
             # Render admin page if login is successful
             return render_template("main/admin.html", user=user)
@@ -94,6 +99,7 @@ def test():
 
 
 @bp.route("/upload", methods=["GET", "POST"])
+@login_required  # Ensure user is logged in to access this route
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
@@ -238,8 +244,10 @@ def chat_message():
 
 
 @bp.route("/logout")
+@login_required  # Ensure user is logged in to access this route
 # Redirect to login page
 def logout():
+    logout_user()  # Log out the current user
     return redirect(url_for("main.index"))
 
 
