@@ -9,7 +9,6 @@ from langchain.prompts import ChatPromptTemplate
 import ollama
 from ollama import chat
 from ollama import ChatResponse
-from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
@@ -39,6 +38,8 @@ Answer the question in details and give me quotes based on the above context
 """
 
 
+
+
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
 def index():
@@ -52,8 +53,7 @@ def index():
     Description: Added a admin login.
 
     """
-
-    # login form
+    
     form = LoginForm()
 
     # Check for correct password/username
@@ -70,10 +70,12 @@ def index():
                 db.session.commit()
             
             login_user(user)
-            User.user.is_active = True
+            
+            db.session.commit()
+            
 
             # Render admin page if login is successful
-            return render_template("main/admin.html", user=user)
+            return redirect(url_for('main.admin'))
         else:
             # return error to index page
             return render_template(
@@ -84,6 +86,10 @@ def index():
 
     return render_template("main/index.html", form=form)
 
+@bp.route("/admin", methods=["GET"])
+@login_required
+def admin():
+    return render_template("main/admin.html", user = current_user)
 
 @bp.route("/test", methods=["GET"])
 def test():
@@ -248,6 +254,7 @@ def chat_message():
 # Redirect to login page
 def logout():
     logout_user()  # Log out the current user
+    db.session.commit()
     return redirect(url_for("main.index"))
 
 

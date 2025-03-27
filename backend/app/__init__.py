@@ -17,7 +17,8 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-login_manager.login_view = "main.index"
+ 
+
 
 
 def create_app(config_class=Config):
@@ -33,13 +34,16 @@ def create_app(config_class=Config):
     CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
 
-    # app.secret_key = os.getenv("SESSION_SECRET_KEY")
-    # app.config['SESSION_PERMANENT'] = True
+    #app.secret_key = os.getenv("SESSION_SECRET_KEY")
+    #app.config['SESSION_PERMANENT'] = True
 
     # initializing the database for the app
     db.init_app(app)
     # initalizing the database migrations for the app
     migrate.init_app(app, db)
+
+    login_manager.init_app(app)
+    
 
     app.vector_db = PGVector(
         embeddings=DeterministicFakeEmbedding(size=4096),
