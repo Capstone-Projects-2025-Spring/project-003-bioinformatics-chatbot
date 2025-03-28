@@ -7,6 +7,7 @@ import pytest
 
 
 def test_chat_response_success(client):
+    client.post("/index", data={"username": "testuser", "password": "password"})
     with patch("app.main.routes.Client.chat") as mock_chat:
         mock_chat.return_value.message = {
             "content": "The sky is blue because of MAGIC!"

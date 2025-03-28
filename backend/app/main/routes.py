@@ -9,11 +9,12 @@ from langchain.prompts import ChatPromptTemplate
 import ollama
 from ollama import chat
 from ollama import ChatResponse
-from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
+
+from flask_login import login_required, current_user, logout_user, login_user
 
 """
 Places for routes in the backend
@@ -51,33 +52,27 @@ def index():
 
     """
 
-    # login form
     form = LoginForm()
-
     # Check for correct password/username
     if form.validate_on_submit():
-        if form.username.data == "admin" and form.password.data == "admin":
-
-            # how to make a simple query
-
-            user = User.query.filter_by(username="admin").first()
-            if not user:
-                user = User(username="admin")
-                user.set_password("password")
-                db.session.add(user)
-                db.session.commit()
-
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
             # Render admin page if login is successful
-            return render_template("main/admin.html", user=user)
+            return redirect(url_for("main.admin"))
         else:
             # return error to index page
             return render_template(
                 "main/index.html", form=form, error="Invalid username or password"
             )
-
     # Pass the forms here.
-
     return render_template("main/index.html", form=form)
+
+
+@bp.route("/admin", methods=["GET"])
+@login_required
+def admin():
+    return render_template("main/admin.html", user=current_user)
 
 
 @bp.route("/test", methods=["GET"])
@@ -94,6 +89,7 @@ def test():
 
 
 @bp.route("/upload", methods=["GET", "POST"])
+@login_required  # Ensure user is logged in to access this route
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
@@ -179,13 +175,13 @@ def chat_message():
 
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
-        
+
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
+
         user_message = data["message"]
         history = data["conversationHistory"]
-         # Getting the documentation (chunks) based on the query
+        # Getting the documentation (chunks) based on the query
 
         Documents = query_database(user_message)
 
@@ -205,8 +201,10 @@ def chat_message():
             )
 
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
-        
+        prompt = prompt_template.format(
+            context=filtered_docs, chat_history=history, question=user_message
+        )
+
         print(prompt)
 
         # Print the filtered documents
@@ -238,8 +236,11 @@ def chat_message():
 
 
 @bp.route("/logout")
+@login_required  # Ensure user is logged in to access this route
 # Redirect to login page
 def logout():
+    logout_user()  # Log out the current user
+    db.session.commit()
     return redirect(url_for("main.index"))
 
 
