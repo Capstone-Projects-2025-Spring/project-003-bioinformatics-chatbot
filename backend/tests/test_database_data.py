@@ -7,13 +7,18 @@ import os
 
 import pypdf 
 
+test_user = User(username="testuser")
+test_user.set_password("password")
+db.session.add(test_user)
+db.session.commit()
+        
 def test_content_file(client, app):
     app.config["WTF_CSRF_ENABLED"] = (
         False  # In testing envionment, no need for CSRF_TOKEN
     )
     with app.app_context():
-        client = User.query.filter_by(username="admin").first()
-        client.post("/login", data={"username": "admin", "password": "admin"})
+        
+        client.post("/index", data={"username": "testuser", "password": "password"})
         # Path to the test file inside the test_data folder
         file_path = os.path.join(os.path.dirname(__file__), "test_data", "test.pdf")
 
@@ -60,8 +65,11 @@ def test_validation(client, app):
     app.config["WTF_CSRF_ENABLED"] = False
 
     with app.app_context():
-        client = User.query.filter_by(username="admin").first()
-        client.post("/login", data={"username": "admin", "password": "admin"})
+        test_user = User(username="testuser")
+        test_user.set_password("password")
+        db.session.add(test_user)
+        db.session.commit()
+        client.post("/index", data={"username": "testuser", "password": "password"})
         # Testing for no document uploaded
         data = {}
         response = client.post("/upload", data=data, content_type="multipart/form-data")
