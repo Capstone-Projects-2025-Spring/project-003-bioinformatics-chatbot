@@ -1,13 +1,10 @@
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
-from langchain_ollama import OllamaEmbeddings
-from config import Config, TestingConfig
+from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
-from dotenv import load_dotenv
-import os
 from flask_login import LoginManager
 
 # load_dotenv()
@@ -17,8 +14,6 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
- 
-
 
 
 def create_app(config_class=Config):
@@ -34,8 +29,8 @@ def create_app(config_class=Config):
     CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
 
-    #app.secret_key = os.getenv("SESSION_SECRET_KEY")
-    #app.config['SESSION_PERMANENT'] = True
+    # app.secret_key = os.getenv("SESSION_SECRET_KEY")
+    # app.config['SESSION_PERMANENT'] = True
 
     # initializing the database for the app
     db.init_app(app)
@@ -43,7 +38,6 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
 
     login_manager.init_app(app)
-    
 
     app.vector_db = PGVector(
         embeddings=DeterministicFakeEmbedding(size=4096),
@@ -58,7 +52,10 @@ def create_app(config_class=Config):
 
     return app
 
+
 @login_manager.user_loader
 def load_user(user_id):
     from app.models import User
+
     return User.query.get(int(user_id))
+

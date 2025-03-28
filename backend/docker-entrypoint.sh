@@ -22,6 +22,4 @@ export FLASK_RUN_HOST=0.0.0.0
 # port number
 export FLASK_RUN_PORT=444
 
-exec python3 seed.py
-
 exec python3 -m flask run
