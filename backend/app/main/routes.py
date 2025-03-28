@@ -38,8 +38,6 @@ Answer the question in details and give me quotes based on the above context
 """
 
 
-
-
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
 def index():
@@ -53,43 +51,29 @@ def index():
     Description: Added a admin login.
 
     """
-    
-    form = LoginForm()
 
+    form = LoginForm()
     # Check for correct password/username
     if form.validate_on_submit():
-        if form.username.data == "admin" and form.password.data == "admin":
-
-            # how to make a simple query
-
-            user = User.query.filter_by(username="admin").first()
-            if not user:
-                user = User(username="admin")
-                user.set_password("password")
-                db.session.add(user)
-                db.session.commit()
-            
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
             login_user(user)
-            
-            db.session.commit()
-            
-
             # Render admin page if login is successful
-            return redirect(url_for('main.admin'))
+            return redirect(url_for("main.admin"))
         else:
             # return error to index page
             return render_template(
                 "main/index.html", form=form, error="Invalid username or password"
             )
-
     # Pass the forms here.
-
     return render_template("main/index.html", form=form)
+
 
 @bp.route("/admin", methods=["GET"])
 @login_required
 def admin():
-    return render_template("main/admin.html", user = current_user)
+    return render_template("main/admin.html", user=current_user)
+
 
 @bp.route("/test", methods=["GET"])
 def test():
@@ -191,13 +175,13 @@ def chat_message():
 
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
-        
+
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
+
         user_message = data["message"]
         history = data["conversationHistory"]
-         # Getting the documentation (chunks) based on the query
+        # Getting the documentation (chunks) based on the query
 
         Documents = query_database(user_message)
 
@@ -217,8 +201,10 @@ def chat_message():
             )
 
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
-        
+        prompt = prompt_template.format(
+            context=filtered_docs, chat_history=history, question=user_message
+        )
+
         print(prompt)
 
         # Print the filtered documents
