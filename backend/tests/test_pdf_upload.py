@@ -1,6 +1,8 @@
 import io
 from werkzeug.datastructures import FileStorage
 import os
+from app.models import User, Document
+from app import db
 
 def test_upload_pdf_valid(client, app):
     app.config['WTF_CSRF_ENABLED'] = False;
@@ -21,7 +23,8 @@ def test_upload_pdf_valid(client, app):
     data = {
         "pdf_file": (io.BytesIO(pdf_file.read()), "test.pdf"),
     }
-    
+    client = User.query.filter_by(username="admin").first()
+    client.post("/login", data={"username": "admin", "password": "admin"})
     # Make the POST request to the upload route
     upload_response = client.post("/upload", data=data, follow_redirects=True)
 

@@ -1,5 +1,7 @@
 import io
 from app.models import Document
+from app import db
+from app.models import User
 from werkzeug.datastructures import FileStorage
 import os
 
@@ -10,7 +12,8 @@ def test_content_file(client, app):
         False  # In testing envionment, no need for CSRF_TOKEN
     )
     with app.app_context():
-
+        client = User.query.filter_by(username="admin").first()
+        client.post("/login", data={"username": "admin", "password": "admin"})
         # Path to the test file inside the test_data folder
         file_path = os.path.join(os.path.dirname(__file__), "test_data", "test.pdf")
 
@@ -57,6 +60,8 @@ def test_validation(client, app):
     app.config["WTF_CSRF_ENABLED"] = False
 
     with app.app_context():
+        client = User.query.filter_by(username="admin").first()
+        client.post("/login", data={"username": "admin", "password": "admin"})
         # Testing for no document uploaded
         data = {}
         response = client.post("/upload", data=data, content_type="multipart/form-data")
