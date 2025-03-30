@@ -121,13 +121,16 @@ function Chat() {
 			});
 			return;
 		}
+		console.log("Timestamp: ", new Date().toLocaleString());
+		
 
 		/**
 		 * Add user's message to chat
 		 */
     const userMessage = { 
       id: messages.length, 
-      text: input, 
+      text: input,
+	  time: new Date().toLocaleString(), 
       type: "Question",
       sender: "User",
     };
@@ -187,9 +190,17 @@ function Chat() {
 			 * @type {string}
 			 */
 			const conversation = messages.reduce(
-				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
+				(acc, curr) => {
+				  if (curr.type === "Response") { // if its a response do not include the
+					// 
+					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+				  } else {
+					
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				  }
+				},
 				""
-			);
+			  );
 			/**
 			 * Creates a Blob object for the formatted string.
 			 * @type {Blob}
@@ -230,9 +241,17 @@ function Chat() {
 			 * @type {string}
 			 */
 			const conversation = messages.reduce(
-				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
+				(acc, curr) => {
+				  if (curr.type === "Response") { // if its a response do not include the
+					// 
+					return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
+				  } else {
+					
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				  }
+				},
 				""
-			);
+			  );
 	
 			/**
 			 * Splits the formatted string into an array of text.
@@ -287,19 +306,40 @@ function Chat() {
 		} else {
 			/**
 			 * Converts the messages array into a formatted string.
-			 * @type {string}
 			 */
-			const conversation = messages.reduce(
-				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
-				""
-			);
+			const conversation = messages.reduce((acc, curr) => {
+				if (curr.type === "Response") { 
+					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+				} else {
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				}
+			}, "");
 	
 			/**
-			 * Creates a new PDF document and adds the conversation.
-			 * @type {jsPDF}
+			 * Creates a new PDF document with automatic page handling.
 			 */
 			const doc = new jsPDF();
-			doc.text(conversation, 10, 10); 
+			doc.setFontSize(10);
+			// margins for the page
+			const marginLeft = 10;
+			const marginTop = 10;
+			const pageHeight = doc.internal.pageSize.height - 20; 
+			const maxWidth = 180; 
+			const lineSpacing = 5; 
+	
+			// This is to make sure that the words do not overflow
+			const textLines = doc.splitTextToSize(conversation, maxWidth);
+	
+			let currentY = marginTop;
+			// Manually move the line down when adding words and adding a new page if need be
+			textLines.forEach((line) => {
+				if (currentY + lineSpacing > pageHeight) { 
+					doc.addPage(); 
+					currentY = marginTop; 
+				}
+				doc.text(line, marginLeft, currentY);
+				currentY += lineSpacing; // Move down for next line
+			});
 	
 			/**
 			 * Saves the PDF file
@@ -307,6 +347,7 @@ function Chat() {
 			doc.save("ChatHistory.pdf");
 		}
 	};
+	
 		
 	
 
