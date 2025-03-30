@@ -371,23 +371,27 @@ function Chat() {
 					/>
 				</button>
 			</div>
+			{/** Small container that allows the user to choose the format of the messages */}
 			{isDialogOpen && (
   <div className="absolute bottom-16 right-4 z-50">
     <div className="p-4 border rounded-lg bg-gray-800 shadow-lg space-y-2">
       <h2 className="text-lg font-semibold text-white">Select the file type</h2>
       <button
+	  data-testid='downloadButtontxt'
         onClick={handleDownloadtxt}
         className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
       >
         .txt
       </button>
       <button
+	  data-testid='downloadButtonpdf'
         onClick={handleDownloadpdf}
         className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
       >
         .pdf
       </button>
       <button
+	  data-testid='downloadButtondoc'
         onClick={handleDownloaddoc}
         className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
       >
