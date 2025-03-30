@@ -4,9 +4,25 @@ import os
 from app.models import User, Document
 from app import db
 
+
+
+def login_user(client):
+    test_user = User(username="testuser")
+    test_user.set_password("password")
+    db.session.add(test_user)
+    db.session.commit()
+    response = client.post(
+        "/index",
+        data={"username": "testuser", "password": "password"},
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+
+    return client
+
 def test_upload_pdf_valid(client, app):
-    app.config['WTF_CSRF_ENABLED'] = False;
-    client.post("/index", data={"username": "testuser", "password": "password"})
+    app.config['WTF_CSRF_ENABLED'] = False
+    client = login_user(client)
     # Path to the test file inside the test_data folder
     file_path = os.path.join(os.path.dirname(__file__), 'test_data', 'test.pdf')
 
