@@ -42,7 +42,7 @@ def test_upload_pdf_valid(client, app):
         data = {
             "pdf_file": (io.BytesIO(pdf_file.read()), "test.pdf"),
         }
-        client = User.query.filter_by(username="admin").first()
+        
     
         # Make the POST request to the upload route
         upload_response = client.post("/upload", data=data, follow_redirects=True)
