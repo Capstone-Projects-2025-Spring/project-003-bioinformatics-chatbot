@@ -4,7 +4,10 @@ from app.models import User
 from app import db
 from app.models import Document
 
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_ollama.llms import OllamaLLM
+
 
 import ollama
 from ollama import chat
@@ -14,6 +17,8 @@ from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
+
+llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
 
 """
 Places for routes in the backend
@@ -173,8 +178,8 @@ def upload_pdf():
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
-        client = Client(host="http://ollama:11434")
-
+        # client = Ollama(model = "llama3.2", base_url = "http://ollama:11434")
+        # client = Client(host="http://ollama:11434")
         data = request.get_json()
 
         if not data or "message" not in data:
@@ -184,9 +189,17 @@ def chat_message():
             return jsonify({"error": "conversationHistory is required"}), 400
         
         user_message = data["message"]
-        history = data["conversationHistory"]
-         # Getting the documentation (chunks) based on the query
+        # history = data["conversationHistory"]
+        history = []
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.append(HumanMessage(content=chat["text"]))
+            elif chat["sender"] == "Chatbot":
+                history.append(AIMessage(content=chat["text"]))
 
+        print(history)
+
+        # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
         # Filter documents with similarity score ≥ 0.90
@@ -203,11 +216,32 @@ def chat_message():
                 ),
                 200,
             )
-
-        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
         
-        print(prompt)
+        # Joining the filtered chunks together
+        context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+        # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        prompt_template = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    "You are a helpful assistant that answers questions based only on the provided context.\n"
+                    "Answer in detail and provide quotes from the context.\n"
+                    "---\n"
+                    "Context:\n{context}\n"
+                    "---",
+                ),
+                MessagesPlaceholder(variable_name="history"),
+                ("human", "{user_message}"),
+            ]
+        )
+
+        chain = prompt_template | llm
+
+        response = chain.invoke({"context": context, "history": history, "user_message": user_message})
+        # prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
+        
+        # print(prompt)
 
         # Print the filtered documents
         print("Chunks:")
@@ -215,22 +249,23 @@ def chat_message():
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
+        
+        print(f"Response: {response}", flush=True)
 
-        # Joining the filtered chunks together
-        chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        return jsonify({"response": response})
 
         # Formatting the question so that the LLM has proper context for the question
-        prompt = f"{chunks}\n\nUser question: {user_message}"
+        # prompt = f"{chunks}\n\nUser question: {user_message}"
 
         # Store the message in messages list
-        response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": prompt}]
-        )
+        # response = client.chat(
+        #     model="llama3.2", messages=[{"role": "user", "content": prompt}]
+        # )
 
-        llm_response = response.message["content"]
-        print(llm_response, flush=True)
+        # llm_response = response.message["content"]
+        # print(llm_response, flush=True)
 
-        return jsonify({"response": llm_response})
+        # return jsonify({"response": llm_response})
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
