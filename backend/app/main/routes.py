@@ -49,14 +49,14 @@ def index():
 
     # Check for correct password/username
     if form.validate_on_submit():
-        if form.username.data == "admin" and form.password.data == "admin":
+        if form.username.data == "admin" and form.password.data == "iamanadminpleasedontguessthispassword":
 
             # how to make a simple query
 
             user = User.query.filter_by(username="admin").first()
             if not user:
                 user = User(username="admin")
-                user.set_password("password")
+                user.set_password("iamanadminpleasedontguessthispassword")
                 db.session.add(user)
                 db.session.commit()
 
@@ -178,11 +178,16 @@ def chat_message():
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
+
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.90]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.50]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
+            print("NO DOCUMENT FOUND: ", user_message)
+            for doc, score in Documents:
+                print(score, doc.page_content[:30])
+
             return (
                 jsonify(
                     {
@@ -194,16 +199,12 @@ def chat_message():
             )
 
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context=filtered_docs, question=user_message)
+        text_from_docs = "".join([doc.page_content for doc, _ in filtered_docs])
+        prompt = prompt_template.format(context=text_from_docs, question=user_message)
 
         print(prompt)
 
         # Print the filtered documents
-        print("Chunks:")
-        for doc, score in filtered_docs:
-            print(f"Document content: {doc.page_content}")
-            print(f"Score: {score}")
-            print("---")
 
         # Joining the filtered chunks together
         chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
@@ -213,8 +214,10 @@ def chat_message():
 
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": prompt}]
+            model="llama3", messages=[{"role": "user", "content": prompt}]
         )
+
+        print(prompt)
 
         llm_response = response.message["content"]
         print(llm_response, flush=True)

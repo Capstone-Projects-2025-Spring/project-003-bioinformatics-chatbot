@@ -71,7 +71,7 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - "5173:5173"  # Vite dev server
+      - "80:5173"  # Vite dev server
     depends_on:
       - backend
     volumes:

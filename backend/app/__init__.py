@@ -22,7 +22,7 @@ def create_app(config_class=Config):
     """
 
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+    CORS(app, resources={r"/*": {"origins": "https://bscb.site"}})
     app.config.from_object(config_class)
 
     # initializing the database for the app
@@ -30,8 +30,10 @@ def create_app(config_class=Config):
     # initalizing the database migrations for the app
     migrate.init_app(app, db)
 
+    #embeddings=OllamaEmbeddings(model="llama3")
+    #embeddings=DeterministicFakeEmbedding(size=4096),
     app.vector_db = PGVector(
-        embeddings=DeterministicFakeEmbedding(size=4096),
+        embeddings=OllamaEmbeddings(model="llama3", base_url="http://ollama:11434"),
         collection_name="vectorized_docs",
         connection=app.config["SQLALCHEMY_DATABASE_URI"],
         use_jsonb=True,

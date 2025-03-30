@@ -124,7 +124,7 @@ function Chat() {
 		 */
 		setLoading(true);
 		axios
-			.post("http://localhost:444/chat", {
+			.post("https://chat.bscb.site/chat", {
 				message: input,
 			})
 			.then((response) => {
