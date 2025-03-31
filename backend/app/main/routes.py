@@ -105,6 +105,8 @@ def delete_item(item_id):
     """
     try:
         # Code for deleting doc in database
+
+        print("Delete Works")
         
         return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'})
     except Exception as e:
