@@ -7,7 +7,7 @@ from app.models import Document
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_ollama.llms import OllamaLLM
-
+from langchain_community.chat_message_histories import ChatMessageHistory
 
 import ollama
 from ollama import chat
@@ -19,28 +19,6 @@ from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 
 llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
-
-"""
-Places for routes in the backend
-"""
-
-# test
-
-PROMPT_TEMPLATE = """
-Answer this question based only on the following text:
-{context}
----
-
-Conversation history:
-{chat_history}
-
-User's current question:
-{question}
-
----
-Answer the question in details and give me quotes based on the above context
-"""
-
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -178,8 +156,6 @@ def upload_pdf():
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
-        # client = Ollama(model = "llama3.2", base_url = "http://ollama:11434")
-        # client = Client(host="http://ollama:11434")
         data = request.get_json()
 
         if not data or "message" not in data:
@@ -189,15 +165,22 @@ def chat_message():
             return jsonify({"error": "conversationHistory is required"}), 400
         
         user_message = data["message"]
-        # history = data["conversationHistory"]
-        history = []
+
+        # history = []
+        # for chat in data["conversationHistory"]:
+        #     if chat["sender"] == "User":
+        #         history.append(HumanMessage(content=chat["text"]))
+        #     elif chat["sender"] == "Chatbot":
+        #         history.append(AIMessage(content=chat["text"]))
+        # print(history)
+
+        history = ChatMessageHistory()
         for chat in data["conversationHistory"]:
             if chat["sender"] == "User":
-                history.append(HumanMessage(content=chat["text"]))
+                history.add_user_message(chat["text"])
             elif chat["sender"] == "Chatbot":
-                history.append(AIMessage(content=chat["text"]))
-
-        print(history)
+                history.add_ai_message(chat["text"])
+        print("Chat History:", history.messages, flush=True)
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
@@ -238,10 +221,7 @@ def chat_message():
 
         chain = prompt_template | llm
 
-        response = chain.invoke({"context": context, "history": history, "user_message": user_message})
-        # prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
-        
-        # print(prompt)
+        response = chain.invoke({"context": context, "history": history.messages, "user_message": user_message})
 
         # Print the filtered documents
         print("Chunks:")
@@ -253,19 +233,6 @@ def chat_message():
         print(f"Response: {response}", flush=True)
 
         return jsonify({"response": response})
-
-        # Formatting the question so that the LLM has proper context for the question
-        # prompt = f"{chunks}\n\nUser question: {user_message}"
-
-        # Store the message in messages list
-        # response = client.chat(
-        #     model="llama3.2", messages=[{"role": "user", "content": prompt}]
-        # )
-
-        # llm_response = response.message["content"]
-        # print(llm_response, flush=True)
-
-        # return jsonify({"response": llm_response})
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
