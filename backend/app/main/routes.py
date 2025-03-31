@@ -166,14 +166,6 @@ def chat_message():
         
         user_message = data["message"]
 
-        # history = []
-        # for chat in data["conversationHistory"]:
-        #     if chat["sender"] == "User":
-        #         history.append(HumanMessage(content=chat["text"]))
-        #     elif chat["sender"] == "Chatbot":
-        #         history.append(AIMessage(content=chat["text"]))
-        # print(history)
-
         history = ChatMessageHistory()
         for chat in data["conversationHistory"]:
             if chat["sender"] == "User":
