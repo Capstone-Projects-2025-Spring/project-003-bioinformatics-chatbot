@@ -55,11 +55,13 @@ def index():
     form = LoginForm()
     # Check for correct password/username
     if form.validate_on_submit():
+
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
             # Render admin page if login is successful
             return redirect(url_for("main.admin"))
+
         else:
             # return error to index page
             return render_template(
@@ -68,6 +70,45 @@ def index():
     # Pass the forms here.
     return render_template("main/index.html", form=form)
 
+@bp.route('/admin')
+def admin():
+    """
+    Direct to the admin dashboard with List document UI
+
+    """
+
+    # how to make a simple query
+    user = User.query.filter_by(username="admin").first()
+    if not user:
+        user = User(username="admin")
+        user.set_password("password")
+        db.session.add(user)
+        db.session.commit()
+
+    # fetch all document from database
+    documents = db.session.query(Document).all()
+    
+    return render_template("main/admin.html", user=user, documents=documents)
+
+@bp.route('/delete/<int:item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    """
+    Delete document from database. 
+
+    Args:
+        Item ID: the document ID
+
+    Returns:
+       True if item is deleted or False for error
+    """
+    try:
+        # Code for deleting doc in database
+
+        print("Delete Works")
+        
+        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
 
 @bp.route("/admin", methods=["GET"])
 @login_required
