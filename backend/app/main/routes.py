@@ -70,7 +70,8 @@ def index():
     # Pass the forms here.
     return render_template("main/index.html", form=form)
 
-@bp.route('/admin')
+
+@bp.route("/admin")
 def admin():
     """
     Direct to the admin dashboard with List document UI
@@ -87,13 +88,14 @@ def admin():
 
     # fetch all document from database
     documents = db.session.query(Document).all()
-    
+
     return render_template("main/admin.html", user=user, documents=documents)
 
-@bp.route('/delete/<int:item_id>', methods=['DELETE'])
+
+@bp.route("/delete/<int:item_id>", methods=["DELETE"])
 def delete_item(item_id):
     """
-    Delete document from database. 
+    Delete document from database.
 
     Args:
         Item ID: the document ID
@@ -105,15 +107,25 @@ def delete_item(item_id):
         # Code for deleting doc in database
 
         print("Delete Works")
-        
-        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'})
-    except Exception as e:
-        return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
 
+        return jsonify(
+            {"success": True, "message": f"Item {item_id} deleted successfully"}
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"success": False, "message": "Failed to delete item", "error": str(e)}
+            ),
+            500,
+        )
+
+
+"""
 @bp.route("/admin", methods=["GET"])
 @login_required
 def admin():
     return render_template("main/admin.html", user=current_user)
+"""
 
 
 @bp.route("/test", methods=["GET"])
