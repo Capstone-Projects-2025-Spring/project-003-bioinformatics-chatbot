@@ -120,14 +120,6 @@ def delete_item(item_id):
         )
 
 
-"""
-@bp.route("/admin", methods=["GET"])
-@login_required
-def admin():
-    return render_template("main/admin.html", user=current_user)
-"""
-
-
 @bp.route("/test", methods=["GET"])
 def test():
     """
