@@ -90,7 +90,8 @@ Doucumentation of Backend API From Flask Server
 	
 - Logs the user out by redirecting to the login page. 
 - Method: `GET` 
-- Returns: Redirects to `/index`
+- Returns:
+  - Redirects to `/index`
  
 </details>
 
