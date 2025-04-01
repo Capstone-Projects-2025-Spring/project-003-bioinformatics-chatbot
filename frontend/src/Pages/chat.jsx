@@ -121,7 +121,7 @@ function Chat() {
 			});
 			return;
 		}
-		console.log("Timestamp: ", new Date().toLocaleString());
+		
 		
 
 		/**
@@ -191,8 +191,8 @@ function Chat() {
 			 */
 			const conversation = messages.reduce(
 				(acc, curr) => {
-				  if (curr.type === "Response") { // if its a response do not include the
-					// 
+				  if (curr.type === "Response") { // if its a response do not include the time
+					
 					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
 				  } else {
 					
@@ -242,7 +242,7 @@ function Chat() {
 			 */
 			const conversation = messages.reduce(
 				(acc, curr) => {
-				  if (curr.type === "Response") { // if its a response do not include the
+				  if (curr.type === "Response") { // if its a response do not include the time
 					// 
 					return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
 				  } else {
@@ -306,9 +306,11 @@ function Chat() {
 		} else {
 			/**
 			 * Converts the messages array into a formatted string.
+			 * @type {string}
 			 */
+			
 			const conversation = messages.reduce((acc, curr) => {
-				if (curr.type === "Response") { 
+				if (curr.type === "Response") { // if its a response do not include the time
 					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
 				} else {
 					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
@@ -317,6 +319,7 @@ function Chat() {
 	
 			/**
 			 * Creates a new PDF document with automatic page handling.
+			 *  @type {jsPDF}
 			 */
 			const doc = new jsPDF();
 			doc.setFontSize(10);
