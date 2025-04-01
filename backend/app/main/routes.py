@@ -2,6 +2,7 @@ from flask import jsonify, render_template, redirect, url_for, request, session
 from app.main import bp
 from app.models import User
 from app import db
+from flask import current_app
 from app.models import Document
 
 from langchain.prompts import ChatPromptTemplate
@@ -14,7 +15,9 @@ from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
-
+from app.doc_indexer.retrieve_document import query_database
+from sqlalchemy import delete
+from sqlalchemy.exc import SQLAlchemyError
 """
 Places for routes in the backend
 """
@@ -95,21 +98,43 @@ def admin():
 @bp.route('/delete/<int:item_id>', methods=['DELETE'])
 def delete_item(item_id):
     """
-    Delete document from database. 
+    Deletes a document and its associated vector embeddings from the database.
+
+    This endpoint:
+      - Deletes the document with the given `item_id`.
+      - Removes related embeddings from the `EmbeddingStore`, where the `id` contains `document_name` (case-sensitive).
+      - Ensures transactional integrity by rolling back in case of failure.
 
     Args:
-        Item ID: the document ID
+        item_id (int): The unique identifier of the document to delete.
 
     Returns:
-       True if item is deleted or False for error
+        Response (JSON): A success message if deletion is successful, 
+                         or an error message with appropriate HTTP status codes.
     """
     try:
-        # Code for deleting doc in database
+        # Retrieve the document by ID
+        document = db.session.query(Document).get(item_id)
 
-        print("Delete Works")
-        
-        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'})
+        if not document:
+            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+
+        vector_db = current_app.vector_db
+
+        # Delete associated embeddings (case-sensitive match)
+        db.session.execute(
+            delete(vector_db.EmbeddingStore).where(vector_db.EmbeddingStore.id.like(f"%{document.document_name}.{document.document_type}%"))
+        )
+        # Delete the document itself
+        db.session.delete(document)
+
+        # Commit the transaction
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'}), 200
+
     except Exception as e:
+        db.session.rollback()  # Rollback changes on failure
         return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
 
 @bp.route("/test", methods=["GET"])
@@ -151,34 +176,32 @@ def upload_pdf():
                     400,
                 )
 
-            # Instance of Document model created
+            # Extract file name and type
+            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+
+            # Check if a document with the same name and type already exists
+            existing_document = db.session.query(Document).filter_by(
+                document_name=file_name, document_type=file_type
+            ).first()
+
+            if existing_document:
+                return jsonify({"error": f"A document named '{uploaded_file.filename}' already exists."}), 409
+
+            # Create new document instance
             new_document = Document(
-                document_name=uploaded_file.filename.split(".")[
-                    0
-                ],  # Name of the file without the extenstion
-                document_type=uploaded_file.filename.split(".")[
-                    -1
-                ],  # Splits the name by "." and gets the ending (Will always be .pdf, but does worke for any file type)
-                file_contents=uploaded_file.read(),  # This is the binary data of the pdf file
+                document_name=file_name,
+                document_type=file_type,
+                file_contents=uploaded_file.read(),  # Store binary PDF data
             )
+            
             # Storing the document into the database
             db.session.add(new_document)
             db.session.commit()
-
-            # fetch all document from database
-            documents = db.session.query(Document).all()
-
-            # loop through each document and process to upload file and to the parser
-            for doc in documents:
-                print(f"ID: {doc.id}")
-                print(f"Name: {doc.document_name}")
-                print(f"Type: {doc.document_type}")
-                print(f"Size: {len(doc.file_contents)} bytes")  # Size of binary data
-
-                # Process the upload doc to the parser and index
-                process_doc(doc)
-
-            # Pretend processing complete and return success
+            # Process the upload doc to the parser and index
+            process_doc(new_document)
+            
+            
             return (
                 jsonify(
                     {
@@ -273,20 +296,3 @@ def chat_message():
 # Redirect to login page
 def logout():
     return redirect(url_for("main.index"))
-
-
-from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
-from app.doc_parsers.parse_pdf import split_documents
-from app.doc_indexer.index_doc import index_and_add_to_db
-from app.doc_indexer.retrieve_document import query_database
-
-
-@bp.route("/test_indexing", methods=["GET"])
-def test_indexing():
-    documents = load_documents(DATA_PATH)
-    chunks = split_documents(documents)
-    index_and_add_to_db(chunks)
-    doc = query_database("cell cycle")
-    print(doc)
-
-    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
