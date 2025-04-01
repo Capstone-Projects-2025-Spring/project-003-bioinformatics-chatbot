@@ -5,152 +5,103 @@ sidebar_position: 2
 <!--Overview Section-->
 # Backend API 
 
-```mermaid
-classDiagram
-direction BT
-	namespace Backend {
-        class server {
-        }
+Doucumentation of Backend API From Flask Server
 
-        class chatbot_backend {
-	        +String query_input
-	        +String respone_output
-	        +check_database(sorted_bioinformatics_database)
-                +get_rag_respone(rag_model, query_input)
-        }
+### `GET /index`
+<details open="True"> 
 
-        class bioinformatics_database{
-	        +Doc bioinformatics_pdfs
-	        +String admin_login
-	        +add_doc(admin)
-        }
+- Renders the index page. 
+- Methods: `GET`, `POST` 
+    - Handles login form submission. 
+	- Redirects to the admin page if credentials are correct. 
+	- Displays an error message on failed login. 
 
-        class sorted_bioinformatics_database{
-            +Array bag_of_words
-            +sort_database(database_bioinformatics)
-        }
-
-        class rag_model {
-	        +String rag_respone
-          +String query
-          +String relevant_information
-	        +retrieve_and_generate(generator_llm, retriever, chatbot_backend)
-        }
-
-        class retriever {
-	        +Doc retrieved_pdf
-                +String query
-	        +retrieve_pdf(sorted_bioinformatics_database, chatbot_backend)
-        }
+</details> 
 
 
-        class generator_llm {
-	        +String generated_response
-		+String query
-	        +generate_response(retriever, chatbot_backend)
-        }
+### `GET /admin`
+<details open="True"> 
 
+- Renders the admin dashboard. 
+	- Fetches and displays a list of documents. 
+	- Ensures an admin user exists, creating one if necessary. 
 
-        class admin {
-          +String Username 
-          +String Password 
-	        +Doc bioinformatics_pdfs
-	        +add_bioinformatics_pdf(bioinformatics_database)
-        }
+</details>
 
-	}
+### `DELETE /delete/{item_id}`
+<details open="True"> 
+	
+- Deletes a document from the database. 
+- Parameters: - `item_id` (int): The ID of the document to delete. 
+- Returns: 
+  - if deletion is successful: `{ "success": true, "message": "Item {item_id} deleted successfully" }` 
+  - if an error occurs:  `{ "success": false, "message": "Failed to delete item", "error": "error details" }`
+ 
+</details>
 
+### `GET /upload`
 
-
-    server *-- chatbot_backend
-    server *-- sorted_bioinformatics_database
-    server *-- rag_model
-    rag_model *-- retriever
-    rag_model *-- generator_llm
-    server *-- admin
-    sorted_bioinformatics_database *-- bioinformatics_database
-    
-```
-
-## __Chatbot_backend__
-+ Class Purpose: To receive query from the user and generate a RAG(Retrieval-augmented generation) response
-+ Datafields:
-  + query_input (String): Store the user query
-  + response_output (String): Store the RAG-generated response
-+ Methods:
-  + check_database()
-      + Purpose: Checks for relevant information in the database.
-      + Pre-Conditon: A parsed user query
-      + Parameters:
-        + query_input (String) : The user query
-        + database (Object) : The sourced of stored information
-      + Return value: True if relevant data exists, False otherwise (Boolean)
-  + generate_response()
-      + Purpose: Generate RAG(Retrieval-augmented generation) response or a message stating "I don't know"
-      + Pre-Conditon: A boolean from check_database()
-      + Post-Conditon: A response for the Chatbot to display
-      + Parameters:
-        + relevant_info(Boolean) : Boolean that checks for relevant information in the database
-        + rag_model(Object) : The RAG class object that generate RAG(Retrieval-augmented generation) response
-      + Return value: RAG response if boolean true, "I don't know" message if boolean false (String)
-
-## __Rag_model__
-+ Class Purpose: Generate a respone for the chatbot query from retrieval infomation and a LLM (Large Language Model)
-+ Datafields:
-  + query_input (String): Store the user query
-  + response_output (String): Store the RAG-generated response
-  + relevant_information(String): Relevant information from the database
-+ Methods:
-  + retrieve_information()
-      + Purpose: Retrieve relevant information in the database based on the user query.
-      + Pre-Conditon: A index database
-      + Parameters:
-        + query_input (String) : The user query
-        + sorted_database (Object) : The sorted database containing all the information
-      + Return value: only containing relevant information (String)
-    + generate_rag_response()
-      + Purpose: Generates a RAG response using LLM and the relevant information.
-      + Pre-Conditon: Relevant information recieved 
-      + Parameters:
-        + relevant_information(String): Relevant information from the database
-        + LLM (Object) : Large language model use to generate RAG response from relevant information
-      + Return value: RAG response from the LLM (String)
-
-## __Sorted Database__
-+ Class Purpose: Parsed and index Bioinformatics pdfs files
-+ Datafields:
-  + File (Object)
-  + Unsorted_database (Object): Unsorted database contain files added by Admin.
-  + Sorted_database (Object): After parsing and indexing the information into a sorted database.
-+ Methods:
-  + parse_information()
-      + Purpose: Parse infomation from the files.
-      + Pre-Conditon: Files has to be pdfs 
-      + Parameters:
-        + File (String) : Bioinformatics pdf file
-      + Return value: Information from Bioinformatics pdf file (String)
-    + index_information()
-      + Purpose: Index the information into a sorted database.
-      + Post-Condtion: Sorted database 
-      + Parameters:
-        + parsed_info (String) : Information from Bioinformatics pdf file
-        + Sorted_database (Object) : The reference of the sorted_database
-     
-   
-## __Admin__
-+ Class Purpose: A safe and secure place to add Bioinformatics pdfs files for Database
-+ Datafields:
-  + Username (String)
-  + Password (String)
-  + File (Object)
-  + Unsorted_database (Object): Unsorted database contain files added by Admin.
-+ Methods:
-  + add_files()
-      + Purpose: Add Bioinformatics pdfs files for Database
-      + Pre-Conditon: Files has to be pdfs
-      + Post-Conditon: Database filled with Bioinformatics pdfs files
-      + Parameters:
-        + File (Object) : Bioinformatics pdfs files
-        + Unsorted_database (Object) : The reference of the unsorted_database
-    
+<details open="True">
+	
+- Renders the PDF upload form.
+- Method: `GET` 
+- Returns: 
+  - Renders the `upload.html` template with the upload form. 
   
+</details>
+
+### `POST /upload`
+
+<details open="True"> 
+	
+- Handles PDF file uploads. 
+- Validates file type to ensure only PDFs are uploaded. 
+- Stores uploaded files in the database. 
+- Processes uploaded documents and sends them to a parser. 
+- Returns: 
+   - On success: `{ "message": "File '{filename}' uploaded successfully!" }` 
+   - if no file is provided: `{ "error": "No file uploaded" }` if no file is provided. 
+   - if form validation fails: `{ "error": "Invalid form data. Please ensure all fields are filled correctly." }` 
+ 
+</details>
+
+
+### `POST /chat`
+<details open="True"> 
+	
+- Handles chat messages and retrieves relevant document information. 
+- Methods: `POST` 
+- Parameters:
+  - `message` (str): The user's input message. 
+  - `conversationHistory` (list): Previous messages in the conversation. 
+- Functionality: 
+	- Queries the database for relevant documents based on user input. - Filters documents with a similarity score of ≥ 0.90. - Constructs a prompt using the retrieved documents and chat history. - Sends the formatted prompt to an LLM (`llama3.2`) for response generation. 
+    - Returns the LLM-generated response. 
+- Returns: 
+   - if successful: `{ "response": "<LLM-generated response>" }` 
+   - if no relevant documents are found: `{ "response": "No document found", "message": "No relevant information available." }`  
+   - if no message is provided: `{ "error": "Message is required" }` 
+   - if no conversation history is provided: `{ "error": "conversationHistory is required" }` 
+   - if an exception occurs: `{ "error": "An error occurred: <error details>" }` 
+   
+</details>
+		
+### `GET /logout`
+<details open="True"> 
+	
+- Logs the user out by redirecting to the login page. 
+- Method: `GET` 
+- Returns:
+  - Redirects to `/index`
+ 
+</details>
+
+### `GET /test`
+<details open="True"> 
+	
+- Tests the Flask and React connection and performs a database query for the admin user. 
+- Method: `GET` 
+- Returns: 
+	 - if the admin user exists: `{ "message": "Hello: <username>" }`  
+	 - if the admin user does not exist: `{ "message": "No one is here :()." }`  
+</details>
