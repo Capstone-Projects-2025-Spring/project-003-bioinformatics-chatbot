@@ -38,17 +38,19 @@ def create_app(config_class=Config):
     # initalizing the database migrations for the app
     migrate.init_app(app, db)
 
+    app.vector_db = PGVector(
+        embeddings=DeterministicFakeEmbedding(size=4096),
+        collection_name="vectorized_docs",
+        connection=app.config["SQLALCHEMY_DATABASE_URI"]
+    )
+
+    # Change llama 3 to 3.1
     # app.vector_db = PGVector(
-    #     embeddings=DeterministicFakeEmbedding(size=4096),
+    #     embeddings=OllamaEmbeddings(model="llama3.1", base_url="http://ollama:11434", num_ctx=4096, repeat_last_n=128, temperature=0.4, top_k=20, top_p=0.7, repeat_penalty=1.3, tfs_z=2.0),
     #     collection_name="vectorized_docs",
     #     connection=app.config["SQLALCHEMY_DATABASE_URI"]
     # )
 
-    app.vector_db = PGVector(
-        embeddings=OllamaEmbeddings(model="llama3.1", base_url="http://ollama:11434", mirostat=2, num_ctx=4096, repeat_last_n=-1),
-        collection_name="vectorized_docs",
-        connection=app.config["SQLALCHEMY_DATABASE_URI"]
-    )
 
     from app.main import bp as main_bp
 
