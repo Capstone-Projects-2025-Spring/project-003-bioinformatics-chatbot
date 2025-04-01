@@ -256,7 +256,7 @@ def chat_message():
 
         # Store the message in messages list
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": prompt}]
+            model="llama3.1", messages=[{"role": "user", "content": prompt}]
         )
 
         llm_response = response.message["content"]
