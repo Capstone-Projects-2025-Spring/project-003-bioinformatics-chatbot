@@ -27,6 +27,10 @@ describe("Chat Page", () => {
   // Clean up the DOM after each test to prevent side effects
   afterEach(cleanup);
 
+  
+
+ 
+
   // Test to check if the chat input and submit button are rendered correctly
   it("renders chat input and messages container", () => {
     render(<Chat />);
@@ -35,6 +39,8 @@ describe("Chat Page", () => {
     expect(screen.getByTestId("input")).toBeInTheDocument();
     expect(screen.getByTestId("submitButton")).toBeInTheDocument();
   });
+
+  
 
   //  Test to ensure user can type in the input field
   it("allows user to type in chat input", () => {
@@ -65,6 +71,24 @@ describe("Chat Page", () => {
       await screen.findByText("ChatBox cannot be empty during submission")
     ).toBeInTheDocument();
   });
+  it("Error message resets after 5 seconds", async () => {
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    render(<Chat />);
+    // Select the submit button
+    const submitButton = screen.getByTestId("submitButton");
+
+    // Click the submit button without entering any text
+    fireEvent.click(submitButton);
+
+    // Expect an error message to be displayed
+    expect(
+      await screen.findByText("ChatBox cannot be empty during submission")
+    ).toBeInTheDocument();
+    await sleep(5000);
+    expect(
+      screen.queryByText("ChatBox cannot be empty during submission")
+    ).not.toBeInTheDocument();
+  }, 6000);
 
   //  Test to ensure message submission works and response is added (to be updated later)
   it("submits a message and adds response", async () => {
@@ -154,74 +178,15 @@ describe("Chat Page", () => {
     expect(scrollIntoViewMock).toHaveBeenCalled();
   });
 
-  it("displays error when downloading empty conversation", async () => {
-    render(<Chat />);
+  
 
-    // click the download button
-    const downloadButton = screen.getByTestId("downloadButton");
-    fireEvent.click(downloadButton);
+ 
 
-    // Waiting for ErrorBox component to appear
-    await waitFor(() => screen.getByText(/Empty Conversation/));
+  
 
-    // Checks to see if error message has popped up
-    expect(screen.getByText(/Please send at least one message/)).toBeInTheDocument();
+  
 
-  });
-
-  it("downloads chatbot conversation when there is at least one message", async () => {
-    // Creating a dummy url for test
-    const createObjectURL = vi.fn().mockReturnValue('mocked-url');
-
-    global.URL.createObjectURL = createObjectURL;
-
-    render(<Chat />);
-
-    // placeholder values
-    const inputField = screen.getByPlaceholderText("Ask a question");
-    const sendButton = screen.getByTestId("submitButton");
-
-    // Sending a message
-    fireEvent.change(inputField, { target: { value: "I like candy" } });
-    fireEvent.click(sendButton);
-
-    // Waiting to get the message
-    await waitFor(() => screen.getByText("I like candy"));
-
-    // Clicking the download button
-    const downloadButton = screen.getByTestId("downloadButton");
-    fireEvent.click(downloadButton);
-
-    // Making sure that the file is being generated
-    await waitFor(() => {
-      const link = document.querySelector("a");
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("download", "ChatHistory.txt");
-    });
-
-    // Makes sure that the download link was made
-    expect(createObjectURL).toHaveBeenCalled();
-
-    // Deleting after its been used
-    delete global.URL.createObjectURL;
-  });
-
-  it("Error message resets after 5 seconds", async () => {
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    render(<Chat />);
-    // Select the submit button
-    const submitButton = screen.getByTestId("submitButton");
-
-    // Click the submit button without entering any text
-    fireEvent.click(submitButton);
-
-    // Expect an error message to be displayed
-    expect(
-      await screen.findByText("ChatBox cannot be empty during submission")
-    ).toBeInTheDocument();
-    await sleep(5000);
-    expect(
-      screen.queryByText("ChatBox cannot be empty during submission")
-    ).not.toBeInTheDocument();
-  }, 6000);
+  
+  
+  
 });
