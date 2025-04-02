@@ -1,9 +1,24 @@
 import os
 import io
 from werkzeug.datastructures import FileStorage
-from app.models import Document
+from app.models import Document, User
 from app import db
 from sqlalchemy import select
+
+def login_user(client):
+    test_user = User(username="testuser")
+    test_user.set_password("password")
+    db.session.add(test_user)
+    db.session.commit()
+    response = client.post(
+        "/index",
+        data={"username": "testuser", "password": "password"},
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+
+    return client
+
 
 def upload_test_document(client, app):
     """
@@ -11,28 +26,28 @@ def upload_test_document(client, app):
     Returns the uploaded document object.
     """
     app.config['WTF_CSRF_ENABLED'] = False
-
-    # Path to the test file inside the test_data folder
-    file_path = os.path.join(os.path.dirname(__file__), 'test_data', 'test.pdf')
-
-    # Open the file in binary read mode and create a FileStorage object
-    with open(file_path, 'rb') as f:
-        pdf_file = FileStorage(
-            stream=io.BytesIO(f.read()),
-            filename="test.pdf",
-            content_type="application/pdf",
-        )
-
-    # Prepare the data dictionary with the file for upload
-    data = {"pdf_file": (pdf_file, "test.pdf")}
-
-    # Make the POST request to the upload route
-    response = client.post("/upload", data=data, content_type='multipart/form-data', follow_redirects=True)
-    assert response.status_code == 200, f"Upload failed: {response.json}"
     
     with app.app_context():
-        return db.session.query(Document).filter_by(document_name="test").first()
+        client = login_user(client)
+        # Path to the test file inside the test_data folder
+        file_path = os.path.join(os.path.dirname(__file__), 'test_data', 'test.pdf')
 
+        # Open the file in binary read mode and create a FileStorage object
+        with open(file_path, 'rb') as f:
+            pdf_file = FileStorage(
+                stream=io.BytesIO(f.read()),
+                filename="test.pdf",
+                content_type="application/pdf",
+            )
+
+        # Prepare the data dictionary with the file for upload
+        data = {"pdf_file": (pdf_file, "test.pdf")}
+
+        # Make the POST request to the upload route
+        response = client.post("/upload", data=data, content_type='multipart/form-data', follow_redirects=True)
+        assert response.status_code == 200, f"Upload failed: {response.json}"
+
+        return db.session.query(Document).filter_by(document_name="test").first()
 
 def test_delete_valid_document(client, app):
     """
