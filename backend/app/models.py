@@ -1,4 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 from app import db
 
 """
@@ -10,7 +11,7 @@ File where we will store all database models which get turned into database tabl
 # File where we will store all database models which get turned into database tables
 
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     # base user table
     # column id: Integer, and primary key of this table
     id = db.Column(db.Integer, primary_key=True)

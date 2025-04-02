@@ -4,37 +4,27 @@ from app.models import User
 from app import db
 from app.models import Document
 
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_ollama.llms import OllamaLLM
+from langchain_community.chat_message_histories import ChatMessageHistory
 
 import ollama
 from ollama import chat
 from ollama import ChatResponse
-from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 
+
+from flask_login import login_required, current_user, logout_user, login_user
+
 """
 Places for routes in the backend
 """
 
-# test
-
-PROMPT_TEMPLATE = """
-Answer this question based only on the following text:
-{context}
----
-
-Conversation history:
-{chat_history}
-
-User's current question:
-{question}
-
----
-Answer the question in details and give me quotes based on the above context
-"""
+llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -51,33 +41,72 @@ def index():
 
     """
 
-    # login form
     form = LoginForm()
-
     # Check for correct password/username
     if form.validate_on_submit():
-        if form.username.data == "admin" and form.password.data == "admin":
 
-            # how to make a simple query
-
-            user = User.query.filter_by(username="admin").first()
-            if not user:
-                user = User(username="admin")
-                user.set_password("password")
-                db.session.add(user)
-                db.session.commit()
-
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
             # Render admin page if login is successful
-            return render_template("main/admin.html", user=user)
+            return redirect(url_for("main.admin"))
+
         else:
             # return error to index page
             return render_template(
                 "main/index.html", form=form, error="Invalid username or password"
             )
-
     # Pass the forms here.
-
     return render_template("main/index.html", form=form)
+
+
+@bp.route("/admin")
+def admin():
+    """
+    Direct to the admin dashboard with List document UI
+
+    """
+
+    # how to make a simple query
+    user = User.query.filter_by(username="admin").first()
+    if not user:
+        user = User(username="admin")
+        user.set_password("password")
+        db.session.add(user)
+        db.session.commit()
+
+    # fetch all document from database
+    documents = db.session.query(Document).all()
+
+    return render_template("main/admin.html", user=user, documents=documents)
+
+
+@bp.route("/delete/<int:item_id>", methods=["DELETE"])
+def delete_item(item_id):
+    """
+    Delete document from database.
+
+    Args:
+        Item ID: the document ID
+
+    Returns:
+       True if item is deleted or False for error
+    """
+    try:
+        # Code for deleting doc in database
+
+        print("Delete Works")
+
+        return jsonify(
+            {"success": True, "message": f"Item {item_id} deleted successfully"}
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"success": False, "message": "Failed to delete item", "error": str(e)}
+            ),
+            500,
+        )
 
 
 @bp.route("/test", methods=["GET"])
@@ -94,6 +123,7 @@ def test():
 
 
 @bp.route("/upload", methods=["GET", "POST"])
+@login_required  # Ensure user is logged in to access this route
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
@@ -173,20 +203,26 @@ def upload_pdf():
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
-        client = Client(host="http://ollama:11434")
-
         data = request.get_json()
 
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
-        
+
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
-        user_message = data["message"]
-        history = data["conversationHistory"]
-         # Getting the documentation (chunks) based on the query
 
+        user_message = data["message"]
+
+
+        history = ChatMessageHistory()
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+        print("Chat History:", history.messages, flush=True)
+
+        # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
         # Filter documents with similarity score ≥ 0.90
@@ -204,10 +240,30 @@ def chat_message():
                 200,
             )
 
-        prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        prompt = prompt_template.format(context= filtered_docs, chat_history = history, question = user_message)
         
-        print(prompt)
+        # Joining the filtered chunks together
+        context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+        # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        prompt_template = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    "You are a helpful assistant that answers questions based only on the provided context.\n"
+                    "Answer in detail and provide quotes from the context.\n"
+                    "---\n"
+                    "Context:\n{context}\n"
+                    "---",
+                ),
+                MessagesPlaceholder(variable_name="history"),
+                ("human", "{user_message}"),
+            ]
+        )
+
+        chain = prompt_template | llm
+
+        response = chain.invoke({"context": context, "history": history.messages, "user_message": user_message})
+
 
         # Print the filtered documents
         print("Chunks:")
@@ -215,22 +271,10 @@ def chat_message():
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
+        
+        print(f"Response: {response}", flush=True)
 
-        # Joining the filtered chunks together
-        chunks = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
-
-        # Formatting the question so that the LLM has proper context for the question
-        prompt = f"{chunks}\n\nUser question: {user_message}"
-
-        # Store the message in messages list
-        response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": prompt}]
-        )
-
-        llm_response = response.message["content"]
-        print(llm_response, flush=True)
-
-        return jsonify({"response": llm_response})
+        return jsonify({"response": response})
 
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
@@ -238,8 +282,11 @@ def chat_message():
 
 
 @bp.route("/logout")
+@login_required  # Ensure user is logged in to access this route
 # Redirect to login page
 def logout():
+    logout_user()  # Log out the current user
+    db.session.commit()
     return redirect(url_for("main.index"))
 
 
