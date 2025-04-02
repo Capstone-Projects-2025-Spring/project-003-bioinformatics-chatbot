@@ -5,7 +5,7 @@ import ResponseBubble from "../Components/responseBubble";
 import ErrorBox from "../Components/errorBox";
 import LoadingSpinner from "../Components/loadingSpinner";
 import axios from "axios";
-import {jsPDF} from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { Document, Packer, Paragraph, HeadingLevel, TextRun } from 'docx';
 import { saveAs } from "file-saver";
 /**
@@ -100,6 +100,13 @@ function Chat() {
 		 * Fills the input chat box with the text of the message being edited.
 		 */
 		setInput(messages[index].text);
+
+		// Remove all messages after the one the user is editing
+		const updatedMessages = messages.slice(0, index);
+
+		// Update state and sessionStorage
+		setMessages(updatedMessages);
+		sessionStorage.setItem("messages", JSON.stringify(updatedMessages));
 	};
 
 	/**
@@ -125,18 +132,18 @@ function Chat() {
 		/**
 		 * Add user's message to chat
 		 */
-    const userMessage = { 
-      id: messages.length, 
-      text: input, 
-      type: "Question",
-      sender: "User",
-    };
-		
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+		const userMessage = {
+			id: messages.length,
+			text: input,
+			type: "Question",
+			sender: "User",
+		};
 
-    // setMessages((prevMessages) => [...prevMessages, userMessage]);
-    
+		const updatedMessages = [...messages, userMessage];
+		setMessages(updatedMessages);
+
+		// setMessages((prevMessages) => [...prevMessages, userMessage]);
+
 		/**
 		 * Send message to Flask backend using axios
 		 */
@@ -144,14 +151,14 @@ function Chat() {
 		axios
 			.post("http://localhost:444/chat", {
 				message: input,
-        conversationHistory: updatedMessages
+				conversationHistory: updatedMessages
 			})
 			.then((response) => {
 				const botResponse = {
 					id: messages.length + 1,
 					text: response.data.response,
 					type: "Response",
-          sender: "Chatbot",
+					sender: "Chatbot",
 				};
 				setMessages((prevMessages) => [...prevMessages, botResponse]);
 				setLoading(false);
@@ -218,7 +225,7 @@ function Chat() {
 	 */
 
 	const handleDownloaddoc = async () => {
-		
+
 		if (messages.length == 0) {
 			handleError({
 				title: "Empty Conversation",
@@ -233,13 +240,13 @@ function Chat() {
 				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
 				""
 			);
-	
+
 			/**
 			 * Splits the formatted string into an array of text.
 			 * @type {string[]}
 			 */
 			const texts = conversation.split("\n\n");
-	
+
 			/**
 			 * Creates a Word document with paragraphs.
 			 * @type {Document}
@@ -263,7 +270,7 @@ function Chat() {
 					},
 				],
 			});
-	
+
 			/**
 			 * Converts the document to a Blob and then starts the download.
 			 */
@@ -277,7 +284,7 @@ function Chat() {
 	 * Download fucntion that allows the user to download the  chat history as a .pdf file.
 	 * If no messages were sent the the chatbot, an error message is sent instead.
 	 */
-	
+
 	const handleDownloadpdf = () => {
 		if (messages.length == 0) {
 			handleError({
@@ -293,22 +300,22 @@ function Chat() {
 				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
 				""
 			);
-	
+
 			/**
 			 * Creates a new PDF document and adds the conversation.
 			 * @type {jsPDF}
 			 */
 			const doc = new jsPDF();
-			doc.text(conversation, 10, 10); 
-	
+			doc.text(conversation, 10, 10);
+
 			/**
 			 * Saves the PDF file
 			 */
 			doc.save("ChatHistory.pdf");
 		}
 	};
-		
-	
+
+
 
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
@@ -373,39 +380,39 @@ function Chat() {
 			</div>
 			{/** Small container that allows the user to choose the format of the messages */}
 			{isDialogOpen && (
-  <div className="absolute bottom-16 right-4 z-50">
-    <div className="p-4 border rounded-lg bg-gray-800 shadow-lg space-y-2">
-      <h2 className="text-lg font-semibold text-white">Select the file type</h2>
-      <button
-	  data-testid='downloadButtontxt'
-        onClick={handleDownloadtxt}
-        className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-      >
-        .txt
-      </button>
-      <button
-	  data-testid='downloadButtonpdf'
-        onClick={handleDownloadpdf}
-        className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-      >
-        .pdf
-      </button>
-      <button
-	  data-testid='downloadButtondoc'
-        onClick={handleDownloaddoc}
-        className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-      >
-        .doc
-      </button>
-      <button
-        onClick={() => setIsDialogOpen(false)}
-        className="w-full p-2 bg-red-500 rounded-lg text-white hover:bg-red-600"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+				<div className="absolute bottom-16 right-4 z-50">
+					<div className="p-4 border rounded-lg bg-gray-800 shadow-lg space-y-2">
+						<h2 className="text-lg font-semibold text-white">Select the file type</h2>
+						<button
+							data-testid='downloadButtontxt'
+							onClick={handleDownloadtxt}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.txt
+						</button>
+						<button
+							data-testid='downloadButtonpdf'
+							onClick={handleDownloadpdf}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.pdf
+						</button>
+						<button
+							data-testid='downloadButtondoc'
+							onClick={handleDownloaddoc}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.doc
+						</button>
+						<button
+							onClick={() => setIsDialogOpen(false)}
+							className="w-full p-2 bg-red-500 rounded-lg text-white hover:bg-red-600"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
 
 		</div>
 	);

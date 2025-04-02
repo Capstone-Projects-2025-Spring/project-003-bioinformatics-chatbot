@@ -13,7 +13,6 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 import ollama
 from ollama import chat
 from ollama import ChatResponse
-from flask import request, jsonify
 from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
@@ -22,7 +21,15 @@ from app.doc_indexer.retrieve_document import query_database
 from sqlalchemy import delete
 from sqlalchemy.exc import SQLAlchemyError
 
+
+from flask_login import login_required, current_user, logout_user, login_user
+
+"""
+Places for routes in the backend
+"""
+
 llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
+
 
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
@@ -38,28 +45,26 @@ def index():
 
     """
 
-    # login form
     form = LoginForm()
-
     # Check for correct password/username
     if form.validate_on_submit():
-        if form.username.data == "admin" and form.password.data == "admin":
 
-
-           
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
             # Render admin page if login is successful
-            return redirect(url_for('main.admin'))
+            return redirect(url_for("main.admin"))
+
         else:
             # return error to index page
             return render_template(
                 "main/index.html", form=form, error="Invalid username or password"
             )
-
     # Pass the forms here.
-
     return render_template("main/index.html", form=form)
 
-@bp.route('/admin')
+
+@bp.route("/admin")
 def admin():
     """
     Direct to the admin dashboard with List document UI
@@ -76,19 +81,21 @@ def admin():
 
     # fetch all document from database
     documents = db.session.query(Document).all()
-    
+
     return render_template("main/admin.html", user=user, documents=documents)
 
-@bp.route('/delete/<int:item_id>', methods=['DELETE'])
+
+@bp.route("/delete/<int:item_id>", methods=["DELETE"])
 def delete_item(item_id):
     """
+
     Deletes a document and its associated vector embeddings from the database.
 
     This endpoint:
       - Deletes the document with the given `item_id`.
       - Removes related embeddings from the `EmbeddingStore`, where the `id` contains `document_name` (case-sensitive).
       - Ensures transactional integrity by rolling back in case of failure.
-
+      
     Args:
         item_id (int): The unique identifier of the document to delete.
 
@@ -121,6 +128,7 @@ def delete_item(item_id):
         db.session.rollback()  # Rollback changes on failure
         return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
 
+
 @bp.route("/test", methods=["GET"])
 def test():
     """
@@ -135,6 +143,7 @@ def test():
 
 
 @bp.route("/upload", methods=["GET", "POST"])
+@login_required  # Ensure user is logged in to access this route
 def upload_pdf():
     """
     Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
@@ -216,11 +225,12 @@ def chat_message():
 
         if not data or "message" not in data:
             return jsonify({"error": "Message is required"}), 400
-        
+
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
+
         user_message = data["message"]
+
 
         history = ChatMessageHistory()
         for chat in data["conversationHistory"]:
@@ -247,6 +257,7 @@ def chat_message():
                 ),
                 200,
             )
+
         
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
@@ -271,6 +282,7 @@ def chat_message():
 
         response = chain.invoke({"context": context, "history": history.messages, "user_message": user_message})
 
+
         # Print the filtered documents
         print("Chunks:")
         for doc, score in filtered_docs:
@@ -288,6 +300,27 @@ def chat_message():
 
 
 @bp.route("/logout")
+@login_required  # Ensure user is logged in to access this route
 # Redirect to login page
 def logout():
+    logout_user()  # Log out the current user
+    db.session.commit()
     return redirect(url_for("main.index"))
+
+
+from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
+from app.doc_parsers.parse_pdf import split_documents
+from app.doc_indexer.index_doc import index_and_add_to_db
+from app.doc_indexer.retrieve_document import query_database
+
+
+@bp.route("/test_indexing", methods=["GET"])
+def test_indexing():
+    documents = load_documents(DATA_PATH)
+    chunks = split_documents(documents)
+    index_and_add_to_db(chunks)
+    doc = query_database("cell cycle")
+    print(doc)
+
+    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
+

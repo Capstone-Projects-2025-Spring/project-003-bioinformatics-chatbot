@@ -12,6 +12,7 @@ done
 echo "Pulling Ollama model..."
 curl -X POST http://ollama:11434/api/pull -d '{"name": "llama3.2"}'
 
+python ./setup/seed.py
 # some variables for flask
 # app entrypont
 export FLASK_APP=app
@@ -21,5 +22,6 @@ export FLASK_DEBUG=1
 export FLASK_RUN_HOST=0.0.0.0
 # port number
 export FLASK_RUN_PORT=444
+
 
 exec python3 -m flask run
