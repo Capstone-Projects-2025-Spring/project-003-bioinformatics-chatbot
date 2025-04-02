@@ -65,6 +65,7 @@ def index():
 
 
 @bp.route("/admin")
+@login_required
 def admin():
     """
     Direct to the admin dashboard with List document UI
