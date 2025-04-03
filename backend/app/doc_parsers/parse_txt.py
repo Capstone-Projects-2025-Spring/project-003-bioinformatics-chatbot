@@ -29,8 +29,10 @@ def parse_txt(FILE_PATH):
 
         # Use a text splitter to break the content into chunks
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,  # Number of characters per chunk
-            chunk_overlap=50,  # Overlap for better continuity
+            chunk_size=1000,               # Larger chunk size for more context
+            chunk_overlap=150,             # Increased overlap to retain context between chunks
+            length_function=lambda x: len(x.split()),  # Using word count instead of character count
+            is_separator_regex=True,       # Allowing regex for flexible splitting
         )
         chunks.extend(text_splitter.split_text(content))
 

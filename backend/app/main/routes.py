@@ -224,9 +224,12 @@ def chat_message():
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
+        for doc, score in Documents:
+            print(f"Score: {score}")
+            print("---")
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.90]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.3]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
