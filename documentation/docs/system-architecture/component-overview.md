@@ -7,7 +7,7 @@ sidebar_position: 1
 This document provides an overview of the key components in the system and the technologies used.
 ## Frontend Application
 
-### **Technology: React with React Router (JavaScript)**  
+#### **Technology: React with React Router (JavaScript)**  
 The frontend is built using React, offering a component-based architecture for interactive user interfaces. React Router enables seamless navigation within the application.  
 
 #### **Key Features:**
@@ -17,7 +17,7 @@ The frontend is built using React, offering a component-based architecture for i
 
 ## Server
 
-### **Technology: Flask (Python)**
+#### **Technology: Flask (Python)**
 The backend processes user queries, retrieves relevant data, adds new documents, and communicates with the LLM.
 
 #### **Key Features:**
@@ -27,18 +27,30 @@ The backend processes user queries, retrieves relevant data, adds new documents,
 - **Error Handling & Logging:** Implements monitoring, logging, and error handling for reliability.  
 - **Admin Controls:** Allows administrators to add new documents to the database, ensuring the system stays up to date.  
 
-## Indexed Documents Database
+## SQL Database and Vector Database
 
-### **Technology: PostgreSQL**
-The database stores indexed documents and enables efficient retrieval based on user queries.  
+#### **Technology Stack: PostgreSQL with PGVector**
+
+The system utilizes PostgreSQL for structured data management and PGVector for efficient vector-based searches.  
+
+#### **Database Functions:**
+- **SQL Database:**  
+  - Stores admin user credentials for secure backend dashboard access.  
+  - Manages metadata and binary data of uploaded documents.  
+- **Vector Database:**  
+  - Stores vectorized chunks of uploaded documents for similarity search.  
+  - Ensures efficient indexing and retrieval of relevant content.  
 
 #### **Key Features:**
-- **Full-Text Search:** Quickly finds relevant documents based on query matching.  
-- **Document Updates:** Allows continuous addition and modification of indexed documents.  
-
+- **Full-Text Search:**  
+  - Enables rapid retrieval of relevant documents based on query matching.  
+- **Document Updates:**  
+  - Supports continuous addition and deletion of documents.
+ 
+  
 ## Large Language Model (LLM)
 
-### **Technology: DeepSeek / Llama**
+#### **Technology: DeepSeek / Llama**
 The LLM generates answers by processing the prompt constructed using retrieved documents.  
 
 #### **Key Features:**
@@ -47,28 +59,21 @@ The LLM generates answers by processing the prompt constructed using retrieved d
 
 ## Hosting and Deployment
 
-### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
-The frontend is hosted on **GitHub Pages**, while the backend, database, and LLM run on a **local server**, ensuring full control over data processing and model execution.
+#### **Technology: Local Server (Frontend, Backend, Database, LLM)**
+The frontend, backend, database, and LLM run on a **local server**, ensuring full control over data processing and model execution.
 
 #### **Key Features:**
-- **CI/CD Pipelines:** Automates deployment from **GitHub** to ensure that the latest changes are live with minimal manual intervention.  
-- **Self-Hosted Backend & Database:** Ensures data privacy, reduces third-party dependencies, and allows for fine-tuned optimization.  
-- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.  
-
-## Developer Tooling and Workflow
-
-- **GitHub:** Manages version control and collaboration.  
-- **Jira:** Used for project management and task tracking.  
-- **ESLint & Prettier:** Enforces consistent code formatting and quality.  
-- **Docker:** Containerizes services for easy deployment.  
+- **Docker:** Containerizes services for easy deployment. 
+- **Self-Hosted Frontend, Backend & Database:** Ensures data privacy, reduces third-party dependencies, and allows for fine-tuned optimization.  
+- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.
 
 ## How Technologies Support System Requirements
 
 This stack ensures a scalable, efficient, and high-performance system for answering user queries.
 
 - **React + Flask + PostgreSQL:** React enables an interactive UI, while Flask handles backend queries and PostgreSQL efficiently stores and retrieves documents.
-- **Indexed Documents + LLM:** PostgreSQL indexes documents for fast retrieval, and DeepSeek/Llama enhances response accuracy by incorporating document context.
+- **Vector Database + LLM:** PGVector stores vectorized documents for fast retrieval, and DeepSeek/Llama enhances response accuracy by incorporating document context.
 - **Local Hosting:** Running the backend, database, and LLM locally provides cost-effective, fast processing without relying on external APIs, offering full control over infrastructure.
-- **CI/CD + Docker:** GitHub integration with CI/CD pipelines and Docker ensures smooth deployment and scalability, maintaining up-to-date services.
+- **Docker:** Docker ensures smooth deployment and scalability, maintaining up-to-date services.
 
 This stack combines performance, flexibility, and cost-effectiveness for a responsive, evolving system.
