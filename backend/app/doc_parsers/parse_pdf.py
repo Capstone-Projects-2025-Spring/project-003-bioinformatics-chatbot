@@ -21,6 +21,8 @@ def parse_pdf(FILE_PATH):
     """
     documents = load_documents(FILE_PATH)
     chunks = split_documents(documents)
+    for chunk in chunks:
+        chunk.page_content = chunk.page_content.replace("\x00", "")
     return chunks
 
 
