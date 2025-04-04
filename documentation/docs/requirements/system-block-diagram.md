@@ -4,12 +4,14 @@ sidebar_position: 2
 
 # System Block Diagram
 
-The block diagram illustrates a system designed to answer user questions. The system consists of four main components: **Frontend Application**, **Server**, **Indexed Documents Database**, and **Large Language Model (LLM)**.
+This document presents a system designed to answer user queries through a structured process involving four main components: the Frontend Application, Server, Indexed Documents Database, and Large Language Model (LLM). 
 
 ## Diagram
 
 ![Figure 1: System Block Diagram](../../static/img/Block%20Diagram.png)
 *Figure 1: System Block Diagram*
+
+The block diagram illustrates a system designed to answer user questions. The system consists of four main components: **Frontend Application**, **Server**, **Indexed Documents Database**, and **Large Language Model (LLM)**.
 
 ## Frontend Application
 The **Frontend Application** serves as the user interface for interacting with the system. Users submit their queries through this interface, which then forwards the requests to the **Server**. Once a response is generated, the Frontend Application displays the answer to the user.

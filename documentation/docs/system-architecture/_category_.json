@@ -3,6 +3,6 @@
   "position": 6,
   "link": {
     "type": "generated-index",
-    "description": "Document Overview goes here."
+    "description": "This document outlines the System Architecture of the project, detailing its components, their interactions, and how system requirements are mapped into the design. It includes diagrams such as class, sequence, and entity-relationship diagrams to visualize the structure and data flow. Additionally, it describes key algorithms, database design, development environment, and version control procedures. This serves as a blueprint for developers, project managers, and stakeholders to ensure a clear understanding of the system’s architecture and implementation plan."
   }
 }
