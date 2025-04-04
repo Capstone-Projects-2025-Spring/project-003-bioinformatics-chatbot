@@ -41,5 +41,5 @@ def test_user_table_password(app):
 
         user = User.query.filter_by(username="test").first()
 
-        assert user.ccheck_password("test")
+        assert user.check_password("test")
         assert not user.check_password("hello")
