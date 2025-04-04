@@ -28,7 +28,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 Places for routes in the backend
 """
 
-llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
+llm = OllamaLLM(model = "llama3.1", base_url = "http://ollama:11434")
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -249,7 +249,7 @@ def chat_message():
 
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.3]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.30]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:

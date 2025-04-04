@@ -75,7 +75,7 @@ Doucumentation of Backend API From Flask Server
   - `message` (str): The user's input message. 
   - `conversationHistory` (list): Previous messages in the conversation. 
 - Functionality: 
-	- Queries the database for relevant documents based on user input. - Filters documents with a similarity score of ≥ 0.90. - Constructs a prompt using the retrieved documents and chat history. - Sends the formatted prompt to an LLM (`llama3.2`) for response generation. 
+	- Queries the database for relevant documents based on user input. - Filters documents with a similarity score of ≥ 0.90. - Constructs a prompt using the retrieved documents and chat history. - Sends the formatted prompt to an LLM (`llama3.1`) for response generation. 
     - Returns the LLM-generated response. 
 - Returns: 
    - if successful: `{ "response": "<LLM-generated response>" }` 
