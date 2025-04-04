@@ -5,15 +5,7 @@ sidebar_position: 6
 
 # Development Environment 
 
-
-
-
-Visual Studio Code (Version: 1.96.4)
-     
-
-
-
-
+This document explains the development environment
 
 ### Frontend and Backend
 #### Frontend
@@ -41,7 +33,7 @@ Visual Studio Code (Version: 1.96.4)
 
 
 #### Database
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL + PgVector
 - Holds relevant information for Chabot
 
 ---

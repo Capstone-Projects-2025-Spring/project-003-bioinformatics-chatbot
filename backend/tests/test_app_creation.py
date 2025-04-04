@@ -1,4 +1,5 @@
 from app.models import User
+from app import db
 
 
 def test_testing(client):
@@ -17,3 +18,28 @@ def test_user_table(app):
     """
     with app.app_context():
         assert User.query.count() == 0
+
+
+def test_user_table_with_user(app):
+    with app.app_context():
+        user = User(username="test")
+        db.session.add(user)
+        db.session.commit()
+
+        assert User.query.count() == 1
+        assert User.query.filter_by(username="test").first()
+
+
+def test_user_table_password(app):
+    with app.app_context():
+        user = User(username="test")
+        db.session.add(user)
+        db.session.flush()
+        user.set_password("test")
+        db.session.add(user)
+        db.session.commit()
+
+        user = User.query.filter_by(username="test").first()
+
+        assert user.check_password("test")
+        assert not user.check_password("hello")

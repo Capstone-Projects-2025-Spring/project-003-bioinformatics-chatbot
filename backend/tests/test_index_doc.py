@@ -5,21 +5,6 @@ from flask import current_app
 from app.doc_parsers.parse_pdf import parse_pdf
 from app.doc_indexer.index_doc import index_and_add_to_db
 from app import db
-from sqlalchemy import delete
-
-@pytest.fixture()
-def clean_vector_db(app):
-    """
-    Fixture to ensure a clean vector database before and after the test.
-    """
-    with app.app_context():
-        vector_db = current_app.vector_db
-        db.session.execute(delete(vector_db.EmbeddingStore))  # Clear embeddings
-        db.session.commit()
-    yield
-    with app.app_context():
-        db.session.execute(delete(vector_db.EmbeddingStore))  # Clean up after test
-        db.session.commit()
 
 
 def test_index_doc(client, app, clean_vector_db):
@@ -33,12 +18,14 @@ def test_index_doc(client, app, clean_vector_db):
     assert len(chunks) > 0, "Parsing failed, no chunks extracted"
 
     with app.app_context():
-    # Index chunks into the vector database
+        # Index chunks into the vector database
         index_and_add_to_db(chunks)
         vector_db = current_app.vector_db
         indexed_chunks = db.session.query(vector_db.EmbeddingStore.id).all()
 
-    assert len(indexed_chunks) == len(chunks), "Not all chunks were indexed successfully"
+    assert len(indexed_chunks) == len(
+        chunks
+    ), "Not all chunks were indexed successfully"
 
 
 def test_duplicate_chunks_ignored(client, app, clean_vector_db):
