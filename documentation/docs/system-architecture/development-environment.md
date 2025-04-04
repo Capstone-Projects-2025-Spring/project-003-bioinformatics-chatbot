@@ -41,7 +41,7 @@ Visual Studio Code (Version: 1.96.4)
 
 
 #### Database
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL + PgVector
 - Holds relevant information for Chabot
 
 ---

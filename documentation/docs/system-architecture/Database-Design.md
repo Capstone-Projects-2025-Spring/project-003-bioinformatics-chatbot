@@ -23,19 +23,28 @@ erDiagram
         string role
     }
 
-    DOCUMENT ||--|{ BAG-OF-WORDS : contains
     DOCUMENT {
         int id PK
         string document_name
         string file_type
         BLOB file_contents
     }
-    BAG-OF-WORDS {
-        int id PK
-        int document_id FK
-        string word
-        int count
+
+    langchain_pg_collection {
+        uuid uuid PK
+        string name
+        json cmetadata
     }
+    
+    langchain_pg_embedding||--|{ langchain_pg_collection: has
+    langchain_pg_embedding {
+        string id PK
+        uuid collection_id FK
+        vector embedding
+        string document
+        jsonb cmetadata
+    }
+    
 ```
 *Figure: Entity-Relation diagram*
 
