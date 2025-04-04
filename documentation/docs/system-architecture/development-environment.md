@@ -16,7 +16,7 @@ Visual Studio Code (Version: 1.96.4)
 
 
 ### Frontend and Backend
-#### Frontend:
+#### Frontend
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;React.js (Version: 18.2.0)
 - Library for web applications
@@ -90,7 +90,7 @@ Visual Studio Code (Version: 1.96.4)
 
 ## Hosting and Deployment
 
-### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
+#### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
 The frontend is hosted on **GitHub Pages**, while the backend, database, and LLM run on a **local server**, ensuring full control over data processing and model execution.
 
 #### **Key Features:**
