@@ -42,7 +42,7 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
 
     app.vector_db = PGVector(
-        embeddings=OllamaEmbeddings(model="llama3", base_url="http://ollama:11434"),
+        embeddings=DeterministicFakeEmbedding(size=4096),
         collection_name="vectorized_docs",
         connection=app.config["SQLALCHEMY_DATABASE_URI"]
     )
