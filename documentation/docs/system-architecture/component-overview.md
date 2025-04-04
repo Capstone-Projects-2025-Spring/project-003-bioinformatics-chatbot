@@ -45,23 +45,6 @@ The LLM generates answers by processing the prompt constructed using retrieved d
 - **Context-Aware Responses:** Uses relevant documents to improve the accuracy of answers.  
 - **API-Based Access:** Communicates with the LLM hosted locally via API calls.  
 
-## Hosting and Deployment
-
-### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
-The frontend is hosted on **GitHub Pages**, while the backend, database, and LLM run on a **local server**, ensuring full control over data processing and model execution.
-
-#### **Key Features:**
-- **CI/CD Pipelines:** Automates deployment from **GitHub** to ensure that the latest changes are live with minimal manual intervention.  
-- **Self-Hosted Backend & Database:** Ensures data privacy, reduces third-party dependencies, and allows for fine-tuned optimization.  
-- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.  
-
-## Developer Tooling and Workflow
-
-- **GitHub:** Manages version control and collaboration.  
-- **Jira:** Used for project management and task tracking.  
-- **ESLint & Prettier:** Enforces consistent code formatting and quality.  
-- **Docker:** Containerizes services for easy deployment.  
-
 ## How Technologies Support System Requirements
 
 This stack ensures a scalable, efficient, and high-performance system for answering user queries.
