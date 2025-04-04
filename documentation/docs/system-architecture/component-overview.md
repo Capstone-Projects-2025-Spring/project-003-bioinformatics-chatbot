@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+This document is a summary of the technologies used in the project
+
 # Component and Technology Overview
 
 This document provides an overview of the key components in the system and the technologies used.

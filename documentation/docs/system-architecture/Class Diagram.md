@@ -2,6 +2,8 @@
 sidebar_position: 2
 ---
 
+This document is a summary of the classes used for the project
+
 <!--Overview Section-->
 # Class Diagram
 

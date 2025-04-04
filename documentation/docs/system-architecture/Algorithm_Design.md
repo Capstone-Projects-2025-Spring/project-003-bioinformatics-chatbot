@@ -2,6 +2,8 @@
 sidebar_position: 4
 ---
 
+This document is a summary of the algorithms used in the project
+
 # Algorithm Description
 
 ## Indexing

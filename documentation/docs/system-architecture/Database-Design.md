@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Database Design
 
-This Document is a summary of the database design for the project
+This document is a summary of the database design for the project
 
 ## Entity-Relation Diagram
 
