@@ -1,6 +1,69 @@
+<script>
+    function deleteItem(itemId) {
+        fetch(`/delete/${itemId}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`row-${itemId}`).remove();  // Remove row from UI
+            } else {
+                alert("Failed to delete item.");
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+
+<style>
+    table {
+        width: 80%;
+        margin: auto;
+        border-collapse: collapse;
+        text-align: center;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    button {
+        padding: 5px 10px;
+        background-color: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+
 {% extends "core/base.html" %} {% block content %}
 <h1>You are logged in</h1>
 <h2>User: {{user.username}}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size (Bytes)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="data-table">
+        {% for row in documents %}
+        <tr id="row-{{ row.id }}">
+            <td>{{ row.id }}</td>
+            <td>{{ row.document_name }}</td>
+            <td>{{ row.document_type }}</td>
+            <td>{{ row.file_contents | length }}</td>
+            <td> <button onclick="deleteItem('{{ row.id }}')">Delete</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 
 <!-- Logout button -->
 <a href="{{ url_for('main.logout') }}" class="btn btn-danger">Logout</a>  
@@ -9,3 +72,4 @@
 <a href="{{ url_for('main.upload_pdf') }}" class="btn btn-primary">Upload PDF</a> 
 
 {% endblock %}
+

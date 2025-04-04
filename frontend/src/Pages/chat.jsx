@@ -5,7 +5,9 @@ import ResponseBubble from "../Components/responseBubble";
 import ErrorBox from "../Components/errorBox";
 import LoadingSpinner from "../Components/loadingSpinner";
 import axios from "axios";
-
+import { jsPDF } from 'jspdf';
+import { Document, Packer, Paragraph, HeadingLevel, TextRun } from 'docx';
+import { saveAs } from "file-saver";
 /**
  * Chat component renders a chat interface with messaging capabilities.
  *
@@ -13,6 +15,7 @@ import axios from "axios";
  * @returns {JSX.Element} The rendered Chat component.
  */
 function Chat() {
+
 	/**
 	 * State for managing the text input in the ChatBox.
 	 */
@@ -44,6 +47,12 @@ function Chat() {
 		title: "",
 		body: "",
 	});
+
+	/**
+	 * State for managing if the different options for downloading is shown.
+	 */
+
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	/**
 	 * Load messages from sessionStorage on component mount.
@@ -91,6 +100,13 @@ function Chat() {
 		 * Fills the input chat box with the text of the message being edited.
 		 */
 		setInput(messages[index].text);
+
+		// Remove all messages after the one the user is editing
+		const updatedMessages = messages.slice(0, index);
+
+		// Update state and sessionStorage
+		setMessages(updatedMessages);
+		sessionStorage.setItem("messages", JSON.stringify(updatedMessages));
 	};
 
 	/**
@@ -112,12 +128,26 @@ function Chat() {
 			});
 			return;
 		}
+		
+		
 
 		/**
 		 * Add user's message to chat
 		 */
-		const userMessage = { id: messages.length, text: input, type: "Question" };
-		setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    const userMessage = { 
+      id: messages.length, 
+      text: input,
+	  time: new Date().toLocaleString(), 
+      type: "Question",
+      sender: "User",
+    };
+		
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+
+    // setMessages((prevMessages) => [...prevMessages, userMessage]);
+    
 
 		/**
 		 * Send message to Flask backend using axios
@@ -126,12 +156,14 @@ function Chat() {
 		axios
 			.post("https://chat.bscb.site/chat", {
 				message: input,
+				conversationHistory: updatedMessages
 			})
 			.then((response) => {
 				const botResponse = {
 					id: messages.length + 1,
 					text: response.data.response,
 					type: "Response",
+					sender: "Chatbot",
 				};
 				setMessages((prevMessages) => [...prevMessages, botResponse]);
 				setLoading(false);
@@ -152,10 +184,10 @@ function Chat() {
 
 	/**
 	 * Download fucntion that allows the user to download the  chat history as a .txt file.
-	 * If no messages were sent the the chatbot, an error message is send instead.
+	 * If no messages were sent the the chatbot, an error message is sent instead.
 	 */
 
-	const handleDownload = () => {
+	const handleDownloadtxt = () => {
 		if (messages.length == 0) {
 			handleError({
 				title: "Empty Conversation",
@@ -167,9 +199,17 @@ function Chat() {
 			 * @type {string}
 			 */
 			const conversation = messages.reduce(
-				(acc, curr) => `${acc}${curr.type}: ${curr.text}\n\n`,
+				(acc, curr) => {
+				  if (curr.type === "Response") { // if its a response do not include the time
+					
+					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+				  } else {
+					
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				  }
+				},
 				""
-			);
+			  );
 			/**
 			 * Creates a Blob object for the formatted string.
 			 * @type {Blob}
@@ -191,6 +231,138 @@ function Chat() {
 			element.click(); // This actually triggers the download
 		}
 	};
+
+	/**
+	 * Download fucntion that allows the user to download the  chat history as a .doc file.
+	 * If no messages were sent the the chatbot, an error message is sent instead.
+	 */
+
+	const handleDownloaddoc = async () => {
+
+		if (messages.length == 0) {
+			handleError({
+				title: "Empty Conversation",
+				body: "Please send at least one message",
+			});
+		} else {
+			/**
+			 * Converts the messages array into a formatted string.
+			 * @type {string}
+			 */
+			const conversation = messages.reduce(
+				(acc, curr) => {
+				  if (curr.type === "Response") { // if its a response do not include the time
+					// 
+					return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
+				  } else {
+					
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				  }
+				},
+				""
+
+			  );
+
+			/**
+			 * Splits the formatted string into an array of text.
+			 * @type {string[]}
+			 */
+			const texts = conversation.split("\n\n");
+
+			/**
+			 * Creates a Word document with paragraphs.
+			 * @type {Document}
+			 */
+			const doc = new Document({
+				sections: [
+					{
+						children: texts.map(
+							(text) =>
+								/**
+								 * Creates a paragraph for each message with spacing.
+								 * @type {Paragraph}
+								 */
+								new Paragraph({
+									children: [new TextRun(text)],
+									spacing: {
+										after: 100, // Adds space after each message
+									},
+								})
+						),
+					},
+				],
+			});
+
+			/**
+			 * Converts the document to a Blob and then starts the download.
+			 */
+			Packer.toBlob(doc).then((blob) => {
+				saveAs(blob, "ChatHistory.docx");
+			});
+		}
+	};
+
+	/**
+	 * Download fucntion that allows the user to download the  chat history as a .pdf file.
+	 * If no messages were sent the the chatbot, an error message is sent instead.
+	 */
+
+	const handleDownloadpdf = () => {
+		if (messages.length == 0) {
+			handleError({
+				title: "Empty Conversation",
+				body: "Please send at least one message",
+			});
+		} else {
+			/**
+			 * Converts the messages array into a formatted string.
+			 * @type {string}
+			 */
+
+			const conversation = messages.reduce((acc, curr) => {
+				if (curr.type === "Response") { // if its a response do not include the time
+					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+				} else {
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				}
+			}, "");
+	
+
+			/**
+			 * Creates a new PDF document with automatic page handling.
+			 *  @type {jsPDF}
+			 */
+			const doc = new jsPDF();
+
+			doc.setFontSize(10);
+			// margins for the page
+			const marginLeft = 10;
+			const marginTop = 10;
+			const pageHeight = doc.internal.pageSize.height - 20; 
+			const maxWidth = 180; 
+			const lineSpacing = 5; 
+	
+			// This is to make sure that the words do not overflow
+			const textLines = doc.splitTextToSize(conversation, maxWidth);
+	
+			let currentY = marginTop;
+			// Manually move the line down when adding words and adding a new page if need be
+			textLines.forEach((line) => {
+				if (currentY + lineSpacing > pageHeight) { 
+					doc.addPage(); 
+					currentY = marginTop; 
+				}
+				doc.text(line, marginLeft, currentY);
+				currentY += lineSpacing; // Move down for next line
+			});
+	
+			/**
+			 * Saves the PDF file
+			 */
+			doc.save("ChatHistory.pdf");
+		}
+	};
+
 
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
@@ -244,7 +416,7 @@ function Chat() {
 				/>
 				<button
 					data-testid='downloadButton'
-					onClick={handleDownload}
+					onClick={() => setIsDialogOpen(true)}
 					className='py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200'>
 					<img
 						src='src\assets\downloads.png'
@@ -253,8 +425,45 @@ function Chat() {
 					/>
 				</button>
 			</div>
+			{/** Small container that allows the user to choose the format of the messages */}
+			{isDialogOpen && (
+				<div className="absolute bottom-16 right-4 z-50">
+					<div className="p-4 border rounded-lg bg-gray-800 shadow-lg space-y-2">
+						<h2 className="text-lg font-semibold text-white">Select the file type</h2>
+						<button
+							data-testid='downloadButtontxt'
+							onClick={handleDownloadtxt}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.txt
+						</button>
+						<button
+							data-testid='downloadButtonpdf'
+							onClick={handleDownloadpdf}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.pdf
+						</button>
+						<button
+							data-testid='downloadButtondoc'
+							onClick={handleDownloaddoc}
+							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
+						>
+							.doc
+						</button>
+						<button
+							onClick={() => setIsDialogOpen(false)}
+							className="w-full p-2 bg-red-500 rounded-lg text-white hover:bg-red-600"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
+
 		</div>
 	);
+
 }
 
 export default Chat;

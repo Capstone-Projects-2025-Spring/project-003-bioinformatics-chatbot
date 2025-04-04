@@ -1,4 +1,5 @@
 from app import create_app, db
+from app.models import User
 from flask_cors import CORS
 from config import Config
 
@@ -16,3 +17,16 @@ def make_shell_context():
 if __name__ == "__main__":
     app.run(host=app.config["HOST"], port=app.config["PORT"])'
 '''
+
+with app.app_context():
+    db.create_all()
+    if not User.query.first():
+        admin = User(username="admin")
+        admin.set_password("admin")
+        db.session.add(admin)
+        db.session.commit()
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+

@@ -11,6 +11,7 @@ services:
       - ollama
     env_file:
       - ./backend/.env
+      # - ./backend/app/.env
     networks:
       - app-network
     volumes:

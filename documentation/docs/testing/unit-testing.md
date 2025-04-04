@@ -12,6 +12,8 @@ I test for a 400 bad request error when no message is provided, ensuring the API
 handles invalid input. Additionally, I used pytest with the libraries io 
 and werkzeug to simulate uploading a pdf file in test_upload_pdf_valid(client, app).
 
+Justin: For my testings, I chose pytest because how it easily and efficiently test variables and support HTTP requests testing. For the testing of my parse_pdf, the test case test_parse_pdf(pdf) accepts a PDF file, parses it into chunks, and store in a list. Test_parse_pdf is expected to return a list containing the parsed chunks. Futhermore, I use pytest to test the intergration of uploading, parsing, and indexing. The test case test_integration(client, app) is testing for 400 bad request error after invaild request is made. The test case test_integration(client, app) also verifies that a valid request successfully completes the entire workflow—uploading, parsing, and indexing—and returns a 200 OK status code.
+
 ## Backend
 ### Library
 
