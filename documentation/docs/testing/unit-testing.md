@@ -14,6 +14,10 @@ and werkzeug to simulate uploading a pdf file in test_upload_pdf_valid(client, a
 
 Justin: For my testings, I chose pytest because how it easily and efficiently test variables and support HTTP requests testing. For the testing of my parse_pdf, the test case test_parse_pdf(pdf) accepts a PDF file, parses it into chunks, and store in a list. Test_parse_pdf is expected to return a list containing the parsed chunks. Futhermore, I use pytest to test the intergration of uploading, parsing, and indexing. The test case test_integration(client, app) is testing for 400 bad request error after invaild request is made. The test case test_integration(client, app) also verifies that a valid request successfully completes the entire workflow—uploading, parsing, and indexing—and returns a 200 OK status code.
 
+Keith: For my testing, I chose Vitest because of its seamless integration with testing libraries and its speed. My test's focus was to make sure that the Chat History's download button behaved properly under three different conditions. Those three conditions were that an error message arises when there are zero messages, allowing the user to download the conversation when there is at least one message, and the proper file format (.txt, .doc, or .pdf) is being downloaded. My testing was done under download.test.jsx, which is located in the tests folder in the frontend directory. All tests first simulate the user clicking the download button which allows them to select the file format. The first three tests verify that when the user clicks on the three different file formats, an error message arises since no conversation has been started. The next three tests verify that if there is at least one conversation started, then the chat history is downloaded with the correct file format.
+
+
+
 ## Backend
 ### Library
 
