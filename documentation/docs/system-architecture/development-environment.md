@@ -59,7 +59,7 @@ Visual Studio Code (Version: 1.96.4)
 
 ---
 
-#### Documentation
+## Documentation
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Docusaurus (Version: 3.7.0)
 - Creates a customizable documentation website
@@ -73,6 +73,8 @@ Visual Studio Code (Version: 1.96.4)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vitest (Version 3.0.5)
 - Good for unit testing Reat.js code
+
+---
 ## Hardware
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A computer with a modern operating system (Windows, MacOS, Linux)
 
@@ -84,6 +86,8 @@ Visual Studio Code (Version: 1.96.4)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Internet access
 
+---
+
 ## Hosting and Deployment
 
 ### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
@@ -92,7 +96,9 @@ The frontend is hosted on **GitHub Pages**, while the backend, database, and LLM
 #### **Key Features:**
 - **CI/CD Pipelines:** Automates deployment from **GitHub** to ensure that the latest changes are live with minimal manual intervention.  
 - **Self-Hosted Backend & Database:** Ensures data privacy, reduces third-party dependencies, and allows for fine-tuned optimization.  
-- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.  
+- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.
+
+---
 
 ## Developer Tooling and Workflow
 
