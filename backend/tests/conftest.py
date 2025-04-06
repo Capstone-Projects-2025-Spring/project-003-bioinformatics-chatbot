@@ -4,11 +4,13 @@ import os
 # Add the project root directory to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from flask import current_app
 from config import TestingConfig
 import pytest
 from app import create_app, db
 from sqlalchemy.sql import text
 from time import sleep
+from sqlalchemy import delete
 
 
 @pytest.fixture()
@@ -39,3 +41,18 @@ def client(app):
     Description: pytest fixture to create a sample client ()
     """
     return app.test_client()
+
+
+@pytest.fixture()
+def clean_vector_db(app):
+    """
+    Fixture to ensure a clean vector database before and after the test.
+    """
+    with app.app_context():
+        vector_db = current_app.vector_db
+        db.session.execute(delete(vector_db.EmbeddingStore))  # Clear embeddings
+        db.session.commit()
+    yield
+    with app.app_context():
+        db.session.execute(delete(vector_db.EmbeddingStore))  # Clean up after test
+        db.session.commit()

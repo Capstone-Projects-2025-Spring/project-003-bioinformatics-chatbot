@@ -1,6 +1,9 @@
 ---
 sidebar_position: 3
 ---
+ 
+This document contains sequence diagrams
+
 # Sequence Diagrams 
 
 ## 1: Question and Answer system

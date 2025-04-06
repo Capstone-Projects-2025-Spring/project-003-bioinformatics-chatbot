@@ -5,18 +5,10 @@ sidebar_position: 6
 
 # Development Environment 
 
-
-
-
-Visual Studio Code (Version: 1.96.4)
-     
-
-
-
-
+This document explains the development environment
 
 ### Frontend and Backend
-#### Frontend:
+#### Frontend
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;React.js (Version: 18.2.0)
 - Library for web applications
@@ -41,7 +33,7 @@ Visual Studio Code (Version: 1.96.4)
 
 
 #### Database
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PostgreSQL + PgVector
 - Holds relevant information for Chabot
 
 ---
@@ -58,20 +50,8 @@ Visual Studio Code (Version: 1.96.4)
   
 
 ---
-## Development Environment & Tooling
-#### Development Environment
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Docker Desktop
-- Allows the user to run applications in an isolated environment
-- OS friendly
 
-#### Static Code Analysis Tool
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESLint
-- Finds issues in code such as unused variables, syntax errors, etc
-- Fixes errors automatically allowing the user to run code with slight errors 
-
-#### Opinionated Code Formatter
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prettier
-- Ensure that all indention and spacing are kept consistent throughout the code
+## Documentation
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Docusaurus (Version: 3.7.0)
 - Creates a customizable documentation website
@@ -85,6 +65,8 @@ Visual Studio Code (Version: 1.96.4)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vitest (Version 3.0.5)
 - Good for unit testing Reat.js code
+
+---
 ## Hardware
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A computer with a modern operating system (Windows, MacOS, Linux)
 
@@ -96,3 +78,23 @@ Visual Studio Code (Version: 1.96.4)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Internet access
 
+---
+
+## Hosting and Deployment
+
+#### **Technology: GitHub Pages (Frontend), Local Server (Backend, Database, LLM)**
+The frontend is hosted on **GitHub Pages**, while the backend, database, and LLM run on a **local server**, ensuring full control over data processing and model execution.
+
+#### **Key Features:**
+- **CI/CD Pipelines:** Automates deployment from **GitHub** to ensure that the latest changes are live with minimal manual intervention.  
+- **Self-Hosted Backend & Database:** Ensures data privacy, reduces third-party dependencies, and allows for fine-tuned optimization.  
+- **LLM Hosting:** Runs locally on your own infrastructure, enabling fast and offline-capable inference without relying on external APIs. This setup is cost-effective, especially for smaller-scale applications, as it eliminates ongoing API costs. However, it may require significant local compute resources, especially for larger models.
+
+---
+
+## Developer Tooling and Workflow
+
+- **GitHub:** Manages version control and collaboration.  
+- **Jira:** Used for project management and task tracking.  
+- **ESLint & Prettier:** Enforces consistent code formatting and quality.  
+- **Docker:** Containerizes services for easy deployment.  
