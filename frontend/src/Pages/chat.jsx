@@ -388,8 +388,8 @@ function Chat() {
 			</nav>
 
 			{/** Chat messages container. */}
-			<div className='flex-1 max-w-s overflow-y-auto p-3 space-y-2 pb-20 bg-gray-800 break-words'>
-				{/** Render messages dynamically based on their type. */}
+			<div className='flex-1 max-w-s overflow-y-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 space-y-2 sm:space-y-3 md:space-y-5 lg:space-y-6 pb-20 bg-gray-800 break-words'>
+			{/** Render messages dynamically based on their type. */}
 				{messages.map((msg, index) =>
 					msg.type === "Question" ? (
 						<UserBubble
