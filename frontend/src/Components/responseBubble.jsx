@@ -26,5 +26,9 @@ ResponseBubble.propTypes = {
  */
 
 export default function ResponseBubble({ text }) {
-	return <div className='p-2 bg-blue-400 rounded-lg max-w-md'>{text}</div>;
+	return (
+		<div className='p-2 bg-blue-400 rounded-lg max-w-md break-words whitespace-pre-wrap overflow-hidden'>
+			{text}
+		</div>
+	);
 }

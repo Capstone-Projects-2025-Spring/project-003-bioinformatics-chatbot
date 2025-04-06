@@ -35,8 +35,9 @@ UserBubble.propTypes = {
 export default function UserBubble({ text, onEdit }) {
 	return (
 		<div className='flex items-center justify-end gap-2 bg-blue-400 rounded-lg max-w-md ml-auto text-left p-2'>
-			{/* User's query text is displayed in flex container */}
-			<p className='flex-1'>{text}</p>  
+			<p className='flex-1 break-words whitespace-pre-wrap overflow-hidden'>
+				{text}
+			</p>
 
 			{/* Edit button to trigger onEdit function and populate input chat box */}
 			<button
