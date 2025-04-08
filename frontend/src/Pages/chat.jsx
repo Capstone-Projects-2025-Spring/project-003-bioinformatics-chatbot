@@ -59,7 +59,7 @@ function Chat() {
 	 * State for managing which message is being edited
 	 */
 
-	const [editingIndex, setEditingIndex] = useState(null);
+	const [editIndex, setEditIndex] = useState(null);
 
 
 	/**
@@ -109,12 +109,18 @@ function Chat() {
 		 */
 		setInput(messages[index].text);
 
-		// Remove all messages after the one the user is editing
-		const updatedMessages = messages.slice(0, index);
+		/**
+		 * Stores index of the message being edited.
+		 */
+		setEditIndex(index);
+	};
 
-		// Update state and sessionStorage
-		setMessages(updatedMessages);
-		sessionStorage.setItem("messages", JSON.stringify(updatedMessages));
+	/**
+	 * Cancel editing and reset input and edit state.
+	 */
+	const cancelEdit = () => {
+		setInput("");
+		setEditIndex(null);
 	};
 
 	/**
@@ -136,26 +142,30 @@ function Chat() {
 			});
 			return;
 		}
-		
-		
+
+		/**
+		 * If editing, trim the conversation up to the message being edited
+		 */
+		let updatedMessages = messages;
+		if (editIndex !== null) {
+			updatedMessages = messages.slice(0, editIndex); // Remove everything after the edited message
+			setEditIndex(null); // Reset edit index to null
+		}
 
 		/**
 		 * Add user's message to chat
 		 */
 
-    const userMessage = { 
-      id: messages.length, 
-      text: input,
-	  time: new Date().toLocaleString(), 
-      type: "Question",
-      sender: "User",
-    };
-		
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+		const userMessage = {
+			id: messages.length,
+			text: input,
+			time: new Date().toLocaleString(),
+			type: "Question",
+			sender: "User",
+		};
 
-    // setMessages((prevMessages) => [...prevMessages, userMessage]);
-    
+		updatedMessages = [...updatedMessages, userMessage];
+		setMessages(updatedMessages);
 
 		/**
 		 * Send message to Flask backend using axios
@@ -208,16 +218,16 @@ function Chat() {
 			 */
 			const conversation = messages.reduce(
 				(acc, curr) => {
-				  if (curr.type === "Response") { // if its a response do not include the time
-					
-					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
-				  } else {
-					
-					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
-				  }
+					if (curr.type === "Response") { // if its a response do not include the time
+
+						return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+					} else {
+
+						return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+					}
 				},
 				""
-			  );
+			);
 			/**
 			 * Creates a Blob object for the formatted string.
 			 * @type {Blob}
@@ -259,17 +269,17 @@ function Chat() {
 			 */
 			const conversation = messages.reduce(
 				(acc, curr) => {
-				  if (curr.type === "Response") { // if its a response do not include the time
-					// 
-					return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
-				  } else {
-					
-					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
-				  }
+					if (curr.type === "Response") { // if its a response do not include the time
+						// 
+						return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
+					} else {
+
+						return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+					}
 				},
 				""
 
-			  );
+			);
 
 			/**
 			 * Splits the formatted string into an array of text.
@@ -334,7 +344,7 @@ function Chat() {
 					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
 				}
 			}, "");
-	
+
 
 			/**
 			 * Creates a new PDF document with automatic page handling.
@@ -346,24 +356,24 @@ function Chat() {
 			// margins for the page
 			const marginLeft = 10;
 			const marginTop = 10;
-			const pageHeight = doc.internal.pageSize.height - 20; 
-			const maxWidth = 180; 
-			const lineSpacing = 5; 
-	
+			const pageHeight = doc.internal.pageSize.height - 20;
+			const maxWidth = 180;
+			const lineSpacing = 5;
+
 			// This is to make sure that the words do not overflow
 			const textLines = doc.splitTextToSize(conversation, maxWidth);
-	
+
 			let currentY = marginTop;
 			// Manually move the line down when adding words and adding a new page if need be
 			textLines.forEach((line) => {
-				if (currentY + lineSpacing > pageHeight) { 
-					doc.addPage(); 
-					currentY = marginTop; 
+				if (currentY + lineSpacing > pageHeight) {
+					doc.addPage();
+					currentY = marginTop;
 				}
 				doc.text(line, marginLeft, currentY);
 				currentY += lineSpacing; // Move down for next line
 			});
-	
+
 			/**
 			 * Saves the PDF file
 			 */
@@ -397,7 +407,7 @@ function Chat() {
 
 			{/** Chat messages container. */}
 			<div className='flex-1 max-w-s overflow-y-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 space-y-2 sm:space-y-3 md:space-y-5 lg:space-y-6 pb-20 bg-gray-800 break-words'>
-			{/** Render messages dynamically based on their type. */}
+				{/** Render messages dynamically based on their type. */}
 				{messages.map((msg, index) =>
 					msg.type === "Question" ? (
 						<UserBubble
@@ -414,8 +424,21 @@ function Chat() {
 			</div>
 
 			{loading && <LoadingSpinner />}
+
+
+
+
 			{/** Chat input form. */}
 			<div className='w-full flex items-center space-x-2 p-3 bg-gray-800 break-words'>
+				{editIndex !== null && (
+					<button
+						className="text-red-500 text-xl font-bold"
+						onClick={cancelEdit}
+						title="Cancel edit"
+					>
+						&times;
+					</button>
+				)}
 				<ChatBox
 					input={input}
 					setInput={setInput}
