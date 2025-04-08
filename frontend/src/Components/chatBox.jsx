@@ -33,7 +33,7 @@ ChatBox.propTypes = {
  * @param {function} props.handleSubmit - Callback to handle the form submission.
  * @returns {JSX.Element} The rendered chat input form.
  */
-export default function ChatBox({ input, setInput, handleSubmit }) {
+export default function ChatBox({ input, setInput, handleSubmit, isEditing, onCancelEdit }) {
 	return (
 		// The form is set to submit via the `handleSubmit` function defined in chat.jsx when the user presses Enter or clicks the submit button
 		<form
@@ -41,6 +41,18 @@ export default function ChatBox({ input, setInput, handleSubmit }) {
 			onSubmit={handleSubmit}
 			data-testid='form' // This attribute is for testing to identify the form
 		>
+			{/* Exit button for if user changes their mind about editing a message */}
+			{isEditing && (
+				<button
+					type="button"
+					onClick={onCancelEdit}
+					className="px-3 py-1 text-red-600 border border-red-600 rounded-lg hover:bg-red-100"
+					data-testid="cancel-edit"
+				>
+					✖
+				</button>
+			)}
+
 			{/* Input field for the user to type their message or question */}
 			<input
 				data-testid='input' // This attribute is for testing to identify the input
