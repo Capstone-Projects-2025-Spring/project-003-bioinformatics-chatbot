@@ -54,6 +54,14 @@ function Chat() {
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+
+	/**
+	 * State for managing which message is being edited
+	 */
+
+	const [editingIndex, setEditingIndex] = useState(null);
+
+
 	/**
 	 * Load messages from sessionStorage on component mount.
 	 */
