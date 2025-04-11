@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-This document is a summary of the technologies used in the project
+
 
 # Component and Technology Overview
 
