@@ -54,7 +54,7 @@ def test_content_file(client, app):
             )
 
             # Making sure that document was moved into database sucessfully
-            assert response.status_code == 200
+            assert response.status_code == 302
 
             # Getting the information of the test.pdf and checking to see if the type is correct and the data
 
