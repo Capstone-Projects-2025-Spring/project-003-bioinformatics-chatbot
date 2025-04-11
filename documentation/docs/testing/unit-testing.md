@@ -23,9 +23,10 @@ sidebar_position: 1
    <br>
    POSTGRES_HOST_AUTH_METHOD=trust
 6. If on Windows, update docker-entrypoint.sh in frontend & backend, and docker-compose.yml, to LF format from CRLF format in Vscode 
-7. In vscode From project-003-bioinformatics chatbot run:
+7. In vscode open the terminal and run:
 - docker compose -f docker-compose.yml build
 - docker compose -f docker-compose.yml up
+
    
 ## Backend
 ### Library
@@ -35,7 +36,10 @@ Flask. For test coverage we are using Coverage.py in order to monitor pytest exe
 and get insights regarding untested code paths. Each function and route will be tested 
 via pytest on the backend, including unit tests for individual functions. 
 
-To run tests
+To run tests, 
+<br>
+In Docker Desktop, open the backend container and go to exec tab and type this 
+
 `python -m pytest -vv`
 
 ## Frontend
@@ -47,7 +51,10 @@ Each component will have tests associated with it, thereby allowing us to test f
 of each component. 
 
 To run tests 
-`cd frontend && npm run test`
+<br>
+In Docker Desktop, open the frontend container and go to exec tab and type this
+<br>
+`npm run test`
 
 Katerina: for my tests I selected pytest because it works with Flask’s built
 in test client to simulate HTTP requests, and this was necessary for multiple
