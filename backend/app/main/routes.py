@@ -196,14 +196,15 @@ def upload_pdf():
             process_doc(new_document)
             
             
-            return (
-                jsonify(
-                    {
-                        "message": f"File '{uploaded_file.filename}' uploaded successfully!"
-                    }
-                ),
-                200,
-            )
+            # return (
+            #     # jsonify(
+            #     #     {
+            #     #         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+            #     #     }
+            #     # ),
+            #     # 200,
+            # )
+            return redirect(url_for("main.admin"))
 
         else:
             return (
