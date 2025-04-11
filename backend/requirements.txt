@@ -16,4 +16,5 @@ requests==2.26.0
 flask-Cors==5.0.0
 langchain_postgres==0.0.12
 langchain-ollama==0.2.3
-flask_login
+flask_login==0.6.3
+coverage==7.8.0
