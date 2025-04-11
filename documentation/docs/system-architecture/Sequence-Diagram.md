@@ -141,42 +141,49 @@ sequenceDiagram
 ```
 *Figure 4: ChatBot re-edit/ re-send queries System Sequence Diagram*
 
-## 5: New/clear Chat
+## 5: Uploading documents (ADMIN / PRODUCT OWNER only)
 
 ```mermaid
 sequenceDiagram
     actor A as User
-    participant B as ChatBot
-    participant C as Server
-    participant D as LLM
+    participant B as ChatBot Backend
+    participant C as Database
     
     
-    A->>B: Connect to the App
     B->>C: Starting backend
     activate B
     activate C
-    loop interacting with bot
-        A->>B: Ask a question
-        B->>C: Queries data
-        C->>D: Send retrieved document
-        D-->>C: return generated answer
-        C-->>B: Returns answer
-        B-->>A: Sends response
-    end
-    A->>B: New Chat button click
-    
-    deactivate C
-
-    B-->>A: Reconnect confirmation text
-    
-    deactivate B
-    A->>B: Reconnect
+    A->>B: Log in to backend
+    A->>B: Redirect to upload route
+    B-->>A: Display upload page  
+    A->>B: Choose PDF to upload
     activate B
-    
-    B->>C: Starting backend
-    activate C
-    deactivate C
+    B->>C: commit to database
+    B-->>A: Display status of completion 
     deactivate B
     
 ```
 *Figure 5: ChatBot open new chat System Sequence Diagram*
+
+
+## 6: Deleting uploaded PDF documents (ADMIN / PRODUCT OWNER only)
+
+```mermaid
+sequenceDiagram
+    actor A as User
+    participant B as ChatBot Backend
+    participant C as Database
+    
+    
+    B->>C: Starting backend
+    activate B
+    
+    A->>B: Log in to backend
+    C-->>B: return list of PDFs uploaded
+    A->>B: Click on delete button in PDF table
+    B->>C: Send delete commit signal to Database
+    deactivate B
+    C-->>B: refresh and return list of PDFs
+    B-->>A: Display refreshed list of PDFs 
+```
+*Figure 6: ChatBot deleting PDFs System Sequence Diagram*

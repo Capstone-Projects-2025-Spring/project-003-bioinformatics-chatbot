@@ -196,15 +196,16 @@ def upload_pdf():
             process_doc(new_document)
             
             
-            # return (
-            #     # jsonify(
-            #     #     {
-            #     #         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
-            #     #     }
-            #     # ),
-            #     # 200,
-            # )
-            return redirect(url_for("main.admin"))
+            return (
+                jsonify(
+                    {
+                        "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+                        ,"redirect_url": url_for("main.upload_pdf")
+                    }
+                ),
+                200,
+            )
+           
 
         else:
             return (
@@ -217,7 +218,8 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    return render_template("main/upload.html", form=form)
+    else:
+        return render_template("main/upload.html", form=form)
 
 
 @bp.route("/chat", methods=["POST"])

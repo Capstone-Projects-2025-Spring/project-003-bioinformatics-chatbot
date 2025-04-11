@@ -48,11 +48,11 @@ def test_upload_pdf_valid(client, app):
         upload_response = client.post("/upload", data=data, follow_redirects=True)
 
     # Get the JSON response using get_json()
-        #response_data = upload_response.get_json()
+        response_data = upload_response.get_json()
     
     # Ensure the response data is not None before accessing
-        #assert response_data is not None  # Ensure the response is valid JSON
+        assert response_data is not None  # Ensure the response is valid JSON
     
     # Check the JSON message
-        assert upload_response.status_code == 302
-        
+        assert upload_response.status_code == 200
+        assert response_data["message"] == "File 'test.pdf' uploaded successfully!"
