@@ -1,4 +1,5 @@
-from flask import jsonify, render_template, redirect, url_for, request, session
+from io import BytesIO
+from flask import jsonify, render_template, redirect, send_file, url_for, request, session
 from app.main import bp
 from app.models import User
 from app import db
@@ -128,6 +129,46 @@ def delete_item(item_id):
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
         return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
+    
+@bp.route("/download/<int:item_id>", methods=["GET"])
+def download_document(item_id):
+    """
+    Downloads a document from the database.
+
+    This endpoint:
+      - Fetches the document with the given `item_id`.
+      - Gets the binary file content for the PDF file.
+      - Uses the document_type and the document_name to get the full file name.
+
+    Args:
+        item_id (int): The unique identifier of the document to download.
+
+    Returns:
+        Response (File): The PDF file,
+                         or an error if the document is not found/the download fails.
+    """
+    try:
+        # Retrieve the document by ID
+        document = db.session.query(Document).get(item_id)
+
+        # Send an error if the document could not be found
+        if not document:
+            return jsonify({'success': False, 'message': f'Document {item_id} not found'}), 404
+
+        # Gets the fullname by combining the name and the type
+        filename = f"{document.document_name}.{document.document_type}"
+        
+        # Sends the document with the proper name and the content of the file for download
+        return send_file(
+            BytesIO(document.file_contents),
+            mimetype="application/pdf",
+            download_name=filename,
+            as_attachment=True
+        )
+        
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'Failed to download document', 'error': str(e)}), 500
+
 
 
 @bp.route("/test", methods=["GET"])
