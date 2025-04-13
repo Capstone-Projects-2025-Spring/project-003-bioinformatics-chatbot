@@ -22,10 +22,13 @@ sidebar_position: 1
    POSTGRES_DB=database
    <br>
    POSTGRES_HOST_AUTH_METHOD=trust
-6. If on Windows, update docker-entrypoint.sh in frontend & backend, and docker-compose.yml, to LF format from CRLF format in Vscode 
-7. In vscode open the terminal and run:
+6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by highlighting the text and on the bottom right click CRLF to LF and save the new file
+7. In vscode open the terminal and `cd project-003-bioinformatics-chatbot-1.0.0`
+8. Run this commands in the terminal one at a time, it may take a while to build due to LLM. 
 - docker compose -f docker-compose.yml build
 - docker compose -f docker-compose.yml up
+9. Go to Docker Desktop for testing and follow the instrutions for each section listed below
+
 
    
 ## Backend
@@ -41,6 +44,9 @@ To run tests,
 In Docker Desktop, open the backend container and go to exec tab and type this 
 
 `python -m pytest -vv`
+![image](https://github.com/user-attachments/assets/6827a63a-9ec0-44ab-8817-40c8e6921767)
+
+
 
 ## Frontend
 ### Library
@@ -55,6 +61,8 @@ To run tests
 In Docker Desktop, open the frontend container and go to exec tab and type this
 <br>
 `npm run test`
+![image](https://github.com/user-attachments/assets/1f756f23-b9da-4cde-8c8a-e2f267b0908d)
+
 
 Katerina: for my tests I selected pytest because it works with Flask’s built
 in test client to simulate HTTP requests, and this was necessary for multiple
