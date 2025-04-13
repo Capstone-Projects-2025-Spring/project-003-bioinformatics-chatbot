@@ -50,7 +50,7 @@ def upload_test_document(client, app):
         return db.session.query(Document).filter_by(document_name="test").first()
     
 
-def test_download_document_success(client, app):
+def test_download_valid_document(client, app):
     """
     Test that a pdf document can be downloaded.
     """
@@ -71,7 +71,7 @@ def test_download_document_success(client, app):
         assert isinstance(response.data, bytes)
         assert len(response.data) > 0
 
-def test_download_document_not_found(client, app):
+def test_download_non_existent_document(client, app):
     """
     Test that a pdf document that does not exist returns an error.
     """
@@ -83,7 +83,7 @@ def test_download_document_not_found(client, app):
     assert not response.json["success"], "Response should indicate failure"
     assert response.json["message"] == f"Item {non_existent_id} not found"
 
-def test_download_document_internal_error(client, app, monkeypatch):
+def test_download_database_error(client, app, monkeypatch):
     """
      Simulates an internal DB error during download to ensure proper 500 response.
     Expected: 500 Internal Server Error
