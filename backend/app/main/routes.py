@@ -153,7 +153,7 @@ def download_document(item_id):
 
         # Send an error if the document could not be found
         if not document:
-            return jsonify({'success': False, 'message': f'Document {item_id} not found'}), 404
+            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
 
         # Gets the fullname by combining the name and the type
         filename = f"{document.document_name}.{document.document_type}"
@@ -165,7 +165,7 @@ def download_document(item_id):
             download_name=filename,
             as_attachment=True
         )
-        
+
     except Exception as e:
         return jsonify({'success': False, 'message': 'Failed to download document', 'error': str(e)}), 500
 
