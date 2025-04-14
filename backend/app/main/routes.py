@@ -271,8 +271,15 @@ def chat_message():
             [
                 (
                     "system",
-                    "You are a helpful assistant that answers questions based only on the provided context.\n"
-                    "Answer in detail and provide quotes from the context.\n"
+                    "You are a Retrieval Augmented Generation (RAG) model.\n"
+                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+                    "You are only to answer questions based on the provided context.\n"
+                    "You are not allowed to make up information.\n"
+                    "You are not allowed to answer questions that are not in the context.\n"
+                    "If a question is not in the context, you should say 'I don't know'.\n"
+                    "Please give all responses in markdown (.md) format.\n"
+                    # "You are a helpful assistant that answers questions based only on the provided context.\n"
+                    # "Answer in detail and provide quotes from the context.\n"
                     "---\n"
                     "Context:\n{context}\n"
                     "---",
