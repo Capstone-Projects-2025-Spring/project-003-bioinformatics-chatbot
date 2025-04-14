@@ -262,6 +262,7 @@ def chat_message():
         user_message = data["message"]
 
         history = ChatMessageHistory()
+
         for chat in data["conversationHistory"]:
             if chat["sender"] == "User":
                 history.add_user_message(chat["text"])
