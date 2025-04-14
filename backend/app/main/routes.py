@@ -271,20 +271,20 @@ def chat_message():
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
-                    "system", #* System message to set the context for the model
+                    "system", # System message to set the context for the model
                     "You are a Retrieval Augmented Generation (RAG) model.\n"
                     "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
                     "You are only to answer questions based on the provided context.\n"
                     "You are not allowed to make up information.\n"
                     "You are not allowed to answer questions that are not in the context.\n"
                     "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n" #* Markdown format for better readability
+                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
                     "---\n"
-                    "Context:\n{context}\n" #* Insert relevent documents as 'context'
+                    "Context:\n{context}\n" # Insert relevent documents as 'context'
                     "---",
                 ),
-                MessagesPlaceholder(variable_name="history"), #* Insert conversation history
-                ("human", "{user_message}"), #* Insert user query
+                MessagesPlaceholder(variable_name="history"), # Insert conversation history
+                ("human", "{user_message}"), # Insert user query
             ]
         )
 
