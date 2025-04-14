@@ -1,3 +1,27 @@
+<style>
+    table {
+        width: 80%;
+        margin: auto;
+        border-collapse: collapse;
+        text-align: center;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    button {
+        padding: 5px 10px;
+        background-color: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+
 {% extends "core/base.html" %} {% block content %}
 <h1>Congrats you started the container, Welcome to flask</h1>
 
@@ -12,6 +36,30 @@
 {% if error %}
 <p style="color: red;">{{ error }}</p>
 {% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size (Bytes)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="data-table">
+        {% for row in documents %}
+        <tr id="row-{{ row.id }}">
+            <td>{{ row.id }}</td>
+            <td>{{ row.document_name }}</td>
+            <td>{{ row.document_type }}</td>
+            <td>{{ row.file_contents | length }}</td>
+            <td><a href="/download/{{ row.id }}"> <button>Download</button></a> </td>
+                       
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 
 
