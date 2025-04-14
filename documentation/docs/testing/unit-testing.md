@@ -22,7 +22,7 @@ sidebar_position: 1
    POSTGRES_DB=database
    <br>
    POSTGRES_HOST_AUTH_METHOD=trust
-6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by highlighting the text and on the bottom right click CRLF to LF and save the new file
+6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by hiting ctrl+shift+p and clicking on "Change End of Line Sequence" and LF. Then save the files.
 7. In vscode open the terminal and `cd project-003-bioinformatics-chatbot-1.0.0`
 8. Run this commands in the terminal one at a time, it may take a while to build due to LLM. 
 - docker compose -f docker-compose.yml build
