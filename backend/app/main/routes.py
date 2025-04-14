@@ -266,26 +266,25 @@ def chat_message():
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
-        # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        # Using the LLM to generate a response based on the context and user message
+        # Defined prompt template that is used when sending the LLM each query, to help refine answers
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
-                    "system",
+                    "system", #* System message to set the context for the model
                     "You are a Retrieval Augmented Generation (RAG) model.\n"
                     "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
                     "You are only to answer questions based on the provided context.\n"
                     "You are not allowed to make up information.\n"
                     "You are not allowed to answer questions that are not in the context.\n"
                     "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n"
-                    # "You are a helpful assistant that answers questions based only on the provided context.\n"
-                    # "Answer in detail and provide quotes from the context.\n"
+                    "Please give all responses in markdown (.md) format.\n" #* Markdown format for better readability
                     "---\n"
-                    "Context:\n{context}\n"
+                    "Context:\n{context}\n" #* Insert relevent documents as 'context'
                     "---",
                 ),
-                MessagesPlaceholder(variable_name="history"),
-                ("human", "{user_message}"),
+                MessagesPlaceholder(variable_name="history"), #* Insert conversation history
+                ("human", "{user_message}"), #* Insert user query
             ]
         )
 
