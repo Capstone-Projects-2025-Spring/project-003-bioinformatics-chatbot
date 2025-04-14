@@ -40,6 +40,25 @@ describe("Chat Page", () => {
     expect(screen.getByTestId("submitButton")).toBeInTheDocument();
   });
 
+  it("Error message resets after 5 seconds", async () => {
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    render(<Chat />);
+    // Select the submit button
+    const submitButton = screen.getByTestId("submitButton");
+
+    // Click the submit button without entering any text
+    fireEvent.click(submitButton);
+
+    // Expect an error message to be displayed
+    expect(
+      await screen.findByText("ChatBox cannot be empty during submission")
+    ).toBeInTheDocument();
+    await sleep(5000);
+    expect(
+      screen.queryByText("ChatBox cannot be empty during submission")
+    ).not.toBeInTheDocument();
+  }, 6000);
+
   
 
   //  Test to ensure user can type in the input field
@@ -71,24 +90,7 @@ describe("Chat Page", () => {
       await screen.findByText("ChatBox cannot be empty during submission")
     ).toBeInTheDocument();
   });
-  it("Error message resets after 5 seconds", async () => {
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    render(<Chat />);
-    // Select the submit button
-    const submitButton = screen.getByTestId("submitButton");
-
-    // Click the submit button without entering any text
-    fireEvent.click(submitButton);
-
-    // Expect an error message to be displayed
-    expect(
-      await screen.findByText("ChatBox cannot be empty during submission")
-    ).toBeInTheDocument();
-    await sleep(5000);
-    expect(
-      screen.queryByText("ChatBox cannot be empty during submission")
-    ).not.toBeInTheDocument();
-  }, 6000);
+  
 
   //  Test to ensure message submission works and response is added (to be updated later)
   it("submits a message and adds response", async () => {

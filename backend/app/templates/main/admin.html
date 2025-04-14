@@ -11,6 +11,7 @@
         })
         .catch(error => console.error('Error:', error));
     }
+        
 </script>
 
 <style>
@@ -48,7 +49,7 @@
             <th>Name</th>
             <th>Type</th>
             <th>Size (Bytes)</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody id="data-table">
@@ -58,7 +59,10 @@
             <td>{{ row.document_name }}</td>
             <td>{{ row.document_type }}</td>
             <td>{{ row.file_contents | length }}</td>
-            <td> <button onclick="deleteItem('{{ row.id }}')">Delete</button></td>
+            <td> <button onclick="deleteItem('{{ row.id }}')">Delete</button>
+             <a href="/download/{{ row.id }}"> <button>Download</button></a></td>
+            
+            
         </tr>
         {% endfor %}
     </tbody>

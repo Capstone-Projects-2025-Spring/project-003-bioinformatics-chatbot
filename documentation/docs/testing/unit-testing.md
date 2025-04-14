@@ -3,6 +3,34 @@ sidebar_position: 1
 ---
 # Unit tests
 
+# Testing Setup 
+1. Install and Open Docker Desktop and Vscode 
+2. Download and unzip the source code in the most recent project release [here](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases)
+3. In Vscode open the project file, in the backend folder create .env file and database.env
+4. In the .env file put this
+    <br> 
+   DATABASE_URI=postgresql+psycopg://admin:admin@database:5432/database
+   TEST_DATABASE_URI=postgresql+psycopg://admin:admin@test-database:5432/database
+5. In the database.env put this
+    <br> 
+   #database variables
+   <br>
+   POSTGRES_USER=admin
+   <br>
+   POSTGRES_PASSWORD=admin
+   <br>
+   POSTGRES_DB=database
+   <br>
+   POSTGRES_HOST_AUTH_METHOD=trust
+6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by hiting ctrl+shift+p and clicking on "Change End of Line Sequence" and LF. Then save the files.
+7. In vscode open the terminal and `cd project-003-bioinformatics-chatbot-1.0.0`
+8. Run this commands in the terminal one at a time, it may take a while to build due to LLM. 
+- docker compose -f docker-compose.yml build
+- docker compose -f docker-compose.yml up
+9. Go to Docker Desktop for testing and follow the instrutions for each section listed below
+
+
+   
 ## Backend
 ### Library
 
@@ -11,8 +39,14 @@ Flask. For test coverage we are using Coverage.py in order to monitor pytest exe
 and get insights regarding untested code paths. Each function and route will be tested 
 via pytest on the backend, including unit tests for individual functions. 
 
-To run tests
+To run tests, 
+<br>
+In Docker Desktop, open the backend container and go to exec tab and type this 
+
 `python -m pytest -vv`
+![image](https://github.com/user-attachments/assets/6827a63a-9ec0-44ab-8817-40c8e6921767)
+
+
 
 ## Frontend
 ### Library
@@ -23,7 +57,12 @@ Each component will have tests associated with it, thereby allowing us to test f
 of each component. 
 
 To run tests 
-`cd frontend && npm run test`
+<br>
+In Docker Desktop, open the frontend container and go to exec tab and type this
+<br>
+`npm run test`
+![image](https://github.com/user-attachments/assets/1f756f23-b9da-4cde-8c8a-e2f267b0908d)
+
 
 Katerina: for my tests I selected pytest because it works with Flask’s built
 in test client to simulate HTTP requests, and this was necessary for multiple
