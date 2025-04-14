@@ -40,7 +40,7 @@ jobs:
       - name: Build containers
         run: docker-compose build -d
 
-      - name: start containers
+      - name: Start containers
         run: docker-compose up -d
 
       - name: Wait for services to be ready
