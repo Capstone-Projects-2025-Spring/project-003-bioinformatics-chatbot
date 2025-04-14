@@ -46,3 +46,8 @@ def test_query_vector_db_no_doc(client, app, clean_vector_db):
         documents = query_database("dna")
 
     assert not documents
+
+
+def test_embedding_model(app):
+    with app.app_context():
+        assert current_app.vector_db.embeddings.model == "mxbai-embed-large"
