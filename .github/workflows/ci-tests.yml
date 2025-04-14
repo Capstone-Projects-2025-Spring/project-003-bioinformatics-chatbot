@@ -41,7 +41,7 @@ jobs:
         run: docker-compose up -d --build  # Runs in detached mode, so it is independent
 
       - name: Wait for services to be ready
-        run: sleep 10 
+        run: sleep 15 
 
       - name: Start backend tests
         run: docker-compose exec -T backend python -m pytest -vv
