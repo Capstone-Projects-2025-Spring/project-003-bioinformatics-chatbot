@@ -52,7 +52,7 @@ def split_documents(documents: list[Document]):
         LIST (_type_): List of chunks object for pdf file
     """
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=300,  # Larger chunk size for more context
+        chunk_size=450,  # Larger chunk size for more context
         chunk_overlap=150,  # Increased overlap to retain context between chunks
         length_function=lambda x: len(
             x.split()

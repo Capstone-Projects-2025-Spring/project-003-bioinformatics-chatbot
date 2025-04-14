@@ -54,13 +54,6 @@ def create_app(config_class=Config):
         embeddings=OllamaEmbeddings(
             model="mxbai-embed-large",
             base_url="http://ollama:11434",
-            num_ctx=512,
-            repeat_last_n=128,
-            temperature=0.4,
-            top_k=20,
-            top_p=0.7,
-            repeat_penalty=1.3,
-            tfs_z=2.0,
         ),
         collection_name="vectorized_docs",
         connection=app.config["SQLALCHEMY_DATABASE_URI"],
