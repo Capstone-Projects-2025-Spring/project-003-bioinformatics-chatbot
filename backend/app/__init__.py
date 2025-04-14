@@ -49,7 +49,6 @@ def create_app(config_class=Config):
     )
     """
 
-    # Change llama 3 to 3.1
     app.vector_db = PGVector(
         embeddings=OllamaEmbeddings(
             model="mxbai-embed-large",

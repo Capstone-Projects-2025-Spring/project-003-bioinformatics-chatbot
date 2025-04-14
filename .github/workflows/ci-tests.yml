@@ -37,11 +37,14 @@ jobs:
       - name: Set executable permissions for docker-entrypoint.sh
         run: chmod +x ./backend/docker-entrypoint.sh
 
-      - name: Build and start containers
-        run: docker-compose up -d --build  # Runs in detached mode, so it is independent
+      - name: Build containers
+        run: docker-compose build -d
+
+      - name: start containers
+        run: docker-compose up -d
 
       - name: Wait for services to be ready
-        run: sleep 15 
+        run: sleep 20 
 
       - name: Start backend tests
         run: docker-compose exec -T backend python -m pytest -vv
