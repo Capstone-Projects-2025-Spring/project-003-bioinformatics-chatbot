@@ -40,20 +40,14 @@
 <table>
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Size (Bytes)</th>
+            <th>Document Name</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody id="data-table">
         {% for row in documents %}
         <tr id="row-{{ row.id }}">
-            <td>{{ row.id }}</td>
             <td>{{ row.document_name }}</td>
-            <td>{{ row.document_type }}</td>
-            <td>{{ row.file_contents | length }}</td>
             <td><a href="/download/{{ row.id }}"> <button>Download</button></a> </td>
                        
         </tr>
