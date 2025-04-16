@@ -45,6 +45,8 @@ def index():
     Description: Added a admin login.
 
     """
+   # fetch all document from database
+    documents = db.session.query(Document).all()
 
     form = LoginForm()
     # Check for correct password/username
@@ -59,10 +61,10 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password"
+                "main/index.html", form=form, error="Invalid username or password", documents=documents
             )
     # Pass the forms here.
-    return render_template("main/index.html", form=form)
+    return render_template("main/index.html", form=form, documents=documents)
 
 
 @bp.route("/admin")
