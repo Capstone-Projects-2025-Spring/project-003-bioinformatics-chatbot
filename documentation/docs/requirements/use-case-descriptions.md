@@ -68,8 +68,21 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 ![Figure 4: ChatBot re-edit/ re-send queries System](../../static/img/Resendrevise.png)  
 *Figure 4: ChatBot re-edit/ re-send queries System*
 
+## Use Case 5 - New/clear Chat
 
-## Use Case 5 - Upload documents (ADMIN / PRODUCT OWNER only)
+Users should have the ability to create a new chat with the chatbot.
+
+#### Hitting refresh will not clear the chat session ONLY closing the tab on browser and reaccess will open new chat
+
+
+
+### Diagrams   
+![Figure 5: ChatBot open new chat System](../../static/img/newchatrevise.png)  
+*Figure 5: ChatBot open new chat System*
+
+
+
+## Use Case 6 - Upload documents (ADMIN / PRODUCT OWNER only)
 
 Users should have the ability to upload documents to the chatbot.
 
@@ -78,11 +91,11 @@ Users should have the ability to upload documents to the chatbot.
 3. The user selects ONLY pdf document files to database.
 
 ### Diagrams   
-![Figure 5: ChatBot upload document System](../../static/img/upload.png)  
-*Figure 5: ChatBot upload document System*
+![Figure 6: ChatBot upload document System](../../static/img/upload.png)  
+*Figure 6: ChatBot upload document System*
 
 
-## Use Case 6 - Delete PDF (ADMIN / PRODUCT OWNER only)
+## Use Case 7 - Delete PDF (ADMIN / PRODUCT OWNER only)
 
 Admin/ Product owner should have the ability to delete PDF documents uploaded
 
@@ -90,21 +103,21 @@ Admin/ Product owner should have the ability to delete PDF documents uploaded
 2. User will see red color delete option in PDF UI table
 3. User click on delete and PDF will be instantly deleted from Database.
 
-![Figure 6: ChatBot delete document System](../../static/img/deletepdf.png)  
-*Figure 6: ChatBot delete document System*
+![Figure 7: ChatBot delete document System](../../static/img/deletepdf.png)  
+*Figure 7: ChatBot delete document System*
 
-## Use Case 7 - Download PDF  
+## Use Case 8 - Download PDF  
 
 
 ### All user should be able to see the list of PDFs uploaded without logging in to backend.
 
-![Figure 7: ChatBot delete document System](../../static/img/downloadpdfs.png)  
-*Figure 7: ChatBot downloading document System*
+![Figure 8: ChatBot delete document System](../../static/img/downloadpdfs.png)  
+*Figure 8: ChatBot downloading document System*
 
-## Use Case 8 - Admin Login (ADMIN / PRODUCT OWNER only)
+## Use Case 9 - Admin Login (ADMIN / PRODUCT OWNER only)
 
 Admin / Product owner should be able to log in to backend service app to perform deleting PDFs, uploading PDFs, changing password.
 
-![Figure 8: Backend service log in System](../../static/img/deletepdf.png)  
-*Figure 8: Backend service log in System*
+![Figure 9: Backend service log in System](../../static/img/deletepdf.png)  
+*Figure 9: Backend service log in System*
 
