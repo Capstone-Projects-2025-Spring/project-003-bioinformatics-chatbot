@@ -3,6 +3,6 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "The goals of the Bioinformatics Chatbot is to provide researchers with a useful AI chatbot that answers inquiries based on the provided documentation. Key functionalities include the ability for users to ask questions and receive valuable information derived from the given documentation, download chat history, and prompt the AI for more critical, detailed responses. A key constraint is that the Chatbot must be free to use. Below are the complete list of features, requirements, diagrams, and use-case descriptions for the project."
+    "description": "This document outlines the General Requirements for the project, providing an overview of the Bioinformatic Chatbot's purpose, design, and functionality. It includes a system overview that provides a high-level summary of the project, followed by a system block diagram that is a visual representation and explanation of key components. The general requirements define the hardware and software requirements needed to run the chatbot smoothly alongside a feature and requirements section detailing the functional and non-functional requirements. Additionally, this section provides use case descriptions that illustrate real-world scenarios. This is the foundation for a shared understanding between the stakeholders and the project team."
   }
 }
