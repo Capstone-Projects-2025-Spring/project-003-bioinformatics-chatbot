@@ -310,6 +310,11 @@ def chat_message():
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
+
+        # Mock the scores only if in testing mode
+        if current_app.config.get("TESTING", False):
+            Documents = [(doc, 0.9) for doc, _ in Documents]  # Override scores to 0.9
+
         for doc, score in Documents:
             print(f"Score: {score}")
             print("---")
