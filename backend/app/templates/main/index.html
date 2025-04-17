@@ -1,61 +1,88 @@
-<style>
-    table {
-        width: 80%;
-        margin: auto;
-        border-collapse: collapse;
-        text-align: center;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 10px;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    button {
-        padding: 5px 10px;
-        background-color: red;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-</style>
+{% extends "core/base.html" %}
+{% block content %}
+<div class="min-h-screen flex flex-col md:flex-row font-sans">
 
+    <!-- Login Form -->
+    <div class="w-full md:w-1/2 flex justify-center items-center bg-white px-6 py-10 md:px-10">
+        <form method="POST" class="w-full max-w-md">
+            {{ form.hidden_tag() }}
 
-{% extends "core/base.html" %} {% block content %}
-<h1>Congrats you started the container, Welcome to flask</h1>
+            <h1 class="text-gray-800 font-bold text-3xl md:text-4xl mb-4 leading-relaxed text-balance font-inter">
+                Welcome to the BioGenie Admin Dashboard!
+            </h1>
 
-<h2>Please login in</h2>
-<form method = "POST" action="">
-    {{ form.hidden_tag() }}
-    {{ form.username }}
-    {{ form.password }}
-    {{ form.submit }}
-</form>
+            <p class="text-base text-gray-600 mb-6 font-poppins">
+                Login to your admin dashboard below:
+            </p>
 
-{% if error %}
-<p style="color: red;">{{ error }}</p>
-{% endif %}
+            <!-- Username -->
+            <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {{ form.username(class="pl-2 w-full outline-none border-none bg-white") }}
+            </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Document Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="data-table">
-        {% for row in documents %}
-        <tr id="row-{{ row.id }}">
-            <td>{{ row.document_name }}</td>
-            <td><a href="/download/{{ row.id }}"> <button>Download</button></a> </td>
-                       
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            <!-- Password -->
+            <div class="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                {{ form.password(class="pl-2 w-full outline-none border-none bg-white") }}
+            </div>
 
+            <!-- Submit Button -->
+            <button type="submit"
+                class="w-full bg-indigo-600 text-white py-2 rounded-2xl font-semibold hover:bg-indigo-700 transition">
+                {{ form.submit.label.text }}
+            </button>
 
+            {% if error %}
+            <p class="text-red-500 mt-2 text-sm">{{ error }}</p>
+            {% endif %}
+        </form>
+    </div>
 
+    <!-- Document Viewer -->
+    <div class="flex flex-col w-full md:w-1/2 justify-center animated-gradient text-white px-6 py-12 md:px-10 overflow-y-auto">
 
+        <h1 class="text-2xl md:text-3xl font-bold mb-4 font-inter">Public Document Viewer</h1>
+        <p class="mb-6 text-white text-base font-poppins">
+
+            You can access the documents below without logging in.
+        </p>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left border border-white text-white">
+                <thead class="bg-white text-indigo-800">
+                    <tr>
+                        <th class="px-4 py-2 border">Document Name</th>
+                        <th class="px-4 py-2 border">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in documents %}
+                    <tr class="hover:bg-purple-900">
+                        <td class="px-4 py-2 border">{{ row.document_name }}</td>
+                        <td class="px-4 py-2 border">
+                            <a href="/download/{{ row.id }}">
+                                <button class="bg-white text-purple-700 px-3 py-1 rounded hover:bg-gray-100 transition">
+                                    Download
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
