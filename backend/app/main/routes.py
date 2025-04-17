@@ -29,7 +29,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 Places for routes in the backend
 """
 
-llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
+llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -45,6 +45,8 @@ def index():
     Description: Added a admin login.
 
     """
+   # fetch all document from database
+    documents = db.session.query(Document).all()
 
     form = LoginForm()
     # Check for correct password/username
@@ -59,10 +61,10 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password"
+                "main/index.html", form=form, error="Invalid username or password", documents=documents
             )
     # Pass the forms here.
-    return render_template("main/index.html", form=form)
+    return render_template("main/index.html", form=form, documents=documents)
 
 
 @bp.route("/admin")
@@ -97,12 +99,12 @@ def delete_item(item_id):
       - Deletes the document with the given `item_id`.
       - Removes related embeddings from the `EmbeddingStore`, where the `id` contains `document_name` (case-sensitive).
       - Ensures transactional integrity by rolling back in case of failure.
-      
+
     Args:
         item_id (int): The unique identifier of the document to delete.
 
     Returns:
-        Response (JSON): A success message if deletion is successful, 
+        Response (JSON): A success message if deletion is successful,
                          or an error message with appropriate HTTP status codes.
     """
     try:
@@ -110,13 +112,20 @@ def delete_item(item_id):
         document = db.session.query(Document).get(item_id)
 
         if not document:
-            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+            return (
+                jsonify({"success": False, "message": f"Item {item_id} not found"}),
+                404,
+            )
 
         vector_db = current_app.vector_db
 
         # Delete associated embeddings (case-sensitive match)
         db.session.execute(
-            delete(vector_db.EmbeddingStore).where(vector_db.EmbeddingStore.id.like(f"%{document.document_name}.{document.document_type}%"))
+            delete(vector_db.EmbeddingStore).where(
+                vector_db.EmbeddingStore.id.like(
+                    f"%{document.document_name}.{document.document_type}%"
+                )
+            )
         )
         # Delete the document itself
         db.session.delete(document)
@@ -124,7 +133,12 @@ def delete_item(item_id):
         # Commit the transaction
         db.session.commit()
 
-        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'}), 200
+        return (
+            jsonify(
+                {"success": True, "message": f"Item {item_id} deleted successfully"}
+            ),
+            200,
+        )
 
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
@@ -212,16 +226,29 @@ def upload_pdf():
                 )
 
             # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+            file_name = uploaded_file.filename.rsplit(".", 1)[
+                0
+            ]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[
+                -1
+            ]  # File extension (should be 'pdf')
 
             # Check if a document with the same name and type already exists
-            existing_document = db.session.query(Document).filter_by(
-                document_name=file_name, document_type=file_type
-            ).first()
+            existing_document = (
+                db.session.query(Document)
+                .filter_by(document_name=file_name, document_type=file_type)
+                .first()
+            )
 
             if existing_document:
-                return jsonify({"error": f"A document named '{uploaded_file.filename}' already exists."}), 409
+                return (
+                    jsonify(
+                        {
+                            "error": f"A document named '{uploaded_file.filename}' already exists."
+                        }
+                    ),
+                    409,
+                )
 
             # Create new document instance
             new_document = Document(
@@ -229,14 +256,13 @@ def upload_pdf():
                 document_type=file_type,
                 file_contents=uploaded_file.read(),  # Store binary PDF data
             )
-            
+
             # Storing the document into the database
             db.session.add(new_document)
             db.session.commit()
             # Process the upload doc to the parser and index
             process_doc(new_document)
-            
-            
+
             return (
                 jsonify(
                     {
@@ -273,8 +299,8 @@ def chat_message():
 
         user_message = data["message"]
 
-
         history = ChatMessageHistory()
+
         for chat in data["conversationHistory"]:
             if chat["sender"] == "User":
                 history.add_user_message(chat["text"])
@@ -289,7 +315,7 @@ def chat_message():
             print("---")
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.3]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
@@ -303,7 +329,6 @@ def chat_message():
                 200,
             )
 
-        
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
@@ -325,8 +350,13 @@ def chat_message():
 
         chain = prompt_template | llm
 
-        response = chain.invoke({"context": context, "history": history.messages, "user_message": user_message})
-
+        response = chain.invoke(
+            {
+                "context": context,
+                "history": history.messages,
+                "user_message": user_message,
+            }
+        )
 
         # Print the filtered documents
         print("Chunks:")
@@ -334,7 +364,7 @@ def chat_message():
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
-        
+
         print(f"Response: {response}", flush=True)
 
         return jsonify({"response": response})
@@ -368,4 +398,3 @@ def test_indexing():
     print(doc)
 
     return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
-
