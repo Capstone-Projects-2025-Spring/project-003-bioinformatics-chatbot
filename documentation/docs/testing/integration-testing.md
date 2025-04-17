@@ -43,7 +43,6 @@ Users wants to ask the chatbot questions related to bioinformatics.
 - Runs `Backend/ Test_query_vector_db_with_doc` unit test.
 - Runs `Backend/ Test_query_vector_db_no_doc` unit test.
 - Runs `Backend/ Test_testing` unit test. 
-
 - Passes if all tests pass.
 </details>
 
@@ -66,7 +65,6 @@ User wants to download conversation.
 - Runs `Frontend/ Downloads chatbot conversation when there is at least one message for .txt` unit test.
 - Runs `Frontend / Downloads chatbot conversation when there is at least one message for .pdf` unit test.
 - Runs `Frontend/ Downloads chatbot conversation when there is at least one message for .doc` unit test.
-
 - Passes if all tests pass.
 </details>
 
@@ -85,7 +83,6 @@ Users wants to view previous messages sent.
 - Runs `Frontend/ Calls scrollIntoView when messages state updates` unit test.
 - Runs `Frontend/ Renders with text (User Bubble)` unit test.
 - Runs `Frontend/ Renders with text (Response Bubble)` unit test.
-
 - Passes if all tests pass.
 </details>
 
@@ -114,8 +111,6 @@ Users wants to ask the chatbot questions related to bioinformatics.
 
 <details open="True">
 - Runs `Frontend / Renders previous messages from sessionStorage` unit test.
-
-
 - Passes if all tests pass.
 </details>
 
@@ -135,8 +130,6 @@ An admin wants to upload a document for the chatbot to use.
 - Runs `Backend/ Test_index_doc` unit test.
 - Runs `Backend/ Test_duplicate_chunks_ignored` unit test.  
 - Runs `Backend/ Test_empty_file` unit test. 
-
-
 - Passes if all tests pass.
 </details>
 
@@ -151,7 +144,6 @@ An admin wants to delete a document from the database.
 - Runs `Backend/ Test_delete_valid_document` unit test.
 - Runs `Backend/ Test_delete_non_existent_document` unit test.
 - Runs `Backend/ Test_delete_database_error` unit test.
-
 - Passes if all tests pass.
 </details>
 
@@ -165,7 +157,6 @@ A user wants to download a document from the database.
 - Runs `Backend/ Test_download_valid_document` unit test.
 - Runs `Backend/ Test_download_non_existent_document` unit test.
 - Runs `Backend/ Test_download_database_error` unit test.
-
 - Passes if all tests pass.
 </details>
 
@@ -180,8 +171,6 @@ An admin should be able to log in and perform admin-only actions.
 - Runs `Backend/ Test_user_table_with_user` unit test.
 - Runs `Backend/ Test_user_table_password` unit test.
 - Runs `Backend/ Test_testing` unit test.
-
-
 - Passes if all tests pass.
 </details>
 
