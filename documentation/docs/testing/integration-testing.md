@@ -87,7 +87,7 @@ Users wants to view previous messages sent.
 </details>
 
 ## Integration Test for Use Case 4
-A user wants to to edit and resend a message
+A user wants to to edit and resend a message.
 
 1. The chatbot gave an answer that the user was unsatisfied with.
 2. The user highlights over the question asked.
@@ -104,7 +104,7 @@ A user wants to to edit and resend a message
 </details>
 
 ## Integration Test for Use Case 5
-Users wants to ask the chatbot questions related to bioinformatics.
+The user wants to create a new chat.
 
 1. The user exits out of the browser
 2. He or she returns back to the website
