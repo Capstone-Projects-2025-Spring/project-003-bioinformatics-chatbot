@@ -3,6 +3,6 @@
   "position": 7,
   "link": {
     "type": "generated-index",
-    "description": "Please remove and replace examples where necessary."
+    "description": "This document outlines the API Specifications, describing how the frontend and backend interact. The frontend-API specifies the React components responsible for rendering the user interface, accepting user input,  displaying chatbot responses, and maintaining application features. The backend-API specifies the Flask server's endpoint that supports the uploading of PDF files, interaction with the database, communication with the LLM, and retrieval of relevant data. Both documents together detail a complete overview of the software implementation."
   }
 }

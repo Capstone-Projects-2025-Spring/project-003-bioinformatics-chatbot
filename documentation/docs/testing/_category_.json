@@ -3,6 +3,6 @@
   "position": 8,
   "link": {
     "type": "generated-index",
-    "description": "Please remove and replace examples where necessary."
+    "description": "This document outlines the Test Procedures, describing the approach to be performed to verify the requirements specified in the Requirements Document. It includes detailed procedures for unit testing, integration testing, and acceptance testing. Unit tests ensure that each function down to the code behaves as intended. Integration tests validate that the different functions are working together so that the use cases are being fulfilled. Acceptance tests confirm that the system is working properly by verifying the functional and non-functional requirements operate correctly. Collectively, these testing procedures provide a thorough validation of the application requirements."
   }
 }

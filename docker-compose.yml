@@ -45,7 +45,6 @@ services:
     networks:
       - app-network
 
-
   frontend:
     build: ./frontend
     container_name: frontend
