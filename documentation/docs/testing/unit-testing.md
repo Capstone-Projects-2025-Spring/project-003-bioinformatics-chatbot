@@ -7,20 +7,14 @@ sidebar_position: 1
 1. Install and Open Docker Desktop and Vscode 
 2. Download and unzip the source code in the most recent project release [here](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases)
 3. In Vscode open the project file, in the backend folder create .env file and database.env
-4. In the .env file put this
-    <br> 
+4. In the .env file put this<br /> 
    DATABASE_URI=postgresql+psycopg://admin:admin@database:5432/database
    TEST_DATABASE_URI=postgresql+psycopg://admin:admin@test-database:5432/database
-5. In the database.env put this
-    <br> 
-   #database variables
-   <br>
-   POSTGRES_USER=admin
-   <br>
-   POSTGRES_PASSWORD=admin
-   <br>
-   POSTGRES_DB=database
-   <br>
+5. In the database.env put this<br /> 
+   #database variables<br />
+   POSTGRES_USER=admin<br />
+   POSTGRES_PASSWORD=admin<br />
+   POSTGRES_DB=database<br />
    POSTGRES_HOST_AUTH_METHOD=trust
 6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by hiting ctrl+shift+p and clicking on "Change End of Line Sequence" and LF. Then save the files.
 7. In vscode open the terminal and `cd project-003-bioinformatics-chatbot-1.0.0`
@@ -39,8 +33,7 @@ Flask. For test coverage we are using Coverage.py in order to monitor pytest exe
 and get insights regarding untested code paths. Each function and route will be tested 
 via pytest on the backend, including unit tests for individual functions. 
 
-To run tests, 
-<br>
+To run tests, <br />
 In Docker Desktop, open the backend container and go to exec tab and type this 
 
 `python -m pytest -vv`
@@ -56,10 +49,8 @@ built-in support for React-Vite projects, and strong compatibility with componen
 Each component will have tests associated with it, thereby allowing us to test funtctional and UI aspects
 of each component. 
 
-To run tests 
-<br>
-In Docker Desktop, open the frontend container and go to exec tab and type this
-<br>
+To run tests <br />
+In Docker Desktop, open the frontend container and go to exec tab and type this<br />
 `npm run test`
 ![image](https://github.com/user-attachments/assets/1f756f23-b9da-4cde-8c8a-e2f267b0908d)
 
