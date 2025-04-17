@@ -106,6 +106,86 @@ A user wants to to edit and resend a message
 - Passes if all tests pass.
 </details>
 
+## Integration Test for Use Case 5
+Users wants to ask the chatbot questions related to bioinformatics.
+
+1. The user exits out of the browser
+2. He or she returns back to the website
+
+<details open="True">
+- Runs `Frontend / Renders previous messages from sessionStorage` unit test.
+
+
+- Passes if all tests pass.
+</details>
+
+## Integration Test for Use Case 6
+An admin wants to upload a document for the chatbot to use.
+
+1. The user signs into the backend and then gets redirect to admin dashboard.
+2. The user then selects  the upload option and gets redirected to the upload page.
+3. The user selects ONLY pdf files to be loaded to the database.
+
+<details open="True">
+- Runs `Backend/ Test_upload_pdf_valid` unit test.
+- Runs `Backend/ Test_upload_pdf_dup` unit test.
+- Runs `Backend/ Test_validation` unit test.
+- Runs `Backend/ Test_content_file` unit test. 
+- Runs `Backend/ Test_parse_pdf` unit test.
+- Runs `Backend/ Test_index_doc` unit test.
+- Runs `Backend/ Test_duplicate_chunks_ignored` unit test.  
+- Runs `Backend/ Test_empty_file` unit test. 
+
+
+- Passes if all tests pass.
+</details>
+
+## Integration Test for Use Case 7
+An admin wants to delete a document from the database.
+
+1. The user signs into the backend and then gets redirect to admin dashboard.
+2. User will see red color delete option in PDF UI table.
+3. User clicks on delete and PDF will be instantly deleted from Database.
+
+<details open="True">
+- Runs `Backend/ Test_delete_valid_document` unit test.
+- Runs `Backend/ Test_delete_non_existent_document` unit test.
+- Runs `Backend/ Test_delete_database_error` unit test.
+
+- Passes if all tests pass.
+</details>
+
+## Integration Test for Use Case 8
+A user wants to download a document from the database.
+
+1. The user sees the red download button on the front page of the backend (no need to sign in).
+2. The user clicks the download button to retrieve the document.
+
+<details open="True">
+- Runs `Backend/ Test_download_valid_document` unit test.
+- Runs `Backend/ Test_download_non_existent_document` unit test.
+- Runs `Backend/ Test_download_database_error` unit test.
+
+- Passes if all tests pass.
+</details>
+
+## Integration Test for Use Case 9
+An admin should be able to log in and perform admin-only actions.
+
+1. The user signs into the backend and then gets redirect to admin dashboard.
+
+<details open="True">
+- Runs `Backend/ Login_user` unit test.
+- Runs `Backend/ Test_user_table` unit test.
+- Runs `Backend/ Test_user_table_with_user` unit test.
+- Runs `Backend/ Test_user_table_password` unit test.
+- Runs `Backend/ Test_testing` unit test.
+
+
+- Passes if all tests pass.
+</details>
+
+
 
 
 

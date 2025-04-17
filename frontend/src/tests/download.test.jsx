@@ -118,7 +118,7 @@ describe("Chat History Download Functions", () => {
   });
 
   
-  it("triggers pdf file download when messages exist", async () => {
+  it("downloads chatbot conversation when there is at least one message for .pdf", async () => {
     render(<Chat />);
     // Type and send a message
     fireEvent.change(screen.getByPlaceholderText("Ask a question"), { target: { value: "I like candy" } });
