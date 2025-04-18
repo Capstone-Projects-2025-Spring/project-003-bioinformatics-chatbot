@@ -74,7 +74,7 @@ def extract_text_spans(file_path):
     return all_spans
 
 #Get the formatted_test_pdf
-@pytest.fixture(scope="module")
+
 def pdf_spans():
 
     FILE_PATH = "./tests/test_data/formatted_test_pdf.pdf"
