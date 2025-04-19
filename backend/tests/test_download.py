@@ -44,8 +44,10 @@ def upload_test_document(client, app):
         data = {"pdf_file": (pdf_file, "test.pdf")}
 
         # Make the POST request to the upload route
-        response = client.post("/upload", data=data, content_type='multipart/form-data', follow_redirects=True)
+        response =  client.post("/admin", data=data, content_type='multipart/form-data')
         assert response.status_code == 200, f"Upload failed: {response.json}"
+        assert "document" in response.json
+
 
         return db.session.query(Document).filter_by(document_name="test").first()
     
