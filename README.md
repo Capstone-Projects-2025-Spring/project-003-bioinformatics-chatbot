@@ -43,9 +43,15 @@ The frontend user interface of this app will be built using **React.js, JavaScri
 Bioinformatics is a rapidly growing field that is using breakthroughs in Computer Science and Machine Learning to study and solve biological problems. Multiple Nobel Prizes in the past few years have been won in the fields of Biology and Chemistry by computer scientists. However, given the differences between both the content and the people in the respective fields, clear and effective communication can be a challenge. With the breakthroughs in the AI field and the rise of Large Language Models, the ability to bridge this gap has never been easier, allowing researchers on both sides of the academic 'fence' to easily learn about and work in the field of Bioinformatics. With that in mind, this Chatbot is meant to help bridge that communication gap, with the ability to customize answers and answer specific questions surrounding bioinformatics.
 
 ## Required Resources
-### Hardware Requirements
+### Hardware Requirements for local development
 - A computer with a modern operating system (Windows, macOS, or Linux)
 - At least **8 GB of RAM**
+- At least **2 GB of free disk space**
+
+### Hardware Requirements for Hosting service
+- A computer with a modern operating system (Windows, macOS, or Linux)
+- At least **8GB of RAM**
+- At least **10 GB of VRAM** (Prefer 12GB NVIDIA GPU with CUDA support)
 - At least **2 GB of free disk space**
 
 ### Software Requirements
