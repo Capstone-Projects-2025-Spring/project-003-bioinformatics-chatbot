@@ -34,23 +34,34 @@ ErrorBox.propTypes = {
 export default function ErrorBox({ title, body, setError }) {
 	return (
 		<div
-			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-errorBg text-orange-700 p-4 rounded-lg shadow-lg z-50'
+			className='fixed top-4 left-1/2 transform -translate-x-1/2 bg-errorBg text-orange-700 p-4 rounded-lg shadow-lg z-50 max-w-md w-full'
 			role='alert'
 			data-testid='errorBox'>
+			{/* Top row: title + close button */}
 			<div className='flex items-center justify-between'>
-				<div>
-					<p className='font-bold'>{title}</p> {/* Displays the error title */}
-					<p>{body}</p> {/* Displays the error body */}
-				</div>
-				{/* Button to dismiss the error message */}
+				<p className='font-bold'>{title}</p>
 				<button
-					className='text-orange-700 hover:text-orange-900'
-					data-testid='closeButton' // This attribute is for testing to identify the close Button
-					onClick={() => setError({ title: "", body: "" })} // When clicked, reset the error state
-				>
-					&times; {/* The "×" symbol for the close button */}
+					className='text-orange-700 hover:text-orange-900 ml-4 mt-1'
+					data-testid='closeButton'
+					onClick={() => setError({ title: "", body: "" })}>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						fill='none'
+						viewBox='0 0 24 24'
+						strokeWidth={2.5}
+						stroke='currentColor'
+						className='size-5'>
+						<path
+							strokeLinecap='round'
+							strokeLinejoin='round'
+							d='M6 18 18 6M6 6l12 12'
+						/>
+					</svg>
 				</button>
 			</div>
+
+			{/* Body message */}
+			<p className='mt-1'>{body}</p>
 		</div>
 	);
 }

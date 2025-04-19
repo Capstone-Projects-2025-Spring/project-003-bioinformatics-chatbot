@@ -1,6 +1,37 @@
 @import "tailwindcss";
 
-
 @theme {
-    --color-errorBg: oklch(1 0.1 30);
-  }
+  --color-primary: oklch(52.5% 0.11 290);     
+  --color-primaryLight: oklch(90% 0.07 296); 
+  --color-accent: oklch(70.4% 0.17 10);  
+  --color-bgLight: oklch(98% 0.01 296);
+  --color-textDark: oklch(28% 0.01 250);
+  --color-textSecondary: oklch(98% 0.005 296);
+  --color-errorBg: oklch(92% 0.15 27);
+
+  --font-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+/* WebKit browsers: Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Invisible track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(52.5% 0.11 290);
+  border-radius: 10px;
+}
+/* Firefox */
+html {
+  scrollbar-width: 10px;
+  scrollbar-color: oklch(52.5% 0.11 290) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}

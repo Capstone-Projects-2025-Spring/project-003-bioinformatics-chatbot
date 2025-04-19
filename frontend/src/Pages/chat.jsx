@@ -5,8 +5,8 @@ import ResponseBubble from "../Components/responseBubble";
 import ErrorBox from "../Components/errorBox";
 import LoadingSpinner from "../Components/loadingSpinner";
 import axios from "axios";
-import { jsPDF } from 'jspdf';
-import { Document, Packer, Paragraph, HeadingLevel, TextRun } from 'docx';
+import { jsPDF } from "jspdf";
+import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 /**
  * Chat component renders a chat interface with messaging capabilities.
@@ -15,7 +15,6 @@ import { saveAs } from "file-saver";
  * @returns {JSX.Element} The rendered Chat component.
  */
 function Chat() {
-
 	/**
 	 * State for managing the text input in the ChatBox.
 	 */
@@ -52,15 +51,13 @@ function Chat() {
 	 * State for managing if the different options for downloading is shown.
 	 */
 
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-
 	/**
 	 * State for managing which message is being edited
 	 */
 
 	const [editIndex, setEditIndex] = useState(null);
 
+	const [position, setPosition] = useState({ x: 50, y: 50 });
 
 	/**
 	 * Load messages from sessionStorage on component mount.
@@ -73,8 +70,21 @@ function Chat() {
 			 */
 			setMessages(JSON.parse(savedMessages));
 		}
+		const handleMouseMove = (e) => {
+			const x = (e.clientX / window.innerWidth) * 100;
+			const y = (e.clientY / window.innerHeight) * 100;
+			setPosition({ x, y });
+		};
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, []);
 
+	const gradient = `radial-gradient(
+		2500px circle at ${position.x}% ${position.y}%,
+		color-mix(in oklab, var(--color-primary) 20%, transparent) 0%,
+		color-mix(in oklab, var(--color-accent) 10%, transparent) 50%,
+		var(--color-bgLight) 100%
+	  )`;
 	/**
 	 * Function to set error to be shown using the errorBox.jsx with timed reset
 	 * @param {object} error - The error object.
@@ -174,7 +184,7 @@ function Chat() {
 		axios
 			.post("http://localhost:444/chat", {
 				message: input,
-				conversationHistory: updatedMessages
+				conversationHistory: updatedMessages,
 			})
 			.then((response) => {
 				const botResponse = {
@@ -216,18 +226,15 @@ function Chat() {
 			 * Converts the messages array into a formatted string.
 			 * @type {string}
 			 */
-			const conversation = messages.reduce(
-				(acc, curr) => {
-					if (curr.type === "Response") { // if its a response do not include the time
+			const conversation = messages.reduce((acc, curr) => {
+				if (curr.type === "Response") {
+					// if its a response do not include the time
 
-						return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
-					} else {
-
-						return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
-					}
-				},
-				""
-			);
+					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
+				} else {
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				}
+			}, "");
 			/**
 			 * Creates a Blob object for the formatted string.
 			 * @type {Blob}
@@ -256,7 +263,6 @@ function Chat() {
 	 */
 
 	const handleDownloaddoc = async () => {
-
 		if (messages.length == 0) {
 			handleError({
 				title: "Empty Conversation",
@@ -267,19 +273,15 @@ function Chat() {
 			 * Converts the messages array into a formatted string.
 			 * @type {string}
 			 */
-			const conversation = messages.reduce(
-				(acc, curr) => {
-					if (curr.type === "Response") { // if its a response do not include the time
-						// 
-						return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
-					} else {
-
-						return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
-					}
-				},
-				""
-
-			);
+			const conversation = messages.reduce((acc, curr) => {
+				if (curr.type === "Response") {
+					// if its a response do not include the time
+					//
+					return `${acc}${curr.type}: ${curr.text}\n\n---------------------------\n\n`;
+				} else {
+					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
+				}
+			}, "");
 
 			/**
 			 * Splits the formatted string into an array of text.
@@ -338,13 +340,13 @@ function Chat() {
 			 */
 
 			const conversation = messages.reduce((acc, curr) => {
-				if (curr.type === "Response") { // if its a response do not include the time
+				if (curr.type === "Response") {
+					// if its a response do not include the time
 					return `${acc}${curr.type}: ${curr.text}\n---------------------------\n\n`;
 				} else {
 					return `${acc}${curr.time}\n\n${curr.type}: ${curr.text}\n\n`;
 				}
 			}, "");
-
 
 			/**
 			 * Creates a new PDF document with automatic page handling.
@@ -381,7 +383,6 @@ function Chat() {
 		}
 	};
 
-
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
 	 */
@@ -392,109 +393,188 @@ function Chat() {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
+	// Default style for Capability and Limitations cards
+	const sectionStyle = "text-primary p-4 rounded-2xl bg-bgLight font-body";
+
+	// Example-specific style that changes background color on hover using a custom variable.
+	const exampleCardStyle =
+		"text-primary p-4 rounded-2xl bg-bgLight transition hover:bg-[var(--color-primaryLight)] font-body";
+
+	const examples = [
+		'🧬 "Summarize recent studies on CRISPR-Cas9 in humans"',
+		'🧪 "What are the key genes in Alzheimer\'s pathology?"',
+		'📚 "Explain the role of RNA-seq in cancer research"',
+	];
+
+	const capabilities = [
+		"🔍 Searches PubMed & other bio databases using RAG",
+		"🧠 Summarizes papers with domain-specific language",
+		"💬 Supports follow-up questions & interactive exploration",
+	];
+
+	const limitations = [
+		"❗ May miss context or misinterpreting of results",
+		"🧪 Not a substitute for expert review of literature",
+		"📅 May not always access the very latest research",
+	];
+
+	// Modified renderCards accepts a style parameter
+	const renderCards = (items, style) =>
+		items.map((text, index) => (
+			<div
+				key={index}
+				className={style}
+				onClick={
+					items === examples
+						? () => {
+								setInput(text);
+						  }
+						: undefined
+				}>
+				{text}
+			</div>
+		));
+
 	return (
-		<div className='w-full h-screen flex flex-col'>
-			{/** Conditionally render the ErrorBox if there is an error. */}
+		<div
+			className='flex flex-col h-screen overflow-hidden transition duration-300'
+			style={{ background: gradient }}>
+			{/* ─── Error (stays static) ───────────────────────── */}
 			{error.title && (
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
-			<nav>
-				<div className='flex justify-center bg-green-600 p-4'>
-					<h1 className='text-2xl text-white'>Chatbot</h1>
-				</div>
-			</nav>
+			{messages.length == 0 ? (
+				<main className='flex flex-1 flex-col justify-center items-center font-body h-full overflow-y-auto'>
+					<div className='pt-8 flex flex-col justify-center items-center mb-12'>
+						<svg
+							width='180'
+							height='180'
+							viewBox='0 0 200 200'
+							fill='none'
+							xmlns='http://www.w3.org/2000/svg'>
+							{/* DNA Helix */}
+							<path
+								d='M60 40 C100 60, 100 140, 60 160'
+								stroke='oklch(60% 0.12 296)'
+								strokeWidth='6'
+								fill='none'
+							/>
+							<path
+								d='M140 40 C100 60, 100 140, 140 160'
+								stroke='oklch(60% 0.12 296)'
+								strokeWidth='6'
+								fill='none'
+							/>
 
-			{/** Chat messages container. */}
-			<div className='flex-1 max-w-s overflow-y-auto px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 space-y-2 sm:space-y-3 md:space-y-5 lg:space-y-6 pb-20 bg-gray-800 break-words'>
-				{/** Render messages dynamically based on their type. */}
-				{messages.map((msg, index) =>
-					msg.type === "Question" ? (
-						<UserBubble
-							key={msg.id}
-							text={msg.text}
-							onEdit={() => handleEdit(index)}
-						/>
-					) : (
-						<ResponseBubble key={msg.id} text={msg.text} />
-					)
-				)}
-				{/** A dummy div to scroll into view. */}
-				<div ref={messagesEndRef} />
-			</div>
+							{/* Connecting Rungs */}
+							<line
+								x1='80'
+								y1='60'
+								x2='120'
+								y2='60'
+								stroke='oklch(70% 0.09 296)'
+								strokeWidth='3'
+							/>
+							<line
+								x1='80'
+								y1='90'
+								x2='120'
+								y2='90'
+								stroke='oklch(70% 0.09 296)'
+								strokeWidth='3'
+							/>
+							<line
+								x1='80'
+								y1='120'
+								x2='120'
+								y2='120'
+								stroke='oklch(70% 0.09 296)'
+								strokeWidth='3'
+							/>
+						</svg>
+						<h1 className='text-3xl font-bold text-primary font-heading'>
+							BioGenie
+						</h1>
+						{/* Description */}
+						<p className='mt-4 max-w-2xl text-center text-lg text-primary'>
+							An advanced chatbot designed to assist researchers in
+							bioinformatics by retrieving and summarizing relevant scientific
+							literature using a retrieval-augmented generation (RAG) model.
+						</p>
+					</div>
+					<div className='grid grid-cols-1 md:grid-cols-3 gap-6 text-primary pb-16 max-w-6xl mx-auto w-full'>
+						{/* Examples with hoverable color change */}
+						<div>
+							<h2 className='text-xl font-semibold mb-4 text-center font-heading'>
+								💡 Examples
+							</h2>
+							<div className='flex flex-col gap-4'>
+								{renderCards(examples, exampleCardStyle)}
+							</div>
+						</div>
 
-			{loading && <LoadingSpinner />}
+						{/* Capabilities */}
+						<div>
+							<h2 className='text-xl font-semibold mb-4 text-center font-heading'>
+								🚀 Capabilities
+							</h2>
+							<div className='flex flex-col gap-4'>
+								{renderCards(capabilities, sectionStyle)}
+							</div>
+						</div>
 
-
-
-
-			{/** Chat input form. */}
-			<div className='w-full flex items-center space-x-2 p-3 bg-gray-800 break-words'>
-				{editIndex !== null && (
-					<button
-						className="text-red-500 text-xl font-bold"
-						onClick={cancelEdit}
-						title="Cancel edit"
-					>
-						&times;
-					</button>
-				)}
-				<ChatBox
-					input={input}
-					setInput={setInput}
-					handleSubmit={handleSubmit}
-					className='flex-1 '
-				/>
-				<button
-					data-testid='downloadButton'
-					onClick={() => setIsDialogOpen(true)}
-					className='py-2 pl-4 pr-4 border rounded-lg bg-green-600 hover:bg-green-400 hover:text-gray-200'>
-					<img
-						src='src\assets\downloads.png'
-						alt='Download Icon'
-						className='w-5 h-5'
-					/>
-				</button>
-			</div>
-			{/** Small container that allows the user to choose the format of the messages */}
-			{isDialogOpen && (
-				<div className="absolute bottom-16 right-4 z-50">
-					<div className="p-4 border rounded-lg bg-gray-800 shadow-lg space-y-2">
-						<h2 className="text-lg font-semibold text-white">Select the file type</h2>
-						<button
-							data-testid='downloadButtontxt'
-							onClick={handleDownloadtxt}
-							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-						>
-							.txt
-						</button>
-						<button
-							data-testid='downloadButtonpdf'
-							onClick={handleDownloadpdf}
-							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-						>
-							.pdf
-						</button>
-						<button
-							data-testid='downloadButtondoc'
-							onClick={handleDownloaddoc}
-							className="w-full p-2 bg-blue-500 rounded-lg text-white hover:bg-blue-600"
-						>
-							.doc
-						</button>
-						<button
-							onClick={() => setIsDialogOpen(false)}
-							className="w-full p-2 bg-red-500 rounded-lg text-white hover:bg-red-600"
-						>
-							Close
-						</button>
+						{/* Limitations */}
+						<div>
+							<h2 className='text-xl font-semibold mb-4 text-center font-heading'>
+								⚠️ Limitations
+							</h2>
+							<div className='flex flex-col gap-4'>
+								{renderCards(limitations, sectionStyle)}
+							</div>
+						</div>
+					</div>
+				</main>
+			) : (
+				<div className='flex justify-center h-full overflow-y-auto '>
+					<div className='w-full py-2 px-4 max-w-7xl mx-auto mt-7'>
+						{messages.map((msg, index) =>
+							msg.type === "Question" ? (
+								<UserBubble
+									key={msg.id}
+									text={msg.text}
+									onEdit={() => handleEdit(index)}
+								/>
+							) : (
+								<ResponseBubble key={msg.id} text={msg.text} />
+							)
+						)}
+						<div ref={messagesEndRef} />
+						<div className='pb-5'></div>
 					</div>
 				</div>
 			)}
 
+			{/* ─── Messages (only this scrolls) ───────────────── */}
+
+			{/* ─── Input (static at bottom) ───────────────────── */}
+
+			<div className='w-full flex items-center space-x-2 pb-4 bg-transparent break-words'>
+				<ChatBox
+					input={input}
+					setInput={setInput}
+					handleSubmit={handleSubmit}
+					handleDownloadtxt={handleDownloadtxt}
+					handleDownloadpdf={handleDownloadpdf}
+					handleDownloaddoc={handleDownloaddoc}
+					cancelEdit={cancelEdit}
+					editIndex={editIndex}
+					loading={loading}
+					className='flex-1'
+				/>
+			</div>
 		</div>
 	);
-
 }
 
 export default Chat;
