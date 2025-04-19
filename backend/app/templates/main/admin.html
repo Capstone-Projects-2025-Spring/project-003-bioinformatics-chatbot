@@ -161,44 +161,44 @@
         </div>
     </div>
 
-    <!-- Document Table -->
+    <!-- Table -->
     <div class="w-full md:w-1/2 flex flex-col bg-white px-6 py-10 md:px-10 overflow-x-auto justify-center">
         <div class="mt-6">
             <h1 class="text-2xl md:text-3xl font-bold mb-6 text-indigo-800 font-inter">Uploaded Documents</h1>
 
             <div class="overflow-x-auto border border-indigo-800">
-                <table class="w-full text-sm text-left border-collapse">
-                    <thead class="bg-white text-indigo-800">
-                        <tr>
-                            <th class="px-4 py-2 border border-indigo-800">ID</th>
-                            <th class="px-4 py-2 border border-indigo-800">Name</th>
-                            <th class="px-4 py-2 border border-indigo-800">Type</th>
-                            <th class="px-4 py-2 border border-indigo-800">Size (Bytes)</th>
-                            <th class="px-4 py-2 border border-indigo-800">Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="bg-gradient-to-tr from-blue-800 to-purple-700 text-white">
-                        {% for row in documents %}
-                        <tr id="row-{{ row.id }}" class="hover:bg-purple-900">
-                            <td class="px-4 py-2 border border-white">{{ row.id }}</td>
-                            <td class="px-4 py-2 border border-white">{{ row.document_name }}</td>
-                            <td class="px-4 py-2 border border-white">{{ row.document_type }}</td>
-                            <td class="px-4 py-2 border border-white">{{ row.file_contents | length }}</td>
-                            <td class="px-4 py-2 border border-white space-x-2">
-                                <button onclick="deleteItem('{{ row.id }}')"
-                                    class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
-                                <a href="/download/{{ row.id }}">
-                                    <button
-                                        class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="overflow-y-auto" style="max-height: 640px;">
+                    <table class="w-full text-sm text-left border-collapse table-auto">
+                        <thead class="bg-white text-indigo-800 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-4 py-2 border border-indigo-800">ID</th>
+                                <th class="px-4 py-2 border border-indigo-800">Name</th>
+                                <th class="px-4 py-2 border border-indigo-800">Type</th>
+                                <th class="px-4 py-2 border border-indigo-800">Size (Bytes)</th>
+                                <th class="px-4 py-2 border border-indigo-800">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gradient-to-tr from-blue-800 to-purple-700 text-white">
+                            {% for row in documents %}
+                            <tr id="row-{{ row.id }}" class="hover:bg-purple-900" style="height: 64px;">
+                                <td class="px-4 py-2 border border-white">{{ row.id }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.document_name }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.document_type }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.file_contents | length }}</td>
+                                <td class="px-4 py-2 border border-white space-x-2">
+                                    <button onclick="deleteItem('{{ row.id }}')"
+                                        class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
+                                    <a href="/download/{{ row.id }}">
+                                        <button
+                                            class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}

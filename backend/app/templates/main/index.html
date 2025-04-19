@@ -49,7 +49,8 @@
     </div>
 
     <!-- Document Viewer -->
-    <div class="flex flex-col w-full md:w-1/2 justify-center animated-gradient text-white px-6 py-12 md:px-10 overflow-y-auto">
+    <div
+        class="flex flex-col w-full md:w-1/2 justify-center animated-gradient text-white px-6 py-12 md:px-10 overflow-y-auto">
 
         <h1 class="text-2xl md:text-3xl font-bold mb-4 font-inter">Public Document Viewer</h1>
         <p class="mb-6 text-white text-base font-poppins">
@@ -58,31 +59,34 @@
         </p>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left border border-white text-white">
-                <thead class="bg-white text-indigo-800">
-                    <tr>
-                        <th class="px-4 py-2 border">Document Name</th>
-                        <th class="px-4 py-2 border">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in documents %}
-                    <tr class="hover:bg-purple-900">
-                        <td class="px-4 py-2 border">{{ row.document_name }}</td>
-                        <td class="px-4 py-2 border">
-                            <a href="/download/{{ row.id }}">
-                                <button class="bg-white text-purple-700 px-3 py-1 rounded hover:bg-gray-100 transition">
-                                    Download
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="overflow-x-auto border border-white">
+            <div class="max-h-[640px] overflow-y-auto"> 
+                <table class="w-full text-sm text-left border-collapse text-white">
+                    <thead class="bg-white text-indigo-800 sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 py-2 border border-white">Document Name</th>
+                            <th class="px-4 py-2 border border-white">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gradient-to-tr from-blue-800 to-purple-700">
+                        {% for row in documents %}
+                        <tr class="hover:bg-purple-900" style="height: 64px;">
+                            <td class="px-4 py-2 border border-white">{{ row.document_name }}</td>
+                            <td class="px-4 py-2 border border-white">
+                                <a href="/download/{{ row.id }}">
+                                    <button
+                                        class="bg-white text-purple-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">
+                                        Download
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-</div>
-{% endblock %}
+
+    </div>
+    {% endblock %}
