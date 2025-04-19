@@ -15,13 +15,10 @@
     }
 
     function handleFileSelect(input) {
-        const fileLabel = document.getElementById("selected-file-name");
         const uploadControls = document.getElementById("upload-controls");
         if (input.files && input.files.length > 0) {
-            fileLabel.textContent = `You are uploading: ${input.files[0].name}`;
             uploadControls.classList.remove("hidden");
         } else {
-            fileLabel.textContent = "";
             uploadControls.classList.add("hidden");
         }
     }
@@ -31,6 +28,65 @@
         input.value = "";
         handleFileSelect(input);
     }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("upload-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            // Disable "Choose a different file" button during upload
+            const chooseAnotherBtn = document.getElementById("choose-another-button");
+            chooseAnotherBtn.disabled = true;
+            chooseAnotherBtn.classList.add("opacity-50", "cursor-not-allowed");
+
+            // Show spinner
+            document.getElementById("spinner").classList.remove("hidden");
+
+            fetch("{{ url_for('main.admin') }}", {
+                method: "POST",
+                body: formData,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    const table = document.querySelector("tbody");
+                    const doc = data.document;
+                    const newRow = document.createElement("tr");
+                    newRow.setAttribute("id", `row-${doc.id}`);
+                    newRow.className = "hover:bg-purple-900";
+                    newRow.innerHTML = `
+                    <td class="px-4 py-2 border border-white">${doc.id}</td>
+                    <td class="px-4 py-2 border border-white">${doc.name}</td>
+                    <td class="px-4 py-2 border border-white">${doc.type}</td>
+                    <td class="px-4 py-2 border border-white">${doc.size}</td>
+                    <td class="px-4 py-2 border border-white space-x-2">
+                        <button onclick="deleteItem('${doc.id}')" class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
+                        <a href="/download/${doc.id}">
+                            <button class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
+                        </a>
+                    </td>
+                `;
+                    table.appendChild(newRow);
+
+                    resetFileInput();
+                    document.getElementById("upload-controls").classList.add("hidden");
+                })
+                .catch((err) => {
+                    console.error("Upload error:", err);
+                })
+                .finally(() => {
+                    // Hide spinner and re-enable button
+                    document.getElementById("spinner").classList.add("hidden");
+                    chooseAnotherBtn.disabled = false;
+                    chooseAnotherBtn.classList.remove("opacity-50", "cursor-not-allowed");
+                });
+        });
+    });
 </script>
 
 
@@ -40,19 +96,18 @@
 </div>
 
 <div class="min-h-screen flex flex-col md:flex-row font-sans">
-    <div
-        class="w-full md:w-1/2 relative bg-gradient-to-tr from-blue-800 to-purple-700 text-black px-6 py-10 md:px-10 flex items-center justify-center">
+    <div <div
+        class="w-full md:w-1/2 relative animated-gradient text-black px-6 py-10 md:px-10 flex items-center justify-center">
 
         <div class="absolute top-4 left-4 text-white text-2xl font-bold font-inter">
             {{ user.username }} is logged into the Admin Dashboard
         </div>
 
 
-            <!-- Upload Form -->
-
+        <!-- Upload Form -->
         <div class="flex justify-center items-center">
             <div class="bg-white border border-white rounded-2xl shadow-md p-8 w-full max-w-md">
-                <form method="POST" enctype="multipart/form-data" action="{{ url_for('main.admin') }}">
+                <form id="upload-form" enctype="multipart/form-data">
                     {{ upload_form.hidden_tag() }}
 
                     <h1 class="font-bold text-3xl md:text-4xl mb-4 leading-relaxed font-inter">
@@ -66,22 +121,36 @@
                     <div class="mb-4">
                         <label class="block text-sm mb-1 font-semibold" for="pdf_file">Choose a PDF:</label>
                         <div class="relative">
-                            {{ upload_form.pdf_file(class="block w-full border border-white rounded-xl bg-indigo-100
-                            text-black cursor-pointer py-2 px-4", id="pdf_file", onchange="handleFileSelect(this)") }}
+                            {{ upload_form.pdf_file(
+                            class="block w-full text-sm text-gray-800 font-semibold
+                            file:mr-4 file:py-2 file:px-4 file:rounded-xl
+                            file:border-0 file:text-white file:bg-indigo-600
+                            hover:file:bg-indigo-700",
+                            id="pdf_file",
+                            onchange="handleFileSelect(this)"
+                            ) }}
                         </div>
                     </div>
-
-                    <p id="selected-file-name" class="text-sm mb-3 font-semibold"></p>
 
                     <div id="upload-controls" class="hidden space-y-2">
                         <div>
                             {{ upload_form.submit(class="w-full bg-indigo-600 hover:bg-indigo-700 text-white
                             font-semibold py-2 px-4 rounded-xl") }}
                         </div>
-                        <button type="button" onclick="resetFileInput()"
+                        <button type="button" id="choose-another-button" onclick="resetFileInput()"
                             class="w-full bg-gray-300 hover:bg-gray-400 text-black font-semibold py-2 px-4 rounded-xl">
                             Choose a different file
                         </button>
+                    </div>
+
+                    <div id="spinner" class="hidden text-center mt-4">
+                        <svg class="animate-spin h-6 w-6 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        <p class="text-indigo-600 mt-2 font-semibold">Processing Document...</p>
                     </div>
 
                     {% if error %}
@@ -118,10 +187,10 @@
                             <td class="px-4 py-2 border border-white">{{ row.file_contents | length }}</td>
                             <td class="px-4 py-2 border border-white space-x-2">
                                 <button onclick="deleteItem('{{ row.id }}')"
-                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded transition">Delete</button>
+                                    class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
                                 <a href="/download/{{ row.id }}">
                                     <button
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded transition">Download</button>
+                                        class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
                                 </a>
                             </td>
                         </tr>

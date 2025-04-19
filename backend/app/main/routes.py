@@ -139,8 +139,13 @@ def admin():
 
             return (
                 jsonify({
-                    "message": f"File '{uploaded_file.filename}' uploaded successfully!"
-                }),
+                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
+                        "id": new_document.id,
+                        "name": file_name,
+                        "type": file_type,
+                        "size": len(new_document.file_contents)
+                        }
+                        }),
                 200,
             )
         else:
