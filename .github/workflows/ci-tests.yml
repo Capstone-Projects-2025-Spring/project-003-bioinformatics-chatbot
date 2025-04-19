@@ -41,10 +41,7 @@ jobs:
         run: docker-compose build -d
 
       - name: Start containers
-        run: docker-compose up -d --wait --wait-timeout 120
-
-      - name: Insure ollama is finished pulling
-        run: docker-compose exec -T backend
+        run: docker-compose up -d --wait --wait-timeout 180
 
       - name: Start backend tests
         run: docker-compose exec -T backend python -m pytest -vv
