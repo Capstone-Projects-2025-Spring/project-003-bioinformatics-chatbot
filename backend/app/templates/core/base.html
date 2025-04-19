@@ -1,11 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bioinformatics Backend</title>
-  </head>
-  <body>
-    {% block content %}{% endblock %}
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bioinformatics Backend</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+  
+    body {
+      background-color: var(--color-bgLight);
+      color: var(--color-textDark);
+      font-family: var(--font-body);
+    }
+
+    @keyframes gradient-flow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .animated-gradient {
+      background: linear-gradient(135deg, #1e3a8a, #6b21a8, #9333ea);
+      background-size: 400% 400%;
+      animation: gradient-flow 6s ease infinite;
+    }
+  </style>
+</head>
+
+<body class="text-gray-800">
+  {% block content %}{% endblock %}
+</body>
+
 </html>

@@ -50,7 +50,7 @@ def test_content_file(client, app):
 
             # Post request testing the /uplouad route
             response = client.post(
-                "/upload", data=data, content_type="multipart/form-data"
+                "/admin", data=data, content_type="multipart/form-data"
             )
 
             # Making sure that document was moved into database sucessfully
@@ -86,7 +86,7 @@ def test_validation(client, app):
         client.post("/index", data={"username": "testuser", "password": "password"})
         # Testing for no document uploaded
         data = {}
-        response = client.post("/upload", data=data, content_type="multipart/form-data")
+        response = client.post("/admin", data=data, content_type="multipart/form-data")
 
         #  Making sure the error is being sent
         assert response.status_code == 400

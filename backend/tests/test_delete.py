@@ -43,11 +43,14 @@ def upload_test_document(client, app):
         # Prepare the data dictionary with the file for upload
         data = {"pdf_file": (pdf_file, "test.pdf")}
 
-        # Make the POST request to the upload route
-        response = client.post("/upload", data=data, content_type='multipart/form-data', follow_redirects=True)
+        # Make the POST request to the admin route
+        response =  client.post("/admin", data=data, content_type='multipart/form-data')
         assert response.status_code == 200, f"Upload failed: {response.json}"
+        assert "document" in response.json
+
 
         return db.session.query(Document).filter_by(document_name="test").first()
+
 
 def test_delete_valid_document(client, app):
     """

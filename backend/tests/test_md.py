@@ -44,7 +44,7 @@ def test_md(mock_query_database, client, app):
                     "pdf_file": (io.BytesIO(pdf_file.read()), "Dna.pdf"),
                 }
                 response = client.post(
-                    "/upload", data=data, content_type="multipart/form-data"
+                    "/admin", data=data, content_type="multipart/form-data"
                 )
 
     response = client.post("/chat", json={"message": "Tell me about DNA", "conversationHistory": []})
