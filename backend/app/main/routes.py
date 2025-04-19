@@ -267,10 +267,12 @@ def upload_pdf():
                 jsonify(
                     {
                         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+                        ,"redirect_url": url_for("main.upload_pdf")
                     }
                 ),
                 200,
             )
+           
 
         else:
             return (
@@ -283,7 +285,8 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    return render_template("main/upload.html", form=form)
+    else:
+        return render_template("main/upload.html", form=form)
 
 
 @bp.route("/chat", methods=["POST"])
@@ -383,6 +386,33 @@ def chat_message():
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+
+from flask import request, flash, redirect, render_template, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+
+@bp.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    if request.method == "POST":
+        current = request.form.get("current_password")
+        new = request.form.get("new_password")
+        confirm = request.form.get("confirm_password")
+
+        if not check_password_hash(current_user.password_hash, current):
+            flash("Current password is incorrect.", "error")
+        elif new != confirm:
+            flash("New passwords do not match.", "error")
+        elif new == current:
+            flash("New password cannot be the same as the current password.", "error")
+        else:
+            current_user.password_hash = generate_password_hash(new)
+            db.session.commit()
+            flash("Password changed successfully.", "success")
+            return redirect(url_for("main.admin"))
+
+    return render_template("main/changepassword.html")
+
 
 
 @bp.route("/logout")
