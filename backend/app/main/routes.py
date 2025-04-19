@@ -380,7 +380,7 @@ def chat_message():
 from flask import request, flash, redirect, render_template, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-@bp.route("/change-password", methods=["GET", "POST"])
+@bp.route("/change_password", methods=["GET", "POST"])
 @login_required
 def change_password():
     if request.method == "POST":
@@ -400,7 +400,7 @@ def change_password():
             flash("Password changed successfully.", "success")
             return redirect(url_for("main.admin"))
 
-    return render_template("main/change_password.html")
+    return render_template("main/changepassword.html")
 
 
 
