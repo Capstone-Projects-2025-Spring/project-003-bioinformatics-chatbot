@@ -244,7 +244,6 @@ export default function ChatBox({
 							)}
 							{isDialogOpen ? (
 								<button
-									data-testid='downloadButtontxt'
 									onClick={(e) => {
 										e.preventDefault(); // Prevent the default behavior
 										setIsDialogOpen(false);
