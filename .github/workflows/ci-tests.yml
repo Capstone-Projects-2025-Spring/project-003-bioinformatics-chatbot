@@ -44,13 +44,12 @@ jobs:
         run: docker-compose up -d
 
       - name: Wait for services to be ready
-        run: sleep 20 
+        run: sleep 120
 
       - name: Start backend tests
         run: docker-compose exec -T backend python -m pytest -vv
         continue-on-error: false # Continue running the pipeline even if backend tests fail
 
-  
       - name: Run frontend tests
         run: docker-compose exec -T frontend npm run test
         env:

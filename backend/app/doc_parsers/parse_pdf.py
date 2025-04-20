@@ -2,6 +2,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 import os
+import fitz  # PyMuPDF
 
 
 DATA_PATH = os.path.abspath("./tests/test_data/Dna.pdf")
@@ -36,8 +37,21 @@ def load_documents(FILE_PATH):
     Returns:
         LIST (_type_): List of Document object for each page
     """
-    document_loader = PyPDFLoader(FILE_PATH)
-    return document_loader.load()
+    doc = fitz.open(FILE_PATH)
+    documents = []
+    for i, page in enumerate(doc):
+        text = page.get_text("text")
+        if text.strip():
+            documents.append(
+                Document(
+                    page_content=text,
+                    metadata={
+                        "page_number": i + 1,
+                        "source": FILE_PATH
+                    },
+                )
+            )
+    return documents
 
 
 # Split the pdf pages into chuck for easier use and clearness
