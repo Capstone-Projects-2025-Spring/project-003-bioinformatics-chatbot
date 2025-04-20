@@ -18,7 +18,7 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 
     - If the answer is not found in the documentation:
         - The chatbot will say "I don't know" as an answer for the user.
-### Diagrams      
+      
 
 ![Figure 1: ChatBot Question and Answer System](../../static/img/chatandanswer.png)  
 *Figure 1: ChatBot Question and Answer System*
@@ -37,7 +37,7 @@ As a user, I should have the functionality of downloading the conversation betwe
 3. A notification appears on the screen that the download is ready to be saved to the user's computer.
 
 4. The user presses the "Save" button to save the history of the converstation with the chatbot file to their device.
-### Diagrams   
+   
 ![Figure 2: ChatBot downloading conversation System](../../static/img/Downloadrevise.png)  
 *Figure 2: ChatBot Question and Answer System*
 
@@ -48,7 +48,7 @@ Users shoud be able view previous conversations with the chatbot and ask new que
 1. The chatbot and the user are currently in conversation with one another.
 2. The user navigates to the scroll bar.
 3. He or she moves the bar up or down so that the past conversations are shown on the screen.
-### Diagrams   
+  
 ![Figure 3: ChatBot downloading conversation System](../../static/img/historyrevise.png)  
 *Figure 3: ChatBot viewing history System*
 
@@ -64,7 +64,7 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 3. He or she selects the edit icon.
 4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
-### Diagrams   
+ 
 ![Figure 4: ChatBot re-edit/ re-send queries System](../../static/img/Resendrevise.png)  
 *Figure 4: ChatBot re-edit/ re-send queries System*
 
@@ -76,7 +76,7 @@ Users should have the ability to create a new chat with the chatbot.
 
 
 
-### Diagrams   
+
 ![Figure 5: ChatBot open new chat System](../../static/img/newchatrevise.png)  
 *Figure 5: ChatBot open new chat System*
 
@@ -89,8 +89,7 @@ Users should have the ability to upload documents to the chatbot.
 1. The user login then get redirect to admin dashboard.
 2. User then select upload option and get redirected to upload page.
 3. The user selects ONLY pdf document files to database.
-
-### Diagrams   
+  
 ![Figure 6: ChatBot upload document System](../../static/img/upload.png)  
 *Figure 6: ChatBot upload document System*
 
@@ -109,7 +108,7 @@ Admin/ Product owner should have the ability to delete PDF documents uploaded
 ## Use Case 8 - Download PDF  
 
 
-### All user should be able to see the list of PDFs uploaded without logging in to backend.
+#### All user should be able to see the list of PDFs uploaded without logging in to backend.
 
 ![Figure 8: ChatBot delete document System](../../static/img/downloadpdfs.png)  
 *Figure 8: ChatBot downloading document System*

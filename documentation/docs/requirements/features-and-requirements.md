@@ -35,6 +35,12 @@ sidebar_position: 4
 - The system can ensure that uploaded documents are properly stored.
 - The system can validate file format before accepting uploads.
 
+#### 4. Delete uploaded Documents
+- The system can allow users to log into or out of a document upload/delete portal.
+- The system can allow authorized users to delete existed documents.
+- The system can ensure that uploaded documents are properly deleted.
+
+
 ## Non-Functional Requirements
 
 #### 1. Availability & Reliability

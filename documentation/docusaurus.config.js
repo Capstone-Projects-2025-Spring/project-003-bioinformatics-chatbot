@@ -19,27 +19,18 @@ const main_template_jira_scripts = () => {
   }
 }
 
-// Fallback value if PROJECT_NAME is not defined:
-const rawProjectName = process.env.PROJECT_NAME || 'docs-dev-mode';
+
+const title = "BioGenie";
 
 // Transform PROJECT_NAME (or fallback) to a title-like string:
-const title = rawProjectName
-  .replaceAll('-', ' ')
-  .split(' ')
-  .map(word => {
-    // Make sure the word has at least one character
-    return word.length > 0 
-      ? word[0].toUpperCase() + word.substring(1) 
-      : '';
-  })
-  .join(' ');
+
 
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   /*TODO: Change to your project's title and tagline*/
   title: title,
-  tagline: 'Owls are cool',
+  tagline: 'BioGenie: A friendly RAG model for your documents.',
   /*Unless you move this website to a seperate repo don't change url and baseurl.*/
   url: 'https://'+process.env.ORG_NAME+'.github.io/',
   baseUrl: '/'+process.env.PROJECT_NAME+'/',
