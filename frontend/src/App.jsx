@@ -4,6 +4,7 @@ import UserBubble from "./Components/userBubble";
 import ResponseBubble from "./Components/responseBubble";
 import ErrorBox from "./Components/errorBox";
 import api from "./api/api";
+import axios from "axios";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
@@ -175,8 +176,8 @@ function App() {
 		 */
 
 		setLoading(true);
-		api
-			.post("chat", {
+		axios
+			.post("http://localhost:444/chat", {
 				message: input,
 				conversationHistory: updatedMessages,
 			})
@@ -499,8 +500,8 @@ function App() {
 							</p>
 							<p className='mt-1 max-w-2xl text-center text-lg text-primary text-primary'>
 								To view the list of documents visit:{" "}
-								<a href={api.defaults.baseURL} className='text-accent'>
-									{api.defaults.baseURL}
+								<a href={api && api.defaults.baseURL} className='text-accent'>
+									{api && api.defaults.baseURL}
 								</a>
 							</p>
 						</div>
