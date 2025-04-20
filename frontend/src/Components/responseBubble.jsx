@@ -38,7 +38,7 @@ export default function ResponseBubble({ text }) {
 	};
 
 	return (
-		<div className='relative w-full px-4 pb-8 pt-2 bg-transparent text-primary break-words whitespace-pre-wrap mb-2 group'>
+		<div className='relative w-full px-4 pb-8 pt-2 bg-transparent text-primary overflow-wrap break-word break-words whitespace-pre-wrap mb-2 group'>
 			<ReactMarkdown>{text}</ReactMarkdown>
 
 			<button
