@@ -53,7 +53,7 @@ jobs:
         continue-on-error: false # Continue running the pipeline even if backend tests fail
 
       - name: Run frontend tests
-        run: docker-compose exec -T frontend npm run coverage
+        run: docker-compose exec -T frontend npx vitest run --coverage
         env:
           CI: true
         continue-on-error: false # Continue running the pipeline even if backend tests fail
