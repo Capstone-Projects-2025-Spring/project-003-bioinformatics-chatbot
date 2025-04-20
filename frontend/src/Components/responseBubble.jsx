@@ -5,6 +5,7 @@
 
 import PropTypes from "prop-types";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 /**
  * PropTypes for the ResponseBubble component.
@@ -12,13 +13,13 @@ import { useState } from "react";
  * @property {string} text - The text message to display in the response bubble.
  */
 
-// Define PropTypes for validation
 ResponseBubble.propTypes = {
-	text: PropTypes.string.isRequired, // `text` is a required prop of type string
+	text: PropTypes.string.isRequired,
 };
 
 /**
  * ResponseBubble component renders a styled bubble displaying a text message.
+ * Supports Markdown formatting.
  *
  * @component
  * @param {object} props - The component props.
@@ -27,17 +28,85 @@ ResponseBubble.propTypes = {
  */
 
 export default function ResponseBubble({ text }) {
-	const [isCopied, setIsCopied] = useState(false); // State to track if text is copied
+	const markdownText = `
+# 🧬 CRISPR-Cas9 in Human Gene Editing
+
+CRISPR-Cas9 is **revolutionizing modern medicine**, especially in the field of **gene editing**. Here's a breakdown of its impact and recent advancements:
+
+---
+
+## 🧪 What is CRISPR-Cas9?
+
+CRISPR-Cas9 is a _genome editing tool_ derived from a bacterial defense system. It enables scientists to:
+
+- Cut DNA at specific locations  
+- Disable malfunctioning genes  
+- Insert or repair genes with high precision  
+
+> "It’s like a pair of molecular scissors guided by GPS." — Geneticist
+
+---
+
+## ⚡ Recent Breakthroughs (2024–2025)
+
+### 1. **Sickle Cell Disease Therapy**
+- 🔬 *Technique:* Ex vivo CRISPR correction of patient hematopoietic stem cells  
+- ✅ *Result:* >90% of patients symptom-free in clinical trials
+
+### 2. **Cancer Immunotherapy**
+- 🧫 *Approach:* CRISPR-edited CAR-T cells  
+- 🎯 *Target:* Tumor-specific antigens  
+- 📈 *Outcome:* Improved T-cell persistence and tumor regression
+
+### 3. **Vision Restoration**
+- 👁 *Condition:* Leber Congenital Amaurosis (LCA)  
+- 🧬 *Tool:* In vivo editing using viral delivery  
+- 🌟 *Impact:* Partial sight restoration in blind patients
+
+---
+
+## 📚 Code Example (just for fun!)
+
+\`\`\`python
+def edit_gene(sequence, target, replacement):
+    if target in sequence:
+        return sequence.replace(target, replacement)
+    return sequence
+
+print(edit_gene("ATCGGATC", "GGA", "TTT"))  # Simulated gene edit
+\`\`\`
+
+---
+
+## 📌 Ethical Considerations
+
+- ⚖️ Germline editing remains controversial  
+- 🧒 Heritable changes could affect future generations  
+- 🧑‍⚖️ Global consensus still evolving
+
+---
+
+## 🔗 Learn More
+- [Nature CRISPR Collection](https://www.nature.com/collections/crispr)
+- [CRISPR Clinical Trials Tracker](https://crisprtrials.org)
+
+---
+
+*Last Updated: April 2025*
+`;
+	const [isCopied, setIsCopied] = useState(false);
 
 	const handleCopy = () => {
 		navigator.clipboard.writeText(text).then(() => {
 			setIsCopied(true);
-			setTimeout(() => setIsCopied(false), 1000); // Reset the icon after 1 second
+			setTimeout(() => setIsCopied(false), 1000);
 		});
 	};
+
 	return (
 		<div className='relative w-full px-4 pb-8 pt-2 bg-transparent text-primary break-words whitespace-pre-wrap mb-2 group'>
-			<div>{text}</div>
+			<ReactMarkdown>{markdownText}</ReactMarkdown>
+
 			<button
 				className='relative mt-3 mb-2 rounded-xl'
 				onClick={handleCopy}
