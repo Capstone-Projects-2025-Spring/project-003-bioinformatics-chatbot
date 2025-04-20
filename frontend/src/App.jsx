@@ -3,7 +3,7 @@ import ChatBox from "./Components/chatBox";
 import UserBubble from "./Components/userBubble";
 import ResponseBubble from "./Components/responseBubble";
 import ErrorBox from "./Components/errorBox";
-import axios from "axios";
+import api from "./api/api";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
@@ -175,17 +175,15 @@ function App() {
 		 */
 
 		setLoading(true);
-		axios
-			.post("http://localhost:444/chat", {
+		api
+			.post("chat", {
 				message: input,
 				conversationHistory: updatedMessages,
 			})
 			.then((response) => {
 				const botResponse = {
 					id: messages.length + 1,
-					text:
-						response.data.response +
-						"**Bold** text and _italic_ text.\n\n- List item 1\n- List item 2\n\n`inline code`",
+					text: response.data.response,
 					type: "Response",
 					sender: "Chatbot",
 				};
@@ -403,13 +401,13 @@ function App() {
 	];
 
 	const capabilities = [
-		"Searches PubMed & other bio databases using RAG",
+		"Answers bioinformatics questions using a RAG model",
 		"Summarizes papers with domain-specific language",
 		"Supports follow-up questions & interactive exploration",
 	];
 
 	const limitations = [
-		"May miss context or misinterpreting of results",
+		"May miss context or misinterpret results, leading to inaccuracies",
 		"Not a substitute for expert review of literature",
 		"May not always access the very latest research",
 	];
@@ -441,8 +439,8 @@ function App() {
 			)}
 
 			{messages.length == 0 ? (
-				<main className='flex flex-1 flex-col justify-center items-center font-body h-full overflow-y-auto p-10'>
-					<div className=' mt-3 flex flex-col justify-center items-center mb-12'>
+				<main className='flex flex-1 flex-col justify-center items-center font-body h-full overflow-y-auto p-10 '>
+					<div className=' mt-3 flex flex-col justify-center items-center mb-7'>
 						<svg
 							width='180'
 							height='180'
@@ -497,6 +495,12 @@ function App() {
 							An advanced chatbot designed to assist researchers in
 							bioinformatics by retrieving and summarizing relevant scientific
 							literature using a retrieval-augmented generation (RAG) model.
+						</p>
+						<p className='mt-1 max-w-2xl text-center text-lg text-primary text-primary'>
+							To view the list of documents visit:{" "}
+							<a href={api.defaults.baseURL} className='text-accent'>
+								{api.defaults.baseURL}
+							</a>
 						</p>
 					</div>
 					<div className='grid grid-cols-1 md:grid-cols-3 gap-6 text-primary pb-16 max-w-6xl mx-auto w-full'>
