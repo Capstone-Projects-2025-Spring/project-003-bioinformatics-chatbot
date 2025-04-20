@@ -7,6 +7,8 @@ from flask_migrate import Migrate
 from langchain_ollama import OllamaEmbeddings
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
+from langchain_ollama import OllamaEmbeddings
+
 from flask_login import LoginManager
 
 # load_dotenv()
@@ -43,11 +45,22 @@ def create_app(config_class=Config):
     #embeddings=DeterministicFakeEmbedding(size=4096),
     login_manager.init_app(app)
 
+    """
     app.vector_db = PGVector(
-         embeddings=OllamaEmbeddings(model="llama3.1", base_url="http://ollama:11434", num_ctx=4096, repeat_last_n=128, temperature=0.4, top_k=20, top_p=0.7, repeat_penalty=1.3, tfs_z=2.0),
-         collection_name="vectorized_docs",
-         connection=app.config["SQLALCHEMY_DATABASE_URI"]
-     )
+        embeddings=OllamaEmbeddings(model="llama3.1", base_url="http://ollama:11434", num_ctx=4096, repeat_last_n=128, temperature=0.4, top_k=20, top_p=0.7, repeat_penalty=1.3, tfs_z=2.0),
+        collection_name="vectorized_docs",
+        connection=app.config["SQLALCHEMY_DATABASE_URI"]
+    )
+    """
+
+    app.vector_db = PGVector(
+        embeddings=OllamaEmbeddings(
+            model="mxbai-embed-large",
+            base_url="http://ollama:11434",
+        ),
+        collection_name="vectorized_docs",
+        connection=app.config["SQLALCHEMY_DATABASE_URI"],
+    )
 
 
     from app.main import bp as main_bp
@@ -61,4 +74,3 @@ def create_app(config_class=Config):
 def load_user(user_id):
     from app.models import User
     return User.query.get(int(user_id))
-

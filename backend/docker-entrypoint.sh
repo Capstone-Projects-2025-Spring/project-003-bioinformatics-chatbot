@@ -13,6 +13,9 @@ done
 echo "Pulling Ollama model..."
 curl -X POST http://ollama:11434/api/pull -d '{"name": "llama3.1"}'
 
+echo "Pulling Embedding model..."
+curl -X POST http://ollama:11434/api/pull -d '{"name": "mxbai-embed-large"}'
+
 python ./setup/seed.py
 # some variables for flask
 # app entrypont
