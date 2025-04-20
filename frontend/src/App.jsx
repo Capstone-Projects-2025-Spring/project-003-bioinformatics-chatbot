@@ -439,137 +439,139 @@ function App() {
 			)}
 
 			{messages.length == 0 ? (
-				<main className='flex flex-1 flex-col justify-center items-center font-body h-full overflow-y-auto p-10 '>
-					<div className=' mt-3 flex flex-col justify-center items-center mb-7'>
-						<svg
-							width='180'
-							height='180'
-							viewBox='0 0 200 200'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'>
-							{/* DNA Helix */}
-							<path
-								d='M60 40 C100 60, 100 140, 60 160'
-								stroke='oklch(60% 0.12 296)'
-								strokeWidth='6'
+				<main className='flex-1 overflow-y-auto'>
+					<div className='min-h-full flex flex-col justify-center items-center px-10'>
+						<div className='flex flex-col items-center mb-7'>
+							<svg
+								width='180'
+								height='180'
+								viewBox='0 0 200 200'
 								fill='none'
-							/>
-							<path
-								d='M140 40 C100 60, 100 140, 140 160'
-								stroke='oklch(60% 0.12 296)'
-								strokeWidth='6'
-								fill='none'
-							/>
-
-							{/* Connecting Rungs */}
-							<line
-								x1='80'
-								y1='60'
-								x2='120'
-								y2='60'
-								stroke='oklch(70% 0.09 296)'
-								strokeWidth='3'
-							/>
-							<line
-								x1='80'
-								y1='90'
-								x2='120'
-								y2='90'
-								stroke='oklch(70% 0.09 296)'
-								strokeWidth='3'
-							/>
-							<line
-								x1='80'
-								y1='120'
-								x2='120'
-								y2='120'
-								stroke='oklch(70% 0.09 296)'
-								strokeWidth='3'
-							/>
-						</svg>
-						<h1 className='text-3xl font-bold text-primary font-heading'>
-							BioGenie
-						</h1>
-						{/* Description */}
-						<p className='mt-4 max-w-2xl text-center text-lg text-primary'>
-							An advanced chatbot designed to assist researchers in
-							bioinformatics by retrieving and summarizing relevant scientific
-							literature using a retrieval-augmented generation (RAG) model.
-						</p>
-						<p className='mt-1 max-w-2xl text-center text-lg text-primary text-primary'>
-							To view the list of documents visit:{" "}
-							<a href={api.defaults.baseURL} className='text-accent'>
-								{api.defaults.baseURL}
-							</a>
-						</p>
-					</div>
-					<div className='grid grid-cols-1 md:grid-cols-3 gap-6 text-primary pb-16 max-w-6xl mx-auto w-full'>
-						{/* Examples with hoverable color change */}
-						<div>
-							<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
+								xmlns='http://www.w3.org/2000/svg'>
+								{/* DNA Helix */}
+								<path
+									d='M60 40 C100 60, 100 140, 60 160'
+									stroke='oklch(60% 0.12 296)'
+									strokeWidth='6'
 									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={1.5}
-									stroke='currentColor'
-									className='size-6 mr-1'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18'
-									/>
-								</svg>
-								Examples
-							</h2>
-							<div className='flex flex-col gap-4'>
-								{renderCards(examples, exampleCardStyle)}
-							</div>
+								/>
+								<path
+									d='M140 40 C100 60, 100 140, 140 160'
+									stroke='oklch(60% 0.12 296)'
+									strokeWidth='6'
+									fill='none'
+								/>
+
+								{/* Connecting Rungs */}
+								<line
+									x1='80'
+									y1='60'
+									x2='120'
+									y2='60'
+									stroke='oklch(70% 0.09 296)'
+									strokeWidth='3'
+								/>
+								<line
+									x1='80'
+									y1='90'
+									x2='120'
+									y2='90'
+									stroke='oklch(70% 0.09 296)'
+									strokeWidth='3'
+								/>
+								<line
+									x1='80'
+									y1='120'
+									x2='120'
+									y2='120'
+									stroke='oklch(70% 0.09 296)'
+									strokeWidth='3'
+								/>
+							</svg>
+							<h1 className='text-3xl font-bold text-primary font-heading'>
+								BioGenie
+							</h1>
+							{/* Description */}
+							<p className='mt-4 max-w-2xl text-center text-lg text-primary'>
+								An advanced chatbot designed to assist researchers in
+								bioinformatics by retrieving and summarizing relevant scientific
+								literature using a retrieval-augmented generation (RAG) model.
+							</p>
+							<p className='mt-1 max-w-2xl text-center text-lg text-primary text-primary'>
+								To view the list of documents visit:{" "}
+								<a href={api.defaults.baseURL} className='text-accent'>
+									{api.defaults.baseURL}
+								</a>
+							</p>
 						</div>
-
-						{/* Capabilities */}
-						<div>
-							<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={1.5}
-									stroke='currentColor'
-									className='size-6 mr-1'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z'
-									/>
-								</svg>
-								Capabilities
-							</h2>
-							<div className='flex flex-col gap-4'>
-								{renderCards(capabilities, sectionStyle)}
+						<div className='grid grid-cols-1 md:grid-cols-3 gap-6 text-primary pb-10 max-w-6xl mx-auto w-full'>
+							{/* Examples with hoverable color change */}
+							<div>
+								<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-6 mr-1'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18'
+										/>
+									</svg>
+									Examples
+								</h2>
+								<div className='flex flex-col gap-4'>
+									{renderCards(examples, exampleCardStyle)}
+								</div>
 							</div>
-						</div>
 
-						{/* Limitations */}
-						<div>
-							<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={1.5}
-									stroke='currentColor'
-									className='size-6 mr-2'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.25-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z'
-									/>
-								</svg>
-								Limitations
-							</h2>
-							<div className='flex flex-col gap-4'>
-								{renderCards(limitations, sectionStyle)}
+							{/* Capabilities */}
+							<div>
+								<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-6 mr-1'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z'
+										/>
+									</svg>
+									Capabilities
+								</h2>
+								<div className='flex flex-col gap-4'>
+									{renderCards(capabilities, sectionStyle)}
+								</div>
+							</div>
+
+							{/* Limitations */}
+							<div>
+								<h2 className='text-xl font-semibold mb-4 text-center font-heading flex justify-center'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-6 mr-2'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M12 9v3.75m0-10.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.25-8.25-3.286Zm0 13.036h.008v.008H12v-.008Z'
+										/>
+									</svg>
+									Limitations
+								</h2>
+								<div className='flex flex-col gap-4'>
+									{renderCards(limitations, sectionStyle)}
+								</div>
 							</div>
 						</div>
 					</div>
