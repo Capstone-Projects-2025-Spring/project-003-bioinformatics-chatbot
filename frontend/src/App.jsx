@@ -177,7 +177,7 @@ function App() {
 
 		setLoading(true);
 		axios
-			.post("http://localhost:444/chat", {
+			.post(api.defaults.baseURL, {
 				message: input,
 				conversationHistory: updatedMessages,
 			})
@@ -500,8 +500,8 @@ function App() {
 							</p>
 							<p className='mt-1 max-w-2xl text-center text-lg text-primary text-primary'>
 								To view the list of documents visit:{" "}
-								<a href={api && api.defaults.baseURL} className='text-accent'>
-									{api && api.defaults.baseURL}
+								<a href={api && api.defaults.adminURL} className='text-accent'>
+									{api && api.defaults.adminURL}
 								</a>
 							</p>
 						</div>
