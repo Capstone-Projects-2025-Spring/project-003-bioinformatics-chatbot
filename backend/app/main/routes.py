@@ -87,6 +87,7 @@ def admin():
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
+@login_required
 def delete_item(item_id):
     """
 
