@@ -67,7 +67,7 @@ def index():
     return render_template("main/index.html", form=form, documents=documents)
 
 
-@bp.route("/admin")
+@bp.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin():
     """
@@ -83,10 +83,81 @@ def admin():
         db.session.add(user)
         db.session.commit()
 
+    form = PDFUploadForm()
     # fetch all document from database
     documents = db.session.query(Document).all()
 
-    return render_template("main/admin.html", user=user, documents=documents)
+    if request.method == "POST":  # Handle form submission
+        if form.validate_on_submit():
+            uploaded_file = form.pdf_file.data
+
+            # Check if a file was uploaded
+            if not uploaded_file:
+                return jsonify({"error": "No file uploaded"}), 400
+
+            # Check if the uploaded file is a PDF (MIME type and file extension)
+            if (
+                uploaded_file.mimetype != "application/pdf"
+                or not uploaded_file.filename.lower().endswith(".pdf")
+            ):
+                return (
+                    jsonify({"error": "Invalid file type. Only PDFs are allowed."}),
+                    400,
+                )
+
+            # Extract file name and type
+            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+
+            # Check if a document with the same name and type already exists
+            existing_document = (
+                db.session.query(Document)
+                .filter_by(document_name=file_name, document_type=file_type)
+                .first()
+            )
+
+            if existing_document:
+                return (
+                    jsonify({
+                        "error": f"A document named '{uploaded_file.filename}' already exists."
+                    }),
+                    409,
+                )
+
+            # Create new document instance
+            new_document = Document(
+                document_name=file_name,
+                document_type=file_type,
+                file_contents=uploaded_file.read(),  # Store binary PDF data
+            )
+
+            # Storing the document into the database
+            db.session.add(new_document)
+            db.session.commit()
+            # Process the upload doc to the parser and index
+            process_doc(new_document)
+
+            return (
+                jsonify({
+                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
+                        "id": new_document.id,
+                        "name": file_name,
+                        "type": file_type,
+                        "size": len(new_document.file_contents)
+                        }
+                        }),
+                200,
+            )
+        else:
+            return (
+                jsonify({
+                    "error": "Invalid form data. Please ensure all fields are filled correctly."
+                }),
+                400,
+            )
+
+    documents = db.session.query(Document).all()
+    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -197,14 +268,11 @@ def test():
     else:
         return jsonify({"message": "No one is here :()."}), 200
 
-
+"""
 @bp.route("/upload", methods=["GET", "POST"])
 @login_required  # Ensure user is logged in to access this route
 def upload_pdf():
-    """
-    Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
-    Keith will implement the actual database storage (done).
-    """
+   
     form = PDFUploadForm()
 
     if request.method == "POST":  # Handle form submission
@@ -285,6 +353,7 @@ def upload_pdf():
     # If it's a GET request, render the upload.html template
     return render_template("main/upload.html", form=form)
 
+    """
 
 @bp.route("/chat", methods=["POST"])
 def chat_message():

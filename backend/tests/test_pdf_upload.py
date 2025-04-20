@@ -45,7 +45,7 @@ def test_upload_pdf_valid(client, app):
         
     
         # Make the POST request to the upload route
-        upload_response = client.post("/upload", data=data, follow_redirects=True)
+        upload_response =  client.post("/admin", data=data, content_type='multipart/form-data')
 
     # Get the JSON response using get_json()
         response_data = upload_response.get_json()
@@ -82,7 +82,7 @@ def test_upload_pdf_dup(client, app):
         }
 
         # Make the POST request to the upload route First time
-        upload_response = client.post("/upload", data=data, follow_redirects=True)
+        upload_response = client.post("/admin", data=data, content_type='multipart/form-data')
 
         # Open the file again in binary read mode
         with open(file_path, 'rb') as f2:
@@ -100,7 +100,7 @@ def test_upload_pdf_dup(client, app):
         
     
         # Make the POST request to the upload route Second time
-        upload_response_2 = client.post("/upload", data=data, follow_redirects=True)
+        upload_response_2 = client.post("/admin", data=data, content_type='multipart/form-data')
 
     # Get the JSON response using get_json()
         response_data = upload_response_2.get_json()
