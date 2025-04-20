@@ -47,8 +47,9 @@ jobs:
         run: sleep 120
 
       - name: Start backend tests
-        run: docker-compose exec -T backend coverage run -m pytest -vv
-        run: docker-compose exec -T backend coverage html -d /coverage/html
+        run: |
+          docker-compose exec -T backend coverage run -m pytest -vv
+          docker-compose exec -T backend coverage html -d /coverage/html
         continue-on-error: false # Continue running the pipeline even if backend tests fail
 
       - name: Run frontend tests
