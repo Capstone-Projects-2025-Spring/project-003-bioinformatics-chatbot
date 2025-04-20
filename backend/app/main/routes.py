@@ -391,7 +391,7 @@ def chat_message():
 
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.30]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.50]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
