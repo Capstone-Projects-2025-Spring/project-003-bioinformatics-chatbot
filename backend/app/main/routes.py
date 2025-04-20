@@ -460,28 +460,27 @@ def chat_message():
 from flask import request, flash, redirect, render_template, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
-@bp.route("/change_password", methods=["GET", "POST"])
+@bp.route("/change_password", methods=["POST"])
 @login_required
 def change_password():
-    if request.method == "POST":
-        current = request.form.get("current_password")
-        new = request.form.get("new_password")
-        confirm = request.form.get("confirm_password")
+    data = request.get_json()
 
-        if not check_password_hash(current_user.password_hash, current):
-            flash("Current password is incorrect.", "error")
-        elif new != confirm:
-            flash("New passwords do not match.", "error")
-        elif new == current:
-            flash("New password cannot be the same as the current password.", "error")
-        else:
-            current_user.password_hash = generate_password_hash(new)
-            db.session.commit()
-            flash("Password changed successfully.", "success")
-            return redirect(url_for("main.admin"))
+    current = data.get("old_password")
+    new = data.get("new_password")
 
-    return render_template("main/changepassword.html")
+    if not current or not new:
+        return jsonify({"success": False, "message": "Missing required fields."}), 400
 
+    if not check_password_hash(current_user.password_hash, current):
+        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+
+    if new == current:
+        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+
+    current_user.password_hash = generate_password_hash(new)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Password changed successfully."}), 200
 
 
 @bp.route("/logout")
