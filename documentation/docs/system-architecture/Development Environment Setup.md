@@ -26,6 +26,6 @@ This document shows to setup the Development Enviroment locally.
 - docker compose -f docker-compose.yml up
 9. Frontend host is http://localhost:5173/s<br />
    Backend host is http://localhost:444/s<br />
-   Username is admins<br />
-   Password is admin
+   Default Username is admin<br />
+   Default Password is admin
 
