@@ -1,79 +1,266 @@
+{% extends "core/base.html" %}
+{% block content %}
 <script>
     function deleteItem(itemId) {
         fetch(`/delete/${itemId}`, { method: 'DELETE' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById(`row-${itemId}`).remove();  // Remove row from UI
-            } else {
-                alert("Failed to delete item.");
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`row-${itemId}`).remove();
+                } else {
+                    alert("Failed to delete item.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
-        
+
+    function handleFileSelect(input) {
+        const uploadControls = document.getElementById("upload-controls");
+        if (input.files && input.files.length > 0) {
+            uploadControls.classList.remove("hidden");
+        } else {
+            uploadControls.classList.add("hidden");
+        }
+    }
+
+    function resetFileInput() {
+        const input = document.getElementById("pdf_file");
+        input.value = "";
+        handleFileSelect(input);
+    }
+    function openPasswordModal() {
+    document.getElementById("passwordModal").classList.remove("hidden");
+    }
+
+    function closePasswordModal() {
+    document.getElementById("passwordModal").classList.add("hidden");
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("upload-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            // Disable "Choose a different file" button during upload
+            const chooseAnotherBtn = document.getElementById("choose-another-button");
+            chooseAnotherBtn.disabled = true;
+            chooseAnotherBtn.classList.add("opacity-50", "cursor-not-allowed");
+
+            // Show spinner
+            document.getElementById("spinner").classList.remove("hidden");
+
+            fetch("{{ url_for('main.admin') }}", {
+                method: "POST",
+                body: formData,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    const table = document.querySelector("tbody");
+                    const doc = data.document;
+                    const newRow = document.createElement("tr");
+                    newRow.setAttribute("id", `row-${doc.id}`);
+                    newRow.className = "hover:bg-purple-900";
+                    newRow.innerHTML = `
+                    <td class="px-4 py-2 border border-white">${doc.id}</td>
+                    <td class="px-4 py-2 border border-white">${doc.name}</td>
+                    <td class="px-4 py-2 border border-white">${doc.type}</td>
+                    <td class="px-4 py-2 border border-white">${doc.size}</td>
+                    <td class="px-4 py-2 border border-white space-x-2">
+                        <button onclick="deleteItem('${doc.id}')" class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
+                        <a href="/download/${doc.id}">
+                            <button class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
+                        </a>
+                    </td>
+                `;
+                    table.appendChild(newRow);
+
+                    resetFileInput();
+                    document.getElementById("upload-controls").classList.add("hidden");
+                })
+                .catch((err) => {
+                    console.error("Upload error:", err);
+                })
+                .finally(() => {
+                    // Hide spinner and re-enable button
+                    document.getElementById("spinner").classList.add("hidden");
+                    chooseAnotherBtn.disabled = false;
+                    chooseAnotherBtn.classList.remove("opacity-50", "cursor-not-allowed");
+                });
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("password-form");
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const oldPassword = document.getElementById("old_password").value;
+        const newPassword = document.getElementById("new_password").value;
+
+        fetch("{{ url_for('main.change_password') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                alert(data.message || "Password updated.");
+                closePasswordModal();
+            })
+            .catch((err) => {
+                console.error("Error changing password:", err);
+                alert("Something went wrong.");
+            });
+    });
+});
 </script>
 
-<style>
-    table {
-        width: 80%;
-        margin: auto;
-        border-collapse: collapse;
-        text-align: center;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 10px;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    button {
-        padding: 5px 10px;
-        background-color: red;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-</style>
+
+<div class="fixed top-4 right-6 z-50 flex flex-col items-end space-y-2">
+    <a href="{{ url_for('main.logout') }}"
+        class="text-white bg-indigo-600 hover:bg-indigo-700 font-semibold px-4 py-2 rounded-xl text-sm transition">
+        Logout
+    </a>
+    
+    <button onclick="openPasswordModal()"
+        class="text-white bg-yellow-500 hover:bg-indigo-700 font-semibold px-4 py-2 rounded-xl text-sm transition">
+        Change Password
+    </button>
+</div>
 
 
-{% extends "core/base.html" %} {% block content %}
-<h1>You are logged in</h1>
-<h2>User: {{user.username}}</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Size (Bytes)</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="data-table">
-        {% for row in documents %}
-        <tr id="row-{{ row.id }}">
-            <td>{{ row.id }}</td>
-            <td>{{ row.document_name }}</td>
-            <td>{{ row.document_type }}</td>
-            <td>{{ row.file_contents | length }}</td>
-            <td> <button onclick="deleteItem('{{ row.id }}')">Delete</button>
-             <a href="/download/{{ row.id }}"> <button>Download</button></a></td>
-            
-            
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="min-h-screen flex flex-col md:flex-row font-sans">
+    <div <div
+        class="w-full md:w-1/2 relative animated-gradient text-black px-6 py-10 md:px-10 flex items-center justify-center">
+
+        <div class="absolute top-4 left-4 text-white text-2xl font-bold font-inter">
+            {{ user.username }} is logged into the Admin Dashboard
+        </div>
 
 
-<!-- Logout button -->
-<a href="{{ url_for('main.logout') }}" class="btn btn-danger">Logout</a>  
+        <!-- Upload Form -->
+        <div class="flex justify-center items-center">
+            <div class="bg-white border border-white rounded-2xl shadow-md p-8 w-full max-w-md">
+                <form id="upload-form" enctype="multipart/form-data">
+                    {{ upload_form.hidden_tag() }}
 
-<h2>Upload PDF Documents</h2>
-<a href="{{ url_for('main.upload_pdf') }}" class="btn btn-primary">Upload PDF</a> 
+                    <h1 class="font-bold text-3xl md:text-4xl mb-4 leading-relaxed font-inter">
+                        Upload a PDF Document
+                    </h1>
 
-{% endblock %}
+                    <p class="text-base mb-6 font-poppins">
+                        Select a file to upload to your admin dashboard.
+                    </p>
 
+                    <div class="mb-4">
+                        <label class="block text-sm mb-1 font-semibold" for="pdf_file">Choose a PDF:</label>
+                        <div class="relative">
+                            {{ upload_form.pdf_file(
+                            class="block w-full text-sm text-gray-800 font-semibold
+                            file:mr-4 file:py-2 file:px-4 file:rounded-xl
+                            file:border-0 file:text-white file:bg-indigo-600
+                            hover:file:bg-indigo-700",
+                            id="pdf_file",
+                            onchange="handleFileSelect(this)"
+                            ) }}
+                        </div>
+                    </div>
+
+                    <div id="upload-controls" class="hidden space-y-2">
+                        <div>
+                            {{ upload_form.submit(class="w-full bg-indigo-600 hover:bg-indigo-700 text-white
+                            font-semibold py-2 px-4 rounded-xl") }}
+                        </div>
+                        <button type="button" id="choose-another-button" onclick="resetFileInput()"
+                            class="w-full bg-gray-300 hover:bg-gray-400 text-black font-semibold py-2 px-4 rounded-xl">
+                            Choose a different file
+                        </button>
+                    </div>
+
+                    <div id="spinner" class="hidden text-center mt-4">
+                        <svg class="animate-spin h-6 w-6 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        <p class="text-indigo-600 mt-2 font-semibold">Processing Document...</p>
+                    </div>
+
+                    {% if error %}
+                    <p class="text-red-500 mt-3 text-sm">{{ error }}</p>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full md:w-1/2 flex flex-col bg-white px-6 py-10 md:px-10 overflow-x-auto justify-center">
+        <div class="mt-6">
+            <h1 class="text-2xl md:text-3xl font-bold mb-6 text-indigo-800 font-inter">Uploaded Documents</h1>
+
+            <div class="overflow-x-auto border border-indigo-800">
+                <div class="overflow-y-auto" style="max-height: 640px;">
+                    <table class="w-full text-sm text-left border-collapse table-auto">
+                        <thead class="bg-white text-indigo-800 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-4 py-2 border border-indigo-800">ID</th>
+                                <th class="px-4 py-2 border border-indigo-800">Name</th>
+                                <th class="px-4 py-2 border border-indigo-800">Type</th>
+                                <th class="px-4 py-2 border border-indigo-800">Size (Bytes)</th>
+                                <th class="px-4 py-2 border border-indigo-800">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gradient-to-tr from-blue-800 to-purple-700 text-white">
+                            {% for row in documents %}
+                            <tr id="row-{{ row.id }}" class="hover:bg-purple-900" style="height: 64px;">
+                                <td class="px-4 py-2 border border-white">{{ row.id }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.document_name }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.document_type }}</td>
+                                <td class="px-4 py-2 border border-white">{{ row.file_contents | length }}</td>
+                                <td class="px-4 py-2 border border-white space-x-2">
+                                    <button onclick="deleteItem('{{ row.id }}')"
+                                        class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
+                                    <a href="/download/{{ row.id }}">
+                                        <button
+                                            class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-sm shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Change Password</h2>
+            <form id="password-form">
+                <label class="block text-sm mb-1 font-semibold text-gray-700" for="old_password">Old Password:</label>
+                <input type="password" id="old_password" name="old_password" required
+                    class="w-full px-3 py-2 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    
+                <label class="block text-sm mb-1 font-semibold text-gray-700" for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required
+                    class="w-full px-3 py-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closePasswordModal()"
+                        class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Cancel</button>
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}

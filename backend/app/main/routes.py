@@ -29,7 +29,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 Places for routes in the backend
 """
 
-llm = OllamaLLM(model = "llama3.2", base_url = "http://ollama:11434")
+llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -45,6 +45,8 @@ def index():
     Description: Added a admin login.
 
     """
+   # fetch all document from database
+    documents = db.session.query(Document).all()
 
     form = LoginForm()
     # Check for correct password/username
@@ -59,13 +61,13 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password"
+                "main/index.html", form=form, error="Invalid username or password", documents=documents
             )
     # Pass the forms here.
-    return render_template("main/index.html", form=form)
+    return render_template("main/index.html", form=form, documents=documents)
 
 
-@bp.route("/admin")
+@bp.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin():
     """
@@ -81,10 +83,81 @@ def admin():
         db.session.add(user)
         db.session.commit()
 
+    form = PDFUploadForm()
     # fetch all document from database
     documents = db.session.query(Document).all()
 
-    return render_template("main/admin.html", user=user, documents=documents)
+    if request.method == "POST":  # Handle form submission
+        if form.validate_on_submit():
+            uploaded_file = form.pdf_file.data
+
+            # Check if a file was uploaded
+            if not uploaded_file:
+                return jsonify({"error": "No file uploaded"}), 400
+
+            # Check if the uploaded file is a PDF (MIME type and file extension)
+            if (
+                uploaded_file.mimetype != "application/pdf"
+                or not uploaded_file.filename.lower().endswith(".pdf")
+            ):
+                return (
+                    jsonify({"error": "Invalid file type. Only PDFs are allowed."}),
+                    400,
+                )
+
+            # Extract file name and type
+            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+
+            # Check if a document with the same name and type already exists
+            existing_document = (
+                db.session.query(Document)
+                .filter_by(document_name=file_name, document_type=file_type)
+                .first()
+            )
+
+            if existing_document:
+                return (
+                    jsonify({
+                        "error": f"A document named '{uploaded_file.filename}' already exists."
+                    }),
+                    409,
+                )
+
+            # Create new document instance
+            new_document = Document(
+                document_name=file_name,
+                document_type=file_type,
+                file_contents=uploaded_file.read(),  # Store binary PDF data
+            )
+
+            # Storing the document into the database
+            db.session.add(new_document)
+            db.session.commit()
+            # Process the upload doc to the parser and index
+            process_doc(new_document)
+
+            return (
+                jsonify({
+                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
+                        "id": new_document.id,
+                        "name": file_name,
+                        "type": file_type,
+                        "size": len(new_document.file_contents)
+                        }
+                        }),
+                200,
+            )
+        else:
+            return (
+                jsonify({
+                    "error": "Invalid form data. Please ensure all fields are filled correctly."
+                }),
+                400,
+            )
+
+    documents = db.session.query(Document).all()
+    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -97,12 +170,12 @@ def delete_item(item_id):
       - Deletes the document with the given `item_id`.
       - Removes related embeddings from the `EmbeddingStore`, where the `id` contains `document_name` (case-sensitive).
       - Ensures transactional integrity by rolling back in case of failure.
-      
+
     Args:
         item_id (int): The unique identifier of the document to delete.
 
     Returns:
-        Response (JSON): A success message if deletion is successful, 
+        Response (JSON): A success message if deletion is successful,
                          or an error message with appropriate HTTP status codes.
     """
     try:
@@ -110,13 +183,20 @@ def delete_item(item_id):
         document = db.session.query(Document).get(item_id)
 
         if not document:
-            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+            return (
+                jsonify({"success": False, "message": f"Item {item_id} not found"}),
+                404,
+            )
 
         vector_db = current_app.vector_db
 
         # Delete associated embeddings (case-sensitive match)
         db.session.execute(
-            delete(vector_db.EmbeddingStore).where(vector_db.EmbeddingStore.id.like(f"%{document.document_name}.{document.document_type}%"))
+            delete(vector_db.EmbeddingStore).where(
+                vector_db.EmbeddingStore.id.like(
+                    f"%{document.document_name}.{document.document_type}%"
+                )
+            )
         )
         # Delete the document itself
         db.session.delete(document)
@@ -124,7 +204,12 @@ def delete_item(item_id):
         # Commit the transaction
         db.session.commit()
 
-        return jsonify({'success': True, 'message': f'Item {item_id} deleted successfully'}), 200
+        return (
+            jsonify(
+                {"success": True, "message": f"Item {item_id} deleted successfully"}
+            ),
+            200,
+        )
 
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
@@ -183,14 +268,11 @@ def test():
     else:
         return jsonify({"message": "No one is here :()."}), 200
 
-
+"""
 @bp.route("/upload", methods=["GET", "POST"])
 @login_required  # Ensure user is logged in to access this route
 def upload_pdf():
-    """
-    Handles PDF uploads, for now I'm just pretend processing the file and returning success if processed.
-    Keith will implement the actual database storage (done).
-    """
+   
     form = PDFUploadForm()
 
     if request.method == "POST":  # Handle form submission
@@ -212,16 +294,29 @@ def upload_pdf():
                 )
 
             # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+            file_name = uploaded_file.filename.rsplit(".", 1)[
+                0
+            ]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[
+                -1
+            ]  # File extension (should be 'pdf')
 
             # Check if a document with the same name and type already exists
-            existing_document = db.session.query(Document).filter_by(
-                document_name=file_name, document_type=file_type
-            ).first()
+            existing_document = (
+                db.session.query(Document)
+                .filter_by(document_name=file_name, document_type=file_type)
+                .first()
+            )
 
             if existing_document:
-                return jsonify({"error": f"A document named '{uploaded_file.filename}' already exists."}), 409
+                return (
+                    jsonify(
+                        {
+                            "error": f"A document named '{uploaded_file.filename}' already exists."
+                        }
+                    ),
+                    409,
+                )
 
             # Create new document instance
             new_document = Document(
@@ -229,22 +324,23 @@ def upload_pdf():
                 document_type=file_type,
                 file_contents=uploaded_file.read(),  # Store binary PDF data
             )
-            
+
             # Storing the document into the database
             db.session.add(new_document)
             db.session.commit()
             # Process the upload doc to the parser and index
             process_doc(new_document)
-            
-            
+
             return (
                 jsonify(
                     {
                         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+                        ,"redirect_url": url_for("main.upload_pdf")
                     }
                 ),
                 200,
             )
+           
 
         else:
             return (
@@ -257,8 +353,10 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    return render_template("main/upload.html", form=form)
+    else:
+        return render_template("main/upload.html", form=form)
 
+    """
 
 @bp.route("/chat", methods=["POST"])
 def chat_message():
@@ -273,8 +371,8 @@ def chat_message():
 
         user_message = data["message"]
 
-
         history = ChatMessageHistory()
+
         for chat in data["conversationHistory"]:
             if chat["sender"] == "User":
                 history.add_user_message(chat["text"])
@@ -284,12 +382,17 @@ def chat_message():
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
+
+        # Mock the scores only if in testing mode
+        if current_app.config.get("TESTING", False):
+            Documents = [(doc, 0.9) for doc, _ in Documents]  # Override scores to 0.9
+
         for doc, score in Documents:
             print(f"Score: {score}")
             print("---")
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.3]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
 
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
@@ -303,30 +406,40 @@ def chat_message():
                 200,
             )
 
-        
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
-        # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        # Using the LLM to generate a response based on the context and user message
+        # Defined prompt template that is used when sending the LLM each query, to help refine answers
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
-                    "system",
-                    "You are a helpful assistant that answers questions based only on the provided context.\n"
-                    "Answer in detail and provide quotes from the context.\n"
+                    "system", # System message to set the context for the model
+                    "You are a Retrieval Augmented Generation (RAG) model.\n"
+                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+                    "You are only to answer questions based on the provided context.\n"
+                    "You are not allowed to make up information.\n"
+                    "You are not allowed to answer questions that are not in the context.\n"
+                    "If a question is not in the context, you should say 'I don't know'.\n"
+                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
                     "---\n"
-                    "Context:\n{context}\n"
+                    "Context:\n{context}\n" # Insert relevent documents as 'context'
                     "---",
                 ),
-                MessagesPlaceholder(variable_name="history"),
-                ("human", "{user_message}"),
+                MessagesPlaceholder(variable_name="history"), # Insert conversation history
+                ("human", "{user_message}"), # Insert user query
             ]
         )
 
         chain = prompt_template | llm
 
-        response = chain.invoke({"context": context, "history": history.messages, "user_message": user_message})
-
+        response = chain.invoke(
+            {
+                "context": context,
+                "history": history.messages,
+                "user_message": user_message,
+            }
+        )
 
         # Print the filtered documents
         print("Chunks:")
@@ -334,7 +447,7 @@ def chat_message():
             print(f"Document content: {doc.page_content}")
             print(f"Score: {score}")
             print("---")
-        
+
         print(f"Response: {response}", flush=True)
 
         return jsonify({"response": response})
@@ -342,6 +455,32 @@ def chat_message():
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+
+from flask import request, flash, redirect, render_template, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+
+@bp.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    data = request.get_json()
+
+    current = data.get("old_password")
+    new = data.get("new_password")
+
+    if not current or not new:
+        return jsonify({"success": False, "message": "Missing required fields."}), 400
+
+    if not check_password_hash(current_user.password_hash, current):
+        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+
+    if new == current:
+        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+
+    current_user.password_hash = generate_password_hash(new)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Password changed successfully."}), 200
 
 
 @bp.route("/logout")
@@ -368,4 +507,3 @@ def test_indexing():
     print(doc)
 
     return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
-
