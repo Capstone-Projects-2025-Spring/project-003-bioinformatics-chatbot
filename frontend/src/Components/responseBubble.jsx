@@ -52,7 +52,6 @@ export default function ResponseBubble({ text }) {
 	return (
 		<div className='relative w-full max-w-7xl px-4 pb-8 pt-2 bg-transparent text-primary whitespace-pre-wrap break-words break-all mb-2 group'>
 			<ReactMarkdown components={components}>{text}</ReactMarkdown>
-
 			<button
 				className='relative mt-3 mb-2 rounded-xl'
 				onClick={handleCopy}
