@@ -548,6 +548,8 @@ def handle_chat(data):
             }
         ):
             emit("chunk", {"chunk": chunk})
+        emit("done", {"status": "complete"})
+
     except Exception as e:
         emit("error", {"error": str(e)})
 
