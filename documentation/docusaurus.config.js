@@ -32,7 +32,7 @@ const config = {
   trailingSlash: false,
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/Logo.ico',
+  favicon: 'img/BioGenie.svg',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
