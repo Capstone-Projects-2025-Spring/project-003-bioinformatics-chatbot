@@ -43,13 +43,10 @@ def client(app):
     return app.test_client()
 
 
-# @pytest.fixture()
-# def socketio_client(app, client):
-#     with client:
-#         test_client = socketio.test_client(app, flask_test_client=client)
-#         assert test_client.is_connected(), "SocketIO client failed to connect"
-#         yield test_client
-#         test_client.disconnect()
+@pytest.fixture()
+def socketio_client(app, client):
+    return socketio.test_client(app, flask_test_client=client)
+
 
 @pytest.fixture()
 def clean_vector_db(app):

@@ -23,8 +23,6 @@ Places for routes in the backend
 """
 
 
-
-
 @bp.route("/", methods=["GET", "POST"])
 @bp.route("/index", methods=["GET", "POST"])
 def index():
@@ -38,7 +36,7 @@ def index():
     Description: Added a admin login.
 
     """
-   # fetch all document from database
+    # fetch all document from database
     documents = db.session.query(Document).all()
 
     form = LoginForm()
@@ -54,7 +52,10 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password", documents=documents
+                "main/index.html",
+                form=form,
+                error="Invalid username or password",
+                documents=documents,
             )
     # Pass the forms here.
     return render_template("main/index.html", form=form, documents=documents)
@@ -99,8 +100,12 @@ def admin():
                 )
 
             # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+            file_name = uploaded_file.filename.rsplit(".", 1)[
+                0
+            ]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[
+                -1
+            ]  # File extension (should be 'pdf')
 
             # Check if a document with the same name and type already exists
             existing_document = (
@@ -111,9 +116,11 @@ def admin():
 
             if existing_document:
                 return (
-                    jsonify({
-                        "error": f"A document named '{uploaded_file.filename}' already exists."
-                    }),
+                    jsonify(
+                        {
+                            "error": f"A document named '{uploaded_file.filename}' already exists."
+                        }
+                    ),
                     409,
                 )
 
@@ -131,26 +138,33 @@ def admin():
             process_doc(new_document)
 
             return (
-                jsonify({
-                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
-                        "id": new_document.id,
-                        "name": file_name,
-                        "type": file_type,
-                        "size": len(new_document.file_contents)
-                        }
-                        }),
+                jsonify(
+                    {
+                        "message": f"File '{uploaded_file.filename}' uploaded successfully!",
+                        "document": {
+                            "id": new_document.id,
+                            "name": file_name,
+                            "type": file_type,
+                            "size": len(new_document.file_contents),
+                        },
+                    }
+                ),
                 200,
             )
         else:
             return (
-                jsonify({
-                    "error": "Invalid form data. Please ensure all fields are filled correctly."
-                }),
+                jsonify(
+                    {
+                        "error": "Invalid form data. Please ensure all fields are filled correctly."
+                    }
+                ),
                 400,
             )
 
     documents = db.session.query(Document).all()
-    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
+    return render_template(
+        "main/admin.html", user=current_user, documents=documents, upload_form=form
+    )
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -206,8 +220,14 @@ def delete_item(item_id):
 
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
-        return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
-    
+        return (
+            jsonify(
+                {"success": False, "message": "Failed to delete item", "error": str(e)}
+            ),
+            500,
+        )
+
+
 @bp.route("/download/<int:item_id>", methods=["GET"])
 def download_document(item_id):
     """
@@ -231,22 +251,33 @@ def download_document(item_id):
 
         # Send an error if the document could not be found
         if not document:
-            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+            return (
+                jsonify({"success": False, "message": f"Item {item_id} not found"}),
+                404,
+            )
 
         # Gets the fullname by combining the name and the type
         filename = f"{document.document_name}.{document.document_type}"
-        
+
         # Sends the document with the proper name and the content of the file for download
         return send_file(
             BytesIO(document.file_contents),
             mimetype="application/pdf",
             download_name=filename,
-            as_attachment=True
+            as_attachment=True,
         )
 
     except Exception as e:
-        return jsonify({'success': False, 'message': 'Failed to download document', 'error': str(e)}), 500
-
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Failed to download document",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
 
 
 @bp.route("/test", methods=["GET"])
@@ -260,6 +291,7 @@ def test():
         return jsonify({"message": f"Hello: {user.username}"}), 200
     else:
         return jsonify({"message": "No one is here :()."}), 200
+
 
 """
 @bp.route("/upload", methods=["GET", "POST"])
@@ -348,6 +380,7 @@ def upload_pdf():
 
     """
 
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -360,7 +393,7 @@ def chat_message():
             return jsonify({"error": "conversationHistory is required"}), 400
 
         user_message = data["message"]
-        
+
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
@@ -396,7 +429,6 @@ def chat_message():
                 history.add_ai_message(chat["text"])
         print("Chat History:", history.messages, flush=True)
 
-
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
@@ -405,20 +437,22 @@ def chat_message():
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
-                    "system", # System message to set the context for the model
+                    "system",  # System message to set the context for the model
                     "You are a Retrieval Augmented Generation (RAG) model.\n"
                     "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
                     "You are only to answer questions based on the provided context.\n"
                     "You are not allowed to make up information.\n"
                     "You are not allowed to answer questions that are not in the context.\n"
                     "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+                    "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
                     "---\n"
-                    "Context:\n{context}\n" # Insert relevent documents as 'context'
+                    "Context:\n{context}\n"  # Insert relevent documents as 'context'
                     "---",
                 ),
-                MessagesPlaceholder(variable_name="history"), # Insert conversation history
-                ("human", "{user_message}"), # Insert user query
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Insert conversation history
+                ("human", "{user_message}"),  # Insert user query
             ]
         )
 
@@ -446,8 +480,7 @@ def chat_message():
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    
-    
+
 
 @socketio.on("chat")
 def handle_chat(data):
@@ -459,12 +492,14 @@ def handle_chat(data):
         if "conversationHistory" not in data:
             emit("error", {"error": "conversationHistory is required"})
             return
-        
+
         user_message = data["message"]
-        
+
         Documents = query_database(user_message)
-        
+
         filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+
+        print(Documents)
 
         if not filtered_docs:
             emit("chunk", {"chunk": "No document found"})
@@ -484,20 +519,22 @@ def handle_chat(data):
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 (
-                    "system", # System message to set the context for the model
+                    "system",  # System message to set the context for the model
                     "You are a Retrieval Augmented Generation (RAG) model.\n"
                     "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
                     "You are only to answer questions based on the provided context.\n"
                     "You are not allowed to make up information.\n"
                     "You are not allowed to answer questions that are not in the context.\n"
                     "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+                    "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
                     "---\n"
-                    "Context:\n{context}\n" # Insert relevent documents as 'context'
+                    "Context:\n{context}\n"  # Insert relevent documents as 'context'
                     "---",
                 ),
-                MessagesPlaceholder(variable_name="history"), # Insert conversation history
-                ("human", "{user_message}"), # Insert user query
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Insert conversation history
+                ("human", "{user_message}"),  # Insert user query
             ]
         )
 
@@ -511,11 +548,9 @@ def handle_chat(data):
             }
         ):
             emit("chunk", {"chunk": chunk})
-
-        emit("done", {"status": "complete"})
-
     except Exception as e:
         emit("error", {"error": str(e)})
+
 
 @bp.route("/logout")
 @login_required  # Ensure user is logged in to access this route
