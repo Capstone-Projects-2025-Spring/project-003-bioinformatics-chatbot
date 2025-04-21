@@ -499,8 +499,6 @@ def handle_chat(data):
 
         filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
 
-        print(Documents)
-
         if not filtered_docs:
             emit("chunk", {"chunk": "No document found"})
             emit("done", {"status": "complete"})
@@ -561,20 +559,3 @@ def logout():
     logout_user()  # Log out the current user
     db.session.commit()
     return redirect(url_for("main.index"))
-
-
-from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
-from app.doc_parsers.parse_pdf import split_documents
-from app.doc_indexer.index_doc import index_and_add_to_db
-from app.doc_indexer.retrieve_document import query_database
-
-
-@bp.route("/test_indexing", methods=["GET"])
-def test_indexing():
-    documents = load_documents(DATA_PATH)
-    chunks = split_documents(documents)
-    index_and_add_to_db(chunks)
-    doc = query_database("cell cycle")
-    print(doc)
-
-    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
