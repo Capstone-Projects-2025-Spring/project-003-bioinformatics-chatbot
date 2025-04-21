@@ -12,7 +12,6 @@ import ReactMarkdown from "react-markdown";
  *
  * @property {string} text - The text message to display in the response bubble.
  */
-
 ResponseBubble.propTypes = {
 	text: PropTypes.string.isRequired,
 };
@@ -26,7 +25,6 @@ ResponseBubble.propTypes = {
  * @param {string} props.text - The text message to display.
  * @returns {JSX.Element} The rendered response bubble element.
  */
-
 export default function ResponseBubble({ text }) {
 	const [isCopied, setIsCopied] = useState(false);
 
@@ -37,9 +35,23 @@ export default function ResponseBubble({ text }) {
 		});
 	};
 
+	const components = {
+		code({ inline, className, children, ...props }) {
+			return inline ? (
+				<code className={` ${className ?? ""}`} {...props}>
+					{children}
+				</code>
+			) : (
+				<pre className='whitespace-pre-wrap' {...props}>
+					<code>{children}</code>
+				</pre>
+			);
+		},
+	};
+
 	return (
-		<div className='relative w-full px-4 pb-8 pt-2 bg-transparent text-primary break-words whitespace-pre-wrap mb-2 group'>
-			<ReactMarkdown>{text}</ReactMarkdown>
+		<div className='relative w-full max-w-7xl px-4 pb-8 pt-2 bg-transparent text-primary whitespace-pre-wrap break-words break-all mb-2 group'>
+			<ReactMarkdown components={components}>{text}</ReactMarkdown>
 
 			<button
 				className='relative mt-3 mb-2 rounded-xl'

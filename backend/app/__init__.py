@@ -6,9 +6,9 @@ from flask_migrate import Migrate
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
 from langchain_ollama import OllamaEmbeddings
-
+from flask_socketio import SocketIO
 from flask_login import LoginManager
-
+from langchain_ollama.llms import OllamaLLM
 # load_dotenv()
 # print(os.getenv("SESSION_SECRET_KEY"))
 
@@ -16,7 +16,8 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-
+socketio = SocketIO(cors_allowed_origins="http://localhost:5173", async_mode="threading")  # Use gevent async mode
+llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
 
 def create_app(config_class=Config):
     """
@@ -40,7 +41,8 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
 
     login_manager.init_app(app)
-
+    # Initialize SocketIO
+    socketio.init_app(app)  
     """
     app.vector_db = PGVector(
         embeddings=DeterministicFakeEmbedding(size=4096),

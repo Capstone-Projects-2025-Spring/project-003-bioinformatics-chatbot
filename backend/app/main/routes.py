@@ -1,26 +1,19 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request, session
+from flask import jsonify, render_template, redirect, send_file, url_for, request
 from app.main import bp
 from app.models import User
-from app import db
+from app import db, socketio, llm
 from flask import current_app
 from app.models import Document
+from flask_socketio import emit
 
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_ollama.llms import OllamaLLM
 from langchain_community.chat_message_histories import ChatMessageHistory
-
-import ollama
-from ollama import chat
-from ollama import ChatResponse
-from ollama import Client
 
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 from app.doc_indexer.retrieve_document import query_database
 from sqlalchemy import delete
-from sqlalchemy.exc import SQLAlchemyError
 
 
 from flask_login import login_required, current_user, logout_user, login_user
@@ -29,7 +22,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 Places for routes in the backend
 """
 
-llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
+
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -367,16 +360,7 @@ def chat_message():
             return jsonify({"error": "conversationHistory is required"}), 400
 
         user_message = data["message"]
-
-        history = ChatMessageHistory()
-
-        for chat in data["conversationHistory"]:
-            if chat["sender"] == "User":
-                history.add_user_message(chat["text"])
-            elif chat["sender"] == "Chatbot":
-                history.add_ai_message(chat["text"])
-        print("Chat History:", history.messages, flush=True)
-
+        
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
 
@@ -402,6 +386,16 @@ def chat_message():
                 ),
                 200,
             )
+
+        history = ChatMessageHistory()
+
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+        print("Chat History:", history.messages, flush=True)
+
 
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
@@ -452,7 +446,76 @@ def chat_message():
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    
+    
 
+@socketio.on("chat")
+def handle_chat(data):
+    try:
+        if not data or "message" not in data:
+            emit("error", {"error": "Message is required"})
+            return
+
+        if "conversationHistory" not in data:
+            emit("error", {"error": "conversationHistory is required"})
+            return
+        
+        user_message = data["message"]
+        
+        Documents = query_database(user_message)
+        
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+
+        if not filtered_docs:
+            emit("chunk", {"chunk": "No document found"})
+            emit("done", {"status": "complete"})
+            return
+
+        history = ChatMessageHistory()
+
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+
+        context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+        prompt_template = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system", # System message to set the context for the model
+                    "You are a Retrieval Augmented Generation (RAG) model.\n"
+                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+                    "You are only to answer questions based on the provided context.\n"
+                    "You are not allowed to make up information.\n"
+                    "You are not allowed to answer questions that are not in the context.\n"
+                    "If a question is not in the context, you should say 'I don't know'.\n"
+                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+                    "---\n"
+                    "Context:\n{context}\n" # Insert relevent documents as 'context'
+                    "---",
+                ),
+                MessagesPlaceholder(variable_name="history"), # Insert conversation history
+                ("human", "{user_message}"), # Insert user query
+            ]
+        )
+
+        chain = prompt_template | llm
+
+        for chunk in chain.stream(
+            {
+                "context": context,
+                "history": history.messages,
+                "user_message": user_message,
+            }
+        ):
+            emit("chunk", {"chunk": chunk})
+
+        emit("done", {"status": "complete"})
+
+    except Exception as e:
+        emit("error", {"error": str(e)})
 
 @bp.route("/logout")
 @login_required  # Ensure user is logged in to access this route
