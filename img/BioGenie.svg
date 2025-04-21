@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="120 80 160 240" width="400" height="400">
+  <!-- DNA Helix -->
+  <path
+    d="M120 80 C200 120, 200 280, 120 320"
+    stroke="oklch(60% 0.12 296)"
+    stroke-width="16"
+    fill="none"
+  />
+  <path
+    d="M280 80 C200 120, 200 280, 280 320"
+    stroke="oklch(60% 0.12 296)"
+    stroke-width="16"
+    fill="none"
+  />
+
+  <!-- Connecting Rungs -->
+  <line
+    x1="160"
+    y1="120"
+    x2="240"
+    y2="120"
+    stroke="oklch(60% 0.12 296)"
+    stroke-width="8"
+  />
+  <line
+    x1="160"
+    y1="180"
+    x2="240"
+    y2="180"
+    stroke="oklch(60% 0.12 296)"
+    stroke-width="8"
+  />
+  <line
+    x1="160"
+    y1="240"
+    x2="240"
+    y2="240"
+    stroke="oklch(60% 0.12 296)"
+    stroke-width="8"
+  />
+</svg>
