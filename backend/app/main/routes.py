@@ -99,13 +99,10 @@ def admin():
                     400,
                 )
 
-            # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[
-                0
-            ]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[
-                -1
-            ]  # File extension (should be 'pdf')
+
+            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+
 
             # Check if a document with the same name and type already exists
             existing_document = (
@@ -116,11 +113,9 @@ def admin():
 
             if existing_document:
                 return (
-                    jsonify(
-                        {
-                            "error": f"A document named '{uploaded_file.filename}' already exists."
-                        }
-                    ),
+                    jsonify({
+                        "error": f"A document named '{uploaded_file.filename}' already exists."
+                    }),
                     409,
                 )
 
@@ -138,33 +133,27 @@ def admin():
             process_doc(new_document)
 
             return (
-                jsonify(
-                    {
-                        "message": f"File '{uploaded_file.filename}' uploaded successfully!",
-                        "document": {
-                            "id": new_document.id,
-                            "name": file_name,
-                            "type": file_type,
-                            "size": len(new_document.file_contents),
-                        },
-                    }
-                ),
+                jsonify({
+                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
+                        "id": new_document.id,
+                        "name": file_name,
+                        "type": file_type,
+                        "size": len(new_document.file_contents)
+                        }
+                        }),
                 200,
             )
         else:
             return (
-                jsonify(
-                    {
-                        "error": "Invalid form data. Please ensure all fields are filled correctly."
-                    }
-                ),
+                jsonify({
+                    "error": "Invalid form data. Please ensure all fields are filled correctly."
+                }),
                 400,
             )
 
     documents = db.session.query(Document).all()
-    return render_template(
-        "main/admin.html", user=current_user, documents=documents, upload_form=form
-    )
+    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
+
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -360,10 +349,12 @@ def upload_pdf():
                 jsonify(
                     {
                         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
+                        ,"redirect_url": url_for("main.upload_pdf")
                     }
                 ),
                 200,
             )
+           
 
         else:
             return (
@@ -376,7 +367,8 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    return render_template("main/upload.html", form=form)
+    else:
+        return render_template("main/upload.html", form=form)
 
     """
 
@@ -482,6 +474,7 @@ def chat_message():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
+
 @socketio.on("chat")
 def handle_chat(data):
     try:
@@ -550,6 +543,31 @@ def handle_chat(data):
 
     except Exception as e:
         emit("error", {"error": str(e)})
+
+from flask import request, flash, redirect, render_template, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+
+@bp.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    data = request.get_json()
+
+    current = data.get("old_password")
+    new = data.get("new_password")
+
+    if not current or not new:
+        return jsonify({"success": False, "message": "Missing required fields."}), 400
+
+    if not check_password_hash(current_user.password_hash, current):
+        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+
+    if new == current:
+        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+
+    current_user.password_hash = generate_password_hash(new)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Password changed successfully."}), 200
 
 
 @bp.route("/logout")

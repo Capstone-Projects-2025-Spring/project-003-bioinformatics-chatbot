@@ -34,14 +34,20 @@ def test_md(mock_query_database, client, app):
     )
     with app.app_context():
         with client:
-            client = login_user(client)
-            file_path = os.path.join(os.path.dirname(__file__), "test_data", "Dna.pdf")
-            with open(file_path, "rb") as f:
-                # Create a FileStorage object from the file content
-                pdf_file = FileStorage(
-                    stream=io.BytesIO(f.read()),
-                    filename="Dna.pdf",
-                    content_type="application/pdf",
+                client = login_user(client)
+                file_path = os.path.join(os.path.dirname(__file__), "test_data", "Dna.pdf")
+                with open(file_path, "rb") as f:
+                    # Create a FileStorage object from the file content
+                    pdf_file = FileStorage(
+                        stream=io.BytesIO(f.read()),
+                        filename="Dna.pdf",
+                        content_type="application/pdf",
+                    )
+                data = {
+                    "pdf_file": (io.BytesIO(pdf_file.read()), "Dna.pdf"),
+                }
+                response = client.post(
+                    "/admin", data=data, content_type="multipart/form-data"
                 )
             data = {
                 "pdf_file": (io.BytesIO(pdf_file.read()), "Dna.pdf"),
