@@ -360,12 +360,10 @@ def upload_pdf():
                 jsonify(
                     {
                         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
-                        ,"redirect_url": url_for("main.upload_pdf")
                     }
                 ),
                 200,
             )
-           
 
         else:
             return (
@@ -378,8 +376,7 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    else:
-        return render_template("main/upload.html", form=form)
+    return render_template("main/upload.html", form=form)
 
     """
 
