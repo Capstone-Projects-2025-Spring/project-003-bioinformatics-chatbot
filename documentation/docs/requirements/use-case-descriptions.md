@@ -25,7 +25,6 @@ Users should have the ability to ask the chatbot questions related to bioinforma
 
 
 
-
 ## Use Case 2 - Downloading Conversation
 
 As a user, I should have the functionality of downloading the conversation between myself and the chatbot to refrence at a later date.
@@ -49,6 +48,7 @@ Users shoud be able view previous conversations with the chatbot and ask new que
 2. The user navigates to the scroll bar.
 3. He or she moves the bar up or down so that the past conversations are shown on the screen.
 ### Diagrams   
+
 ![Figure 3: ChatBot downloading conversation System](../../static/img/historyrevise.png)  
 *Figure 3: ChatBot viewing history System*
 
@@ -65,8 +65,10 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
 ### Diagrams   
+
 ![Figure 4: ChatBot re-edit/ re-send queries System](../../static/img/Resendrevise.png)  
 *Figure 4: ChatBot re-edit/ re-send queries System*
+
 
 ## Use Case 5 - New/clear Chat
 
@@ -77,6 +79,7 @@ Users should have the ability to create a new chat with the chatbot.
 
 
 ### Diagrams   
+
 ![Figure 5: ChatBot open new chat System](../../static/img/newchatrevise.png)  
 *Figure 5: ChatBot open new chat System*
 
@@ -120,4 +123,5 @@ Admin / Product owner should be able to log in to backend service app to perform
 
 ![Figure 9: Backend service log in System](../../static/img/deletepdf.png)  
 *Figure 9: Backend service log in System*
+
 
