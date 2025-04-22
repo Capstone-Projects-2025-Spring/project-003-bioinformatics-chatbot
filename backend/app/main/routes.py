@@ -1,22 +1,18 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request
+from flask import jsonify, render_template, redirect, send_file, url_for, request, current_app
 from app.main import bp
 from app.models import User
 from app import db, socketio, llm
-from flask import current_app
 from app.models import Document
-from flask_socketio import emit
-
+from flask_socketio import emit, disconnect
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_community.chat_message_histories import ChatMessageHistory
-
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 from app.doc_indexer.retrieve_document import query_database
 from sqlalchemy import delete
-
-
 from flask_login import login_required, current_user, logout_user, login_user
+from werkzeug.security import check_password_hash, generate_password_hash
 
 """
 Places for routes in the backend
@@ -481,9 +477,14 @@ def chat_message():
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
+active_sessions = {}
+
 @socketio.on("chat")
 def handle_chat(data):
     try:
+        sid = request.sid
+        active_sessions[sid] = True  # Mark session as active
+        
         if not data or "message" not in data:
             emit("error", {"error": "Message is required"})
             return
@@ -544,14 +545,21 @@ def handle_chat(data):
                 "user_message": user_message,
             }
         ):
+            if not active_sessions.get(sid):
+                return  # Exit early if cancelled
             emit("chunk", {"chunk": chunk})
         emit("done", {"status": "complete"})
 
     except Exception as e:
         emit("error", {"error": str(e)})
+        
+    finally:
+        active_sessions.pop(request.sid, None)
 
-from flask import request, flash, redirect, render_template, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
+@socketio.on("cancel")
+def handle_cancel():
+    sid = request.sid
+    active_sessions[sid] = False  # Mark this session as cancelled
 
 @bp.route("/change_password", methods=["POST"])
 @login_required
