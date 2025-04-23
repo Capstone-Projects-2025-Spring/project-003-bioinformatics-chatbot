@@ -398,7 +398,7 @@ def chat_message():
         filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
 
         # If doc_toggle is set to False, return the response regardless of document context
-        if data["doc_toggle"] is True:
+        if data["doc_toggle"] is False:
             filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
             # If no document meets the threshold, return a message to the frontend
             if not filtered_docs:
@@ -424,7 +424,7 @@ def chat_message():
             "You are not allowed to make up information.\n"
         )
 
-        if data["doc_toggle"] is True:
+        if data["doc_toggle"] is False:
             system_message += (
                 "You are not allowed to answer questions that are not in the context.\n"
                 "You are only to answer questions based on the provided context.\n"
@@ -435,7 +435,7 @@ def chat_message():
             "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
             "---\n"
             "Context:\n{context}\n" # Insert relevent documents as 'context'
-            "---",
+            "---"
         )
 
         prompt_template = ChatPromptTemplate.from_messages(

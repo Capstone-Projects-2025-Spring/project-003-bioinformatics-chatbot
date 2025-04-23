@@ -47,7 +47,7 @@ def test_md(mock_query_database, client, app):
                     "/admin", data=data, content_type="multipart/form-data"
                 )
 
-    response = client.post("/chat", json={"message": "Tell me about DNA", "conversationHistory": []})
+    response = client.post("/chat", json={"message": "Tell me about DNA", "conversationHistory": [], "doc_toggle": False})
     content = response.get_data(as_text=True)
     print(content)
     md_format = False
