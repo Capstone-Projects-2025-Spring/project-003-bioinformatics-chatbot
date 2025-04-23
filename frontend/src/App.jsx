@@ -222,6 +222,7 @@ function App() {
 
 		socketRef.current = socket;
 
+
 		let updatedMessages = messages;
 		if (editIndex !== null) {
 			updatedMessages = messages.slice(0, editIndex);
@@ -299,6 +300,7 @@ function App() {
 		socket.on("chunk", handleChunk);
 		socket.on("done", handleDone);
 		socket.on("error", handleErrorEvent);
+
 	};
 
 	const handleCancel = () => {

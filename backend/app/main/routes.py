@@ -480,7 +480,6 @@ def chat_message():
 
 # Dictionary to keep track of active sessions by their socket ID
 active_sessions = {}
-
 # This event handler listens for 'chat' events from clients
 @socketio.on("chat")
 def handle_chat(data):
