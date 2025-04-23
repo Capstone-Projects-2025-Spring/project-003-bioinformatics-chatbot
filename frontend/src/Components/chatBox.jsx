@@ -35,6 +35,7 @@ ChatBox.propTypes = {
 export default function ChatBox({
 	input,
 	setInput,
+	handleEnterkey,
 	handleSubmit,
 	editIndex,
 	cancelEdit,
@@ -113,6 +114,7 @@ export default function ChatBox({
 						placeholder="What's on your mind?..."
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={handleEnterkey}
 						rows={1}
 						className='w-full min-h-[2.5rem] max-h-[10rem] px-2 mt-1 text-primary bg-transparent resize-none overflow-auto focus:outline-none focus:ring-2 focus:ring-transparent transition-all duration-300 ease-in-out scrollbar-hide rounded-none'
 					/>
