@@ -117,6 +117,12 @@ const config = {
               label: 'Documentation',
             },
             {
+              type: 'doc',
+              docId: 'tutorial/intro',
+              position: 'left',
+              label: 'Hosting Tutorial',
+            },
+            {
               href: 'https://github.com/'+process.env.ORG_NAME+'/'+process.env.PROJECT_NAME,
               label: 'GitHub',
               position: 'right',
