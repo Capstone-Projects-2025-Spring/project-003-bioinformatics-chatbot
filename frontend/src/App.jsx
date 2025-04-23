@@ -378,6 +378,20 @@ function App() {
 		}
 	};
 
+
+	/**
+	 * Function to handle user starting a new chat, clears messages from state and clears input, resets edit index, and
+	 * clears the session storage. 
+	 */
+	const handleNewChat = () => {
+		setMessages([]);
+		setInput("");
+		setEditIndex(null);
+		sessionStorage.removeItem("messages");
+	};
+	
+
+
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
 	 */
