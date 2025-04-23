@@ -51,6 +51,8 @@ function App() {
 
 	const [position, setPosition] = useState({ x: 50, y: 50 });
 
+	const socketRef = useRef(null);
+
 	/**
 	 * Load messages from sessionStorage on component mount.
 	 */
@@ -220,8 +222,6 @@ function App() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const socket = io("http://localhost:444");
-
 		if (!input.trim()) {
 			handleError({
 				title: "Empty Query",
@@ -229,6 +229,11 @@ function App() {
 			});
 			return;
 		}
+
+		const socket = io("http://localhost:444");
+
+		socketRef.current = socket;
+
 
 		let updatedMessages = messages;
 		if (editIndex !== null) {
@@ -307,6 +312,16 @@ function App() {
 		socket.on("chunk", handleChunk);
 		socket.on("done", handleDone);
 		socket.on("error", handleErrorEvent);
+
+	};
+
+	const handleCancel = () => {
+		if (socketRef.current) {
+			socketRef.current.emit("cancel");
+			socketRef.current.disconnect();
+			socketRef.current = null;
+		}
+		setLoading(false);
 	};
 
 	/**
@@ -735,6 +750,7 @@ function App() {
 					setInput={setInput}
 					handleEnterkey={handleEnterkey}
 					handleSubmit={handleSubmit}
+					handleCancel={handleCancel}
 					handleDownloadtxt={handleDownloadtxt}
 					handleDownloadpdf={handleDownloadpdf}
 					handleDownloaddoc={handleDownloaddoc}

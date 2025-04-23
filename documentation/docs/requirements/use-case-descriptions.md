@@ -40,6 +40,7 @@ As a user, I should have the functionality of downloading the conversation betwe
 ![Figure 2: ChatBot downloading conversation System](../../static/img/Downloadrevise.png)  
 *Figure 2: ChatBot downloading conversation System*
 
+
 ## Use Case 3 - Chat History
 
 Users shoud be able view previous conversations with the chatbot and ask new question. New question with answer will use previous queries for refrencing.
@@ -60,15 +61,16 @@ As a user, I should be allowed to modify previously sent messages or resend mess
 3. He or she selects the edit icon.
 4. The user has the option to update the message before resending.
 5. The user clicks send and the chatbot reanwers the question.
+
 #### Diagrams   
 
 ![Figure 4: ChatBot re-edit/ re-send queries System](../../static/img/Resendrevise.png)  
 *Figure 4: ChatBot re-edit/ re-send queries System*
 
-
 ## Use Case 5 - New/clear Chat
 
 Users should have the ability to create a new chat with the chatbot.
+
 
 #### Hitting refresh will not clear the chat session ONLY closing the tab on browser and reaccess will open new chat
 
@@ -77,7 +79,6 @@ Users should have the ability to create a new chat with the chatbot.
 3. The user selects yes, and the chat is cleared to start a new conversation.
 
 ### Diagrams   
-
 ![Figure 5: ChatBot open new chat System](../../static/img/newchatrevise.png)  
 *Figure 5: ChatBot open new chat System*
 
@@ -124,5 +125,4 @@ Admin / Product owner should be able to log in to backend service app to perform
 
 ![Figure 9: Backend service log in System](../../static/img/deletepdf.png)  
 *Figure 9: Backend service log in System*
-
 
