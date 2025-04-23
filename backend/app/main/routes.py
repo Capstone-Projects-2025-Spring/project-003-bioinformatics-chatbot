@@ -368,6 +368,9 @@ def chat_message():
 
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
+        
+        if not data or "doc_toggle" not in data:
+            return jsonify({"error": "doc_toggle is required"}), 400
 
         user_message = data["message"]
 
@@ -392,40 +395,52 @@ def chat_message():
             print("---")
 
         # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
 
-        # If no document meets the threshold, return a message to the frontend
-        if not filtered_docs:
-            return (
-                jsonify(
-                    {
-                        "response": "No document found",
-                        "message": "No relevant information available.",
-                    }
-                ),
-                200,
-            )
+        # If doc_toggle is set to False, return the response regardless of document context
+        if data["doc_toggle"] is True:
+            filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+            # If no document meets the threshold, return a message to the frontend
+            if not filtered_docs:
+                return (
+                    jsonify(
+                        {
+                            "response": "No document found",
+                            "message": "No relevant information available.",
+                        }
+                    ),
+                    200,
+                )
 
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
         # Using the LLM to generate a response based on the context and user message
         # Defined prompt template that is used when sending the LLM each query, to help refine answers
+
+        system_message = (
+            "You are a Retrieval Augmented Generation (RAG) model.\n"
+            "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+            "You are not allowed to make up information.\n"
+        )
+
+        if data["doc_toggle"] is True:
+            system_message += (
+                "You are not allowed to answer questions that are not in the context.\n"
+                "You are only to answer questions based on the provided context.\n"
+                "If a question is not in the context, you should say 'I don't know'.\n"
+            )
+        
+        system_message += (
+            "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+            "---\n"
+            "Context:\n{context}\n" # Insert relevent documents as 'context'
+            "---",
+        )
+
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                (
-                    "system", # System message to set the context for the model
-                    "You are a Retrieval Augmented Generation (RAG) model.\n"
-                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
-                    "You are only to answer questions based on the provided context.\n"
-                    "You are not allowed to make up information.\n"
-                    "You are not allowed to answer questions that are not in the context.\n"
-                    "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
-                    "---\n"
-                    "Context:\n{context}\n" # Insert relevent documents as 'context'
-                    "---",
-                ),
+                ("system", system_message), # System message to set the context
                 MessagesPlaceholder(variable_name="history"), # Insert conversation history
                 ("human", "{user_message}"), # Insert user query
             ]
