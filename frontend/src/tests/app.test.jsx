@@ -12,6 +12,15 @@ import "@testing-library/jest-dom/vitest";
 import axios from "axios";
 
 vi.mock("axios");
+let emitMock = vi.fn();
+let disconnectMock = vi.fn();
+vi.mock("socket.io-client", () => ({
+	io: vi.fn(() => ({
+		on: vi.fn(),
+		emit: emitMock,
+		disconnect: disconnectMock,
+	})),
+}));
 
 describe("Chat Page", () => {
 	// Runs before each test to set up mock functions
@@ -172,6 +181,7 @@ describe("Chat Page", () => {
 		// Check if scrollIntoView is called when new messages are added
 		expect(scrollIntoViewMock).toHaveBeenCalled();
 	});
+
 	it("only submits the first message if multiple submits happen quickly", async () => {
 		axios.post.mockClear();
 		render(<App />);
@@ -180,11 +190,7 @@ describe("Chat Page", () => {
 				setTimeout(() => resolve({ data: { response: "First response" } }), 500)
 			);
 		});
-
-		const inputField = screen.getByTestId("input");
-		const submitButton = screen.getByTestId("submitButton");
-
-		// Submit the first message
+    // Submit the first message
 		fireEvent.change(inputField, { target: { value: "First message" } });
 		fireEvent.click(submitButton);
 
@@ -195,5 +201,32 @@ describe("Chat Page", () => {
 		// ✅ Ensure the second message does NOT appear in the chat history (scoped to message container)
 		const container = screen.getByTestId("messageContainer");
 		expect(within(container).queryByText("Second message")).toBeNull();
+
+	it("submits a message then cancels the session", async () => {
+		render(<App />);
+
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
+
+
+		// Submit a message
+		fireEvent.change(inputField, { target: { value: "Test cancel flow" } });
+		fireEvent.click(submitButton);
+
+		const spinner = await screen.findByTestId("spinner");
+		expect(spinner).toBeInTheDocument();
+
+		// Click the cancel button
+		const cancelButton = screen.getByTestId("cancelButton");
+		fireEvent.click(cancelButton);
+
+		// Assertions
+		expect(emitMock).toHaveBeenCalledWith("cancel");
+		expect(disconnectMock).toHaveBeenCalled();
+
+		// Spinner should disappear
+		await waitFor(() => {
+			expect(screen.queryByTestId("spinner")).toBeNull();
+		});
 	});
 });

@@ -4,10 +4,10 @@ import UserBubble from "./Components/userBubble";
 import ResponseBubble from "./Components/responseBubble";
 import ErrorBox from "./Components/errorBox";
 import api from "./api/api";
-import axios from "axios";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
+import { io } from "socket.io-client";
 /**
  * Chat component renders a chat interface with messaging capabilities.
  *
@@ -50,6 +50,8 @@ function App() {
 	const [editIndex, setEditIndex] = useState(null);
 
 	const [position, setPosition] = useState({ x: 50, y: 50 });
+
+	const socketRef = useRef(null);
 
 	/**
 	 * Load messages from sessionStorage on component mount.
@@ -128,21 +130,101 @@ function App() {
 	};
 
 	/**
+	 * Handle enter key, enter key will sumbit the query
+	 *  @param {Event} e - The event object.
+	 */
+	const handleEnterkey = (e) => {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault();
+			console.log('Enter pressed'); // just to test
+			handleSubmit(e);
+		  }
+	};
+
+	/**
 	 * Handle form submission for adding new messages.
 	 * @param {Event} e - The event object.
 	 */
+	// const handleSubmit = async (e) => {
+	// 	/**
+	// 	 * Prevent the default form submission behavior (which would reload the page).
+	// 	 */
+	// 	e.preventDefault();
+	// 	if (!input.trim()) {
+	// 		/**
+	// 		 * Error handling: If the input is empty, set an error message.
+	// 		 */
+	// 		handleError({
+	// 			title: "Empty Query",
+	// 			body: "ChatBox cannot be empty during submission",
+	// 		});
+	// 		return;
+	// 	}
+
+	// 	/**
+	// 	 * If editing, trim the conversation up to the message being edited
+	// 	 */
+	// 	let updatedMessages = messages;
+	// 	if (editIndex !== null) {
+	// 		updatedMessages = messages.slice(0, editIndex); // Remove everything after the edited message
+	// 		setEditIndex(null); // Reset edit index to null
+	// 	}
+
+	// 	/**
+	// 	 * Add user's message to chat
+	// 	 */
+
+	// 	const userMessage = {
+	// 		id: messages.length,
+	// 		text: input,
+	// 		time: new Date().toLocaleString(),
+	// 		type: "Question",
+	// 		sender: "User",
+	// 	};
+
+	// 	updatedMessages = [...updatedMessages, userMessage];
+	// 	setMessages(updatedMessages);
+
+	// 	/**
+	// 	 * Send message to Flask backend using axios
+	// 	 */
+
+	// 	setLoading(true);
+	// 	axios
+	// 		.post("http://localhost:444/chat", {
+	// 			message: input,
+	// 			conversationHistory: updatedMessages,
+	// 		})
+	// 		.then((response) => {
+	// 			const botResponse = {
+	// 				id: messages.length + 1,
+	// 				text: response.data.response,
+	// 				type: "Response",
+	// 				sender: "Chatbot",
+	// 			};
+	// 			setMessages((prevMessages) => [...prevMessages, botResponse]);
+	// 			setLoading(false);
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error("Error fetching chatbot response:", error);
+	// 			handleError({
+	// 				title: "Chatbot Error",
+	// 				body: "Failed to fetch response from the chatbot.",
+	// 			});
+	// 			setLoading(false);
+	// 		});
+	// 	/**
+	// 	 * Clear the input field after submission
+	// 	 */
+	// 	setInput("");
+	// };
+
 	const handleSubmit = async (e) => {
-		/**
-		 * Prevent the default form submission behavior (which would reload the page).
-		 */
 		e.preventDefault();
 
 		if (loading) return;
 
 		if (!input.trim()) {
-			/**
-			 * Error handling: If the input is empty, set an error message.
-			 */
 			handleError({
 				title: "Empty Query",
 				body: "ChatBox cannot be empty during submission",
@@ -150,21 +232,19 @@ function App() {
 			return;
 		}
 
-		/**
-		 * If editing, trim the conversation up to the message being edited
-		 */
+		const socket = io("http://localhost:444");
+
+		socketRef.current = socket;
+
+
 		let updatedMessages = messages;
 		if (editIndex !== null) {
-			updatedMessages = messages.slice(0, editIndex); // Remove everything after the edited message
-			setEditIndex(null); // Reset edit index to null
+			updatedMessages = messages.slice(0, editIndex);
+			setEditIndex(null);
 		}
 
-		/**
-		 * Add user's message to chat
-		 */
-
 		const userMessage = {
-			id: messages.length,
+			id: updatedMessages.length,
 			text: input,
 			time: new Date().toLocaleString(),
 			type: "Question",
@@ -173,39 +253,77 @@ function App() {
 
 		updatedMessages = [...updatedMessages, userMessage];
 		setMessages(updatedMessages);
-
-		/**
-		 * Send message to Flask backend using axios
-		 */
-
 		setLoading(true);
-		axios
-			.post("http://localhost:444/chat", {
-				message: input,
-				conversationHistory: updatedMessages,
-			})
-			.then((response) => {
-				const botResponse = {
-					id: messages.length + 1,
-					text: response.data.response,
-					type: "Response",
-					sender: "Chatbot",
-				};
-				setMessages((prevMessages) => [...prevMessages, botResponse]);
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.error("Error fetching chatbot response:", error);
-				handleError({
-					title: "Chatbot Error",
-					body: "Failed to fetch response from the chatbot.",
-				});
-				setLoading(false);
-			});
-		/**
-		 * Clear the input field after submission
-		 */
 		setInput("");
+
+		let botText = "";
+
+		// Send the message to backend via Socket.IO
+		socket.emit("chat", {
+			message: input,
+			conversationHistory: updatedMessages,
+		});
+
+		// Listener for streamed chunks
+		const handleChunk = (data) => {
+			botText += data.chunk;
+
+			setMessages((prevMessages) => {
+				// If the last message is from Chatbot, update it
+				const last = prevMessages[prevMessages.length - 1];
+				if (last && last.sender === "Chatbot") {
+					const updated = [...prevMessages];
+					updated[updated.length - 1] = {
+						...last,
+						text: botText,
+					};
+					return updated;
+				} else {
+					return [
+						...prevMessages,
+						{
+							id: prevMessages.length,
+							text: botText,
+							type: "Response",
+							sender: "Chatbot",
+						},
+					];
+				}
+			});
+		};
+
+		const handleDone = () => {
+			setLoading(false);
+			socket.off("chunk", handleChunk);
+			socket.off("done", handleDone);
+			socket.off("error", handleErrorEvent);
+		};
+
+		const handleErrorEvent = (err) => {
+			handleError({
+				title: "Chatbot Error",
+				body: err?.error || "Something went wrong.",
+			});
+			setLoading(false);
+			socket.off("chunk", handleChunk);
+			socket.off("done", handleDone);
+			socket.off("error", handleErrorEvent);
+		};
+
+		// Attach listeners
+		socket.on("chunk", handleChunk);
+		socket.on("done", handleDone);
+		socket.on("error", handleErrorEvent);
+
+	};
+
+	const handleCancel = () => {
+		if (socketRef.current) {
+			socketRef.current.emit("cancel");
+			socketRef.current.disconnect();
+			socketRef.current = null;
+		}
+		setLoading(false);
 	};
 
 	/**
@@ -381,6 +499,20 @@ function App() {
 		}
 	};
 
+
+	/**
+	 * Function to handle user starting a new chat, clears messages from state and clears input, resets edit index, and
+	 * clears the session storage. 
+	 */
+	const handleNewChat = () => {
+		setMessages([]);
+		setInput("");
+		setEditIndex(null);
+		sessionStorage.removeItem("messages");
+	};
+	
+
+
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
 	 */
@@ -442,9 +574,19 @@ function App() {
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
+			{/* ─── New Chat Button ───────────────────────── */}
+			<div className="flex justify-end p-4">
+					<button
+						onClick={handleNewChat}
+						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
+					>
+					New Chat
+				</button>
+			</div>
+
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
-					<div className='min-h-full flex flex-col justify-center items-center px-10'>
+					<div className='min-h-screen flex flex-col items-center px-10 justify-start lg:justify-center'>
 						<div className='flex flex-col items-center mb-7'>
 							<svg
 								width='180'
@@ -610,7 +752,9 @@ function App() {
 				<ChatBox
 					input={input}
 					setInput={setInput}
+					handleEnterkey={handleEnterkey}
 					handleSubmit={handleSubmit}
+					handleCancel={handleCancel}
 					handleDownloadtxt={handleDownloadtxt}
 					handleDownloadpdf={handleDownloadpdf}
 					handleDownloaddoc={handleDownloaddoc}
