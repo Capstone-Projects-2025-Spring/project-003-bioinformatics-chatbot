@@ -95,13 +95,3 @@ Doucumentation of Backend API From Flask Server
   - Redirects to `/index`
  
 </details>
-
-### `GET /test`
-<details open="True"> 
-	
-- Tests the Flask and React connection and performs a database query for the admin user. 
-- Method: `GET` 
-- Returns: 
-	 - if the admin user exists: `{ "message": "Hello: <username>" }`  
-	 - if the admin user does not exist: `{ "message": "No one is here :()." }`  
-</details>
