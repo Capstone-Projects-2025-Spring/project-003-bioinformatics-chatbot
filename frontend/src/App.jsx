@@ -470,6 +470,20 @@ function App() {
 		}
 	};
 
+
+	/**
+	 * Function to handle user starting a new chat, clears messages from state and clears input, resets edit index, and
+	 * clears the session storage. 
+	 */
+	const handleNewChat = () => {
+		setMessages([]);
+		setInput("");
+		setEditIndex(null);
+		sessionStorage.removeItem("messages");
+	};
+	
+
+
 	/**
 	 * Save messages to sessionStorage and auto-scroll to bottom whenever the messages state changes.
 	 */
@@ -530,6 +544,16 @@ function App() {
 			{error.title && (
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
+
+			{/* ─── New Chat Button ───────────────────────── */}
+			<div className="flex justify-end p-4">
+					<button
+						onClick={handleNewChat}
+						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
+					>
+					New Chat
+				</button>
+			</div>
 
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
