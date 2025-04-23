@@ -371,6 +371,8 @@ def chat_message():
         
         if not data or "doc_toggle" not in data:
             return jsonify({"error": "doc_toggle is required"}), 400
+        
+        print("doc_toggle value:", data["doc_toggle"], flush=True)
 
         user_message = data["message"]
 
@@ -394,23 +396,23 @@ def chat_message():
             print(f"Score: {score}")
             print("---")
 
-        # Filter documents with similarity score ≥ 0.90
-        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
-
-        # If doc_toggle is set to False, return the response regardless of document context
-        if data["doc_toggle"] is False:
+        # If doc_toggle is set to True, return the response regardless of document context
+        if data["doc_toggle"] is True:
+            filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
+        elif data["doc_toggle"] is False:
             filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
-            # If no document meets the threshold, return a message to the frontend
-            if not filtered_docs:
-                return (
-                    jsonify(
-                        {
-                            "response": "No document found",
-                            "message": "No relevant information available.",
-                        }
-                    ),
-                    200,
-                )
+        
+        # If no document meets the threshold, return a message to the frontend
+        if not filtered_docs:
+            return (
+                jsonify(
+                    {
+                        "response": "No document found",
+                        "message": "No relevant information available.",
+                    }
+                ),
+                200,
+            )
 
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
