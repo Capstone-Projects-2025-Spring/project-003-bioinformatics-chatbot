@@ -1,6 +1,5 @@
-from app import create_app, db
+from app import create_app, db, socketio
 from app.models import User
-from flask_cors import CORS
 
 """
 app initializtion point
@@ -24,5 +23,5 @@ with app.app_context():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
 
