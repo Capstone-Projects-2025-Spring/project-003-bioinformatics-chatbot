@@ -581,7 +581,9 @@ function App() {
 					</div>
 				</main>
 			) : (
-				<div className='flex justify-center h-full overflow-y-auto '>
+				<div
+					className='flex justify-center h-full overflow-y-auto '
+					data-testid='messageContainer'>
 					<div className='w-full py-2 px-4 max-w-7xl mx-auto mt-7'>
 						{messages.map((msg, index) =>
 							msg.type === "Question" ? (

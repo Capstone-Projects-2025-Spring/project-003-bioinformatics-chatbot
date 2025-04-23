@@ -3,6 +3,7 @@ import {
 	screen,
 	fireEvent,
 	waitFor,
+	within,
 	cleanup,
 } from "@testing-library/react";
 import { vi, describe, it, expect, afterEach, beforeEach } from "vitest";
@@ -170,5 +171,37 @@ describe("Chat Page", () => {
 
 		// Check if scrollIntoView is called when new messages are added
 		expect(scrollIntoViewMock).toHaveBeenCalled();
+	});
+	it("only submits the first message if multiple submits happen quickly", async () => {
+		axios.post.mockClear();
+		render(<App />);
+		axios.post.mockImplementation(() => {
+			return new Promise((resolve) =>
+				setTimeout(() => resolve({ data: { response: "First response" } }), 500)
+			);
+		});
+
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
+
+		// Submit the first message
+		fireEvent.change(inputField, { target: { value: "First message" } });
+		fireEvent.click(submitButton);
+
+		// Try to submit a second message immediately
+		fireEvent.change(inputField, { target: { value: "Second message" } });
+		fireEvent.click(submitButton);
+
+		// Wait for the first message to show
+		await waitFor(() => {
+			expect(screen.getByText("First message")).toBeInTheDocument();
+		});
+
+		// ✅ Ensure only one API call was made
+		expect(axios.post).toHaveBeenCalledTimes(1);
+
+		// ✅ Ensure the second message does NOT appear in the chat history (scoped to message container)
+		const container = screen.getByTestId("messageContainer");
+		expect(within(container).queryByText("Second message")).toBeNull();
 	});
 });
