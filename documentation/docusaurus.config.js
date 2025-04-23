@@ -116,12 +116,14 @@ const config = {
               position: 'left',
               label: 'Documentation',
             },
+
             {
-              type: 'doc',
-              docId: 'tutorial/intro',
+              to: '/Hosting',
+              label: 'Hosting',
               position: 'left',
-              label: 'Hosting Tutorial',
+
             },
+
             {
               href: 'https://github.com/'+process.env.ORG_NAME+'/'+process.env.PROJECT_NAME,
               label: 'GitHub',
@@ -203,6 +205,7 @@ const config = {
         routeBasePath: 'tutorial',
         sidebarPath: require.resolve('./sidebars.js'),
         // ... other options
+        
       },
     ],
     [

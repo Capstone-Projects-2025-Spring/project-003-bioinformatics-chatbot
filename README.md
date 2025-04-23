@@ -34,11 +34,7 @@ The chat interface is the crux of our application. The user can ask the chatbot 
 
 For the chatbot to deliver quality answers tailored towards Bioinformatics, there is a backend application where users can upload relevant documentation. After logging in, users can navigate to the documentation upload page by clicking on the "Upload PDF" link. Once on the page, the user can upload their bioinformatics documentation which is stored inside of our database for the LLM to reference when producing accurate responses.  
  
-## How to Host and port forward this project to use in your own lab?  
-### (Please check Hardware requirement below before proceeding)
 
-1. Click this link [Hosting](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/tree/Hosting) to access the branch purposely made for Hosting service
-2. 
 
 
 ## How to run this project in your own environment?
@@ -73,6 +69,12 @@ POSTGRES_HOST_AUTH_METHOD=trust
 Backend host is http://localhost:444/  
 Default Username is admin  
 Default Password is admin  
+
+## How to Host and port forward this project to use in your own lab?  
+### (Please check Hardware requirement below before proceeding)
+
+1. Click this link [Hosting](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/tree/Hosting) to access the branch purposely made for Hosting service 
+2. Then read this [documentation](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/Hosting) for more information.
 
 ## Required Resources
 ### Hardware Requirements for local development
