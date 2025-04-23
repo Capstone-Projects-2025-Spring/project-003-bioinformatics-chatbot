@@ -52,6 +52,11 @@ function App() {
 	const [position, setPosition] = useState({ x: 50, y: 50 });
 
 	/**
+	 * State for managing the toggle for the document download options.
+	 * */
+	const [docToggle, setDocToggle] = useState(false);
+
+	/**
 	 * Load messages from sessionStorage on component mount.
 	 */
 	useEffect(() => {
@@ -180,6 +185,7 @@ function App() {
 			.post("http://localhost:444/chat", {
 				message: input,
 				conversationHistory: updatedMessages,
+				doc_toggle: docToggle,
 			})
 			.then((response) => {
 				const botResponse = {
@@ -612,6 +618,7 @@ function App() {
 					cancelEdit={cancelEdit}
 					editIndex={editIndex}
 					loading={loading}
+					setDocToggle={setDocToggle}
 					className='flex-1'
 				/>
 			</div>
