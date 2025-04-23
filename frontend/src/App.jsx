@@ -136,6 +136,9 @@ function App() {
 		 * Prevent the default form submission behavior (which would reload the page).
 		 */
 		e.preventDefault();
+
+		if (loading) return;
+
 		if (!input.trim()) {
 			/**
 			 * Error handling: If the input is empty, set an error message.
