@@ -1,13 +1,37 @@
-def test_chat_message_valid(client):
-    # Test sending a valid message to the chat route
-    response = client.post("/chat", json={"message": "Hello, chatbot!", "conversationHistory": [], "doc_toggle": False})
 
-    # Check for status code and response
+from langchain_core.runnables import RunnableLambda
+
+def test_chat_message_valid(client, app, monkeypatch):
+    # Mock query_database to return one valid document
+    def mock_query_database(query):
+        class MockDoc:
+            def __init__(self, content):
+                self.page_content = content
+        return [(MockDoc("This is a mock document about BioInformatics."), 0.95)]
+
+    monkeypatch.setattr("app.main.routes.query_database", mock_query_database)
+
+    # Wrap a simple lambda in a Runnable
+    mock_llm = RunnableLambda(lambda inputs: (
+        "This is a mocked LLM response based on the provided BioInformatics document."
+    ))
+
+    monkeypatch.setattr("app.main.routes.llm", mock_llm)
+
+    # Make POST request to /chat with message and empty conversation history
+    response = client.post(
+        "/chat",
+        json={
+            "message": "Tell me about BioInformatics.",
+            "conversationHistory": [],
+        },
+    )
+
+    # Validate the response
     assert response.status_code == 200
     json_data = response.get_json()
     assert "response" in json_data
-    assert json_data["response"] != ""
-    assert json_data["response"] != None
+    assert "This is a mocked LLM response based on the provided BioInformatics document." in json_data["response"]
 
 
 def test_chat_message_missing(client):

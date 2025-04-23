@@ -11,14 +11,26 @@ import LoadingSpinner from "./loadingSpinner";
  * @property {string} input - The current input value.
  * @property {function} setInput - Callback to update the input value.
  * @property {function} handleSubmit - Callback to handle form submission.
+ * @property {function} handleCancel - Callback to cancel message editing.
+ * @property {number} editIndex - Index of the message being edited (if any).
+ * @property {function} cancelEdit - Callback to cancel editing state.
+ * @property {function} handleDownloadtxt - Function to download the chat log as a .txt file.
+ * @property {function} handleDownloadpdf - Function to download the chat log as a .pdf file.
+ * @property {function} handleDownloaddoc - Function to download the chat log as a .docx file.
+ * @property {boolean} loading - Indicates whether a response is being loaded.
  */
 ChatBox.propTypes = {
-	input: PropTypes.string.isRequired, // 'input' must be a required prop of type string
-	setInput: PropTypes.func.isRequired, // 'setInput' must be a required prop of type function
-	handleSubmit: PropTypes.func.isRequired, // 'handleSubmit' must be a required prop of type function
-	setDocToggle: PropTypes.func.isRequired, // 'setDocToggle' must be a required prop of type function
+	input: PropTypes.string.isRequired,
+	setInput: PropTypes.func.isRequired,
+	handleSubmit: PropTypes.func.isRequired,
+	handleCancel: PropTypes.func.isRequired,
+	editIndex: PropTypes.number,
+	cancelEdit: PropTypes.func.isRequired,
+	handleDownloadtxt: PropTypes.func.isRequired,
+	handleDownloadpdf: PropTypes.func.isRequired,
+	handleDownloaddoc: PropTypes.func.isRequired,
+	loading: PropTypes.bool.isRequired,
 };
-
 /**
  * ChatBox component renders a chat input form with an input field and submit button.
  *
@@ -36,7 +48,9 @@ ChatBox.propTypes = {
 export default function ChatBox({
 	input,
 	setInput,
+	handleEnterkey,
 	handleSubmit,
+	handleCancel,
 	editIndex,
 	cancelEdit,
 	handleDownloadtxt,
@@ -115,6 +129,7 @@ export default function ChatBox({
 						placeholder="What's on your mind?..."
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={handleEnterkey}
 						rows={1}
 						className='w-full min-h-[2.5rem] max-h-[10rem] px-2 mt-1 text-primary bg-transparent resize-none overflow-auto focus:outline-none focus:ring-2 focus:ring-transparent transition-all duration-300 ease-in-out scrollbar-hide rounded-none'
 					/>
@@ -193,24 +208,48 @@ export default function ChatBox({
 						</div>
 
 						<div className='flex items-center gap-2'>
-							<button
-								type='submit'
-								data-testid='submitButton'
-								className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									fill='none'
-									viewBox='0 0 24 24'
-									strokeWidth={1.5}
-									stroke='currentColor'
-									className='size-5 text-white'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										d='M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5'
-									/>
-								</svg>
-							</button>
+							{!loading ? (
+								<button
+									type='submit'
+									data-testid='submitButton'
+									className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-5 text-white'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5'
+										/>
+									</svg>
+								</button>
+							) : (
+								<button
+									data-testid='cancelButton'
+									className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'
+									onClick={(e) => {
+										e.preventDefault(); // Prevent the default behavior
+										handleCancel();
+									}}>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='currentColor'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-5 text-white'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z'
+										/>
+									</svg>
+								</button>
+							)}
 							{isDialogOpen && (
 								<div className='flex items-center gap-2'>
 									<button
