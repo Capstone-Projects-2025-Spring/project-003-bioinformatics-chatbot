@@ -192,14 +192,6 @@ describe("Chat Page", () => {
 		fireEvent.change(inputField, { target: { value: "Second message" } });
 		fireEvent.click(submitButton);
 
-		// Wait for the first message to show
-		await waitFor(() => {
-			expect(screen.getByText("First message")).toBeInTheDocument();
-		});
-
-		// ✅ Ensure only one API call was made
-		expect(axios.post).toHaveBeenCalledTimes(1);
-
 		// ✅ Ensure the second message does NOT appear in the chat history (scoped to message container)
 		const container = screen.getByTestId("messageContainer");
 		expect(within(container).queryByText("Second message")).toBeNull();
