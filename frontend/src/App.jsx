@@ -453,6 +453,16 @@ function App() {
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
+			{/* ─── New Chat Button ───────────────────────── */}
+			<div className="flex justify-end p-4">
+					<button
+						onClick={handleNewChat}
+						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
+					>
+					New Chat
+				</button>
+			</div>
+
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
 					<div className='min-h-full flex flex-col justify-center items-center px-10'>
