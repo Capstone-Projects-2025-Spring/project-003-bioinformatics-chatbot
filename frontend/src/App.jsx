@@ -128,6 +128,18 @@ function App() {
 	};
 
 	/**
+	 * Handle enter key, enter key will sumbit the query
+	 *  @param {Event} e - The event object.
+	 */
+	const handleEnterkey = (e) => {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault();
+			console.log('Enter pressed'); // just to test
+			handleSubmit(e);
+		  }
+	};
+
+	/**
 	 * Handle form submission for adding new messages.
 	 * @param {Event} e - The event object.
 	 */
@@ -605,6 +617,7 @@ function App() {
 				<ChatBox
 					input={input}
 					setInput={setInput}
+					handleEnterkey={handleEnterkey}
 					handleSubmit={handleSubmit}
 					handleDownloadtxt={handleDownloadtxt}
 					handleDownloadpdf={handleDownloadpdf}
