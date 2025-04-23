@@ -5,7 +5,7 @@
  */
 
 /* You can override the default Infima variables here. */
-:root {
+/* :root {
   --ifm-color-primary: #9d2235;
   --ifm-color-primary-dark: #8d1f30;
   --ifm-color-primary-darker: #851d2d;
@@ -15,10 +15,22 @@
   --ifm-color-primary-lightest: #cc2c45;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+} */
+
+:root {
+  --ifm-color-primary: #6a0dad; /* Primary Purple */
+  --ifm-color-primary-dark: #5e0c9f;
+  --ifm-color-primary-darker: #530b8f;
+  --ifm-color-primary-darkest: #46097a;
+  --ifm-color-primary-light: #7c25c1;
+  --ifm-color-primary-lighter: #8943c7;
+  --ifm-color-primary-lightest: #9963d1;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.05);
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+/* [data-theme='dark'] {
   --ifm-color-primary: #ff3858;
   --ifm-color-primary-dark: #ff193e;
   --ifm-color-primary-darker: #ff0931;
@@ -27,6 +39,17 @@
   --ifm-color-primary-lighter: #ff677f;
   --ifm-color-primary-lightest: #ff7087;
   --ifm-footer-background-color: black;
+} */
+
+[data-theme='dark'] {
+  --ifm-color-primary: #bb86fc; /* Soft Neon Purple */
+  --ifm-color-primary-dark: #a066e6;
+  --ifm-color-primary-darker: #9057cc;
+  --ifm-color-primary-darkest: #7c3eb2;
+  --ifm-color-primary-light: #c89afd;
+  --ifm-color-primary-lighter: #d3aefd;
+  --ifm-color-primary-lightest: #dec3fe;
+  --ifm-footer-background-color: #1c1c1e; /* Dark gray footer */
 }
 
 .medium-zoom-overlay{
