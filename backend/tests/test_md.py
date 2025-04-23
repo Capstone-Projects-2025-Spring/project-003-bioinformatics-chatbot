@@ -49,7 +49,9 @@ def test_md(mock_query_database, client, app):
 
     response = client.post("/chat", json={"message": "Tell me about DNA", "conversationHistory": [], "doc_toggle": False})
     content = response.get_data(as_text=True)
-    print(content)
+    content = content.strip()
+    content = content.replace("\r\n", "\n")  # Normalize line endings
+    print(repr(content))
     md_format = False
     patterns = [
         r"^\s*#+\s",                    # Headers (allow leading spaces)
@@ -60,6 +62,11 @@ def test_md(mock_query_database, client, app):
         r"^-{3,}$",                     # Horizontal rules
         r"^\s*[-*\+]\s",                # Lists
         r">",                           # Blockquotes
+        r"^\s*\d+\.\s",                 # Numbered lists
+        r"^```",                        # Fenced code blocks
+        r"^\|(.+)\|$",                  # Tables
+        r"\$\$(.*?)\$\$|\$(.*?)\$",     # Inline or block math
+        r"<[^>]+>",                     # HTML tags
     ]
     for pattern in patterns:
         if re.search(pattern, content, re.M):
