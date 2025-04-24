@@ -180,7 +180,7 @@ export default function ChatBox({
 							</svg>
 							{!loading ? (
 								<h1 className='text-sm sm:text-lg font-bold text-primary font-heading mr-1'>
-									BioGenie
+									
 								</h1>
 							) : (
 								<LoadingSpinner />

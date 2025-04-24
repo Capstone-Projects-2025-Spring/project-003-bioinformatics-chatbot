@@ -572,9 +572,61 @@ function App() {
 				<ErrorBox title={error.title} body={error.body} setError={setError} />
 			)}
 
-			{/* ─── New Chat Button ───────────────────────── */}
+			{/* ─── New Chat Button, LOGO, and Title ───────────────────────── */}
 			<div className="flex justify-end p-4">
-					<button
+				
+				<svg
+						className="absolute top-4 left-4"
+						width='32'
+						height='32'
+						viewBox='0 0 200 200'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'>
+						<path
+							d='M60 40 C100 60, 100 140, 60 160'
+							stroke='oklch(60% 0.12 296)'
+							strokeWidth='8'
+							fill='none'
+						/>
+						<path
+							d='M140 40 C100 60, 100 140, 140 160'
+							stroke='oklch(60% 0.12 296)'
+							strokeWidth='8'
+							fill='none'
+						/>
+						<line
+							x1='80'
+							y1='60'
+							x2='120'
+							y2='60'
+							stroke='oklch(70% 0.09 296)'
+							strokeWidth='4'
+						/>
+						<line
+							x1='80'
+							y1='90'
+							x2='120'
+							y2='90'
+							stroke='oklch(70% 0.09 296)'
+							strokeWidth='4'
+						/>
+						<line
+							x1='80'
+							y1='120'
+							x2='120'
+							y2='120'
+							stroke='oklch(70% 0.09 296)'
+							strokeWidth='4'
+						/>
+				</svg>
+											
+ 				<h1 className="text-2xl font-bold text-primary font-heading absolute top-4 left-12">
+					BioGenie
+ 				</h1>	
+				
+					
+				
+				<button
 						onClick={handleNewChat}
 						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
 					>
