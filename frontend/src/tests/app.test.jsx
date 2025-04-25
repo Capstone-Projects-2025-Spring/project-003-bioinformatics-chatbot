@@ -158,6 +158,53 @@ describe("Chat Page", () => {
 		expect(screen.getByText("Previous response")).toBeInTheDocument();
 	});
 
+
+	//  Test to ensure the spinner disappears, chat is cleared, cancel and disconnect are called, sessionStorage is cleared
+	it("clears state and stops loading when New Chat is clicked", async () => {
+		// Set up mocks for sessionStorage and loading state
+		Storage.prototype.getItem = vi.fn(() =>
+			JSON.stringify([
+				{ id: 1, text: "Old question", type: "Question" },
+				{ id: 2, text: "Old answer", type: "Response" },
+			])
+		);
+		const removeItemMock = vi.fn();
+		Storage.prototype.removeItem = removeItemMock;
+	
+		render(<App />);
+	
+		// Type a message to simulate activity
+		const inputField = screen.getByTestId("input");
+		const submitButton = screen.getByTestId("submitButton");
+	
+		fireEvent.change(inputField, { target: { value: "Hello" } });
+		fireEvent.click(submitButton);
+	
+		// Spinner should appear
+		expect(await screen.findByTestId("spinner")).toBeInTheDocument();
+	
+		// Click New Chat
+		const newChatButton = screen.getByTestId("newChatButton");
+		fireEvent.click(newChatButton);
+	
+		// Spinner should disappear
+		await waitFor(() => {
+			expect(screen.queryByTestId("spinner")).not.toBeInTheDocument();
+		});
+	
+		// Input should be cleared
+		expect(screen.getByTestId("input").value).toBe("");
+	
+		// Messages should be cleared
+		expect(screen.queryByText("Old question")).not.toBeInTheDocument();
+		expect(screen.queryByText("Old answer")).not.toBeInTheDocument();
+	
+		// Ensure session was cleared and socket was disconnected
+		expect(removeItemMock).toHaveBeenCalledWith("messages");
+		expect(emitMock).toHaveBeenCalledWith("cancel");
+		expect(disconnectMock).toHaveBeenCalled();
+	});
+
 	//  Test to ensure auto-scrolling works when messages update
 	it("calls scrollIntoView when messages state updates", () => {
 		// Mock scrollIntoView
