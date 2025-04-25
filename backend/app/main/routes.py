@@ -401,7 +401,7 @@ def chat_message():
 
         if not data or "doc_toggle" not in data:
             return jsonify({"error": "doc_toggle is required"}), 400
-        
+
         if "stored_context" not in data:
             return jsonify("error", {"error": "stored_context is required"}), 400
 
@@ -422,7 +422,7 @@ def chat_message():
 
         # If doc_toggle is set to True, return the response regardless of document context
         filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
-        
+
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
             return (
@@ -527,11 +527,11 @@ def handle_chat(data):
         if "conversationHistory" not in data:
             emit("error", {"error": "conversationHistory is required"})
             return
-        
+
         if "doc_toggle" not in data:
             emit("error", {"error": "doc_toggle is required"})
             return
-        
+
         if "stored_context" not in data:
             emit("error", {"error": "stored_context is required"})
             return
@@ -576,8 +576,10 @@ def handle_chat(data):
             context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
             stored_context = context  # Store the context for this session
         else:
-            stored_context = data
-            current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+            stored_context = data["stored_context"]
+            current_context = "\n\n---\n\n".join(
+                [doc.page_content for doc, _ in filtered_docs]
+            )
             context = f"{stored_context}\n\n---\n\n{current_context}"
 
         system_message = (
@@ -592,11 +594,11 @@ def handle_chat(data):
                 "You are only to answer questions based on the provided context.\n"
                 "If a question is not in the context, you should say 'I don't know'.\n"
             )
-        
+
         system_message += (
-            "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+            "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
             "---\n"
-            "Context:\n{context}\n" # Insert relevent documents as 'context'
+            "Context:\n{context}\n"  # Insert relevent documents as 'context'
             "---"
         )
 
@@ -604,8 +606,8 @@ def handle_chat(data):
         prompt_template = ChatPromptTemplate.from_messages(
             [
                 ("system", system_message),
-                MessagesPlaceholder(variable_name="history"), 
-                ("human", "{user_message}"), 
+                MessagesPlaceholder(variable_name="history"),
+                ("human", "{user_message}"),
             ]
         )
 
@@ -625,7 +627,9 @@ def handle_chat(data):
                 return  # Exit early if cancelled
             emit("chunk", {"chunk": chunk})  # Emit each chunk of the response
 
-        emit("stored_context", {"stored_context": stored_context})  # Emit the stored context
+        emit(
+            "stored_context", {"stored_context": stored_context}
+        )  # Emit the stored context
 
         # Emit the final status once the response is complete
         emit("done", {"status": "complete"})
@@ -645,7 +649,6 @@ def handle_cancel():
     # Get the socket ID for the current session
     sid = request.sid
     active_sessions[sid] = False  # Mark this session as cancelled
-
 
 
 @bp.route("/change_password", methods=["GET"])
@@ -677,12 +680,12 @@ def change_password():
         flash("New password cannot be the same as the current password.", "error")
         return redirect(url_for("main.change_password"))
 
-
     current_user.password_hash = generate_password_hash(new)
     db.session.commit()
 
     flash("Password changed successfully.", "success")
     return redirect(url_for("main.admin"))
+
 
 @bp.route("/logout")
 @login_required  # Ensure user is logged in to access this route
