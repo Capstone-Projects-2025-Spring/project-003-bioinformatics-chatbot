@@ -6,7 +6,7 @@
 # BioInformatics Software Tutorial Chatbot
 [![Report Issue on Jira](https://img.shields.io/badge/Report%20Issues-Jira-0052CC?style=flat&logo=jira-software)](https://temple-cis-projects-in-cs.atlassian.net/jira/software/c/projects/DT/issues)
 [![Deploy Docs](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml/badge.svg)](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml)
-[![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://applebaumian.github.io/tu-cis-4398-docs-template/)
+[![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://capstone-projects-2025-spring.github.io/project-003-bioinformatics-chatbot/)
 [![CI Status](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/actions/workflows/ci-tests.yml)
 
 
@@ -36,13 +36,45 @@ For the chatbot to deliver quality answers tailored towards Bioinformatics, ther
  
 
 
-## Conceptual Design
 
-The frontend user interface of this app will be built using **React.js, JavaScript, HTML, and CSS**. This will allow for the creation of a clean and lightweight application for UI components, a satisfying user interface, and one that can handle user interactions well. It will also be responsible for sending user queries to the AI system, holding the chat history for context, and allowing users to download their conversation so that the method tutorial can be saved. The backend will be built using **Python** and **Flask**. The chatbot will be powered by **Retrieval-Augmented Generation (RAG)** to retrieve the correct method for the problem given by the user, and an **LLM** to use the provided method from the RAG to create a tutorial for the user.
+## How to run this project in your own environment?
 
-## Background
+1. Install and Open Docker Desktop and Vscode
+2. Download and unzip the source code in the most recent [project release](github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest)
+3. In Vscode open the project file, in the backend folder create .env file and database.env
+4. In the .env file put this
+```
+#database variables
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=database
+POSTGRES_HOST_AUTH_METHOD=trust
+```
+5. In the database.env put this:
+```
+#database variables
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=database
+POSTGRES_HOST_AUTH_METHOD=trust
+```
+6. If on Windows, update docker-entrypoint.sh in backend, and docker-compose.yml, to LF format from CRLF format in Vscode by hiting ctrl+shift+p and clicking on "Change End of Line Sequence" and LF. Then save the files.
+7. In vscode open the terminal and cd to the project from current release number
+- For example, release v1.0.0 `cd project-003-bioinformatics-chatbot-1.0.0` 
+- or release v2.0.0 `cd project-003-bioinformatics-chatbot-2.0.0`
+8. Run this commands in the terminal one at a time, it may take a while to build due to LLM.  
+`docker compose -f docker-compose.yml build`  
+`docker compose -f docker-compose.yml up`
+9. Frontend host is http://localhost:5173/  
+Backend host is http://localhost:444/  
+Default Username is admin  
+Default Password is admin  
 
-Bioinformatics is a rapidly growing field that is using breakthroughs in Computer Science and Machine Learning to study and solve biological problems. Multiple Nobel Prizes in the past few years have been won in the fields of Biology and Chemistry by computer scientists. However, given the differences between both the content and the people in the respective fields, clear and effective communication can be a challenge. With the breakthroughs in the AI field and the rise of Large Language Models, the ability to bridge this gap has never been easier, allowing researchers on both sides of the academic 'fence' to easily learn about and work in the field of Bioinformatics. With that in mind, this Chatbot is meant to help bridge that communication gap, with the ability to customize answers and answer specific questions surrounding bioinformatics.
+## How to Host and port forward this project to use in your own lab?  
+### (Please check Hardware requirement below before proceeding)
+
+1. Click this link [Hosting](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/tree/Hosting) to access the branch purposely made for Hosting service 
+2. Then read this [documentation](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/Hosting) for more information.
 
 ## Required Resources
 ### Hardware Requirements for local development
@@ -50,7 +82,7 @@ Bioinformatics is a rapidly growing field that is using breakthroughs in Compute
 - At least **8 GB of RAM**
 - At least **2 GB of free disk space**
 
-### Hardware Requirements for Hosting service
+### Hardware Requirements for Hosting service 
 - A computer with a modern operating system (Windows, macOS, or Linux)
 - At least **8GB of RAM**
 - At least **10 GB of VRAM** (Prefer 12GB NVIDIA GPU with CUDA support)

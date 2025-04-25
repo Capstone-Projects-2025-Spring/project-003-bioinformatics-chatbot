@@ -61,25 +61,27 @@
         <!-- Table -->
         <div class="overflow-x-auto border border-white">
             <div class="max-h-[640px] overflow-y-auto"> 
-                <table class="w-full text-sm text-left border-collapse text-white">
+                <table class="w-full table-fixed text-sm text-left border-collapse text-white">
                     <thead class="bg-white text-indigo-800 sticky top-0 z-10">
                         <tr>
-                            <th class="px-4 py-2 border border-white">Document Name</th>
-                            <th class="px-4 py-2 border border-white">Actions</th>
+                            <th class="w-[350px] px-4 py-2 border border-white">Document Name</th>
+                            <th class="w-[70px] px-4 py-2 border border-white">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-gradient-to-tr from-blue-800 to-purple-700">
                         {% for row in documents %}
                         <tr class="hover:bg-purple-900" style="height: 64px;">
-                            <td class="px-4 py-2 border border-white">{{ row.document_name }}</td>
-                            <td class="px-4 py-2 border border-white">
+                            <td class="w-[350px] px-4 py-2 border border-white truncate whitespace-nowrap overflow-hidden" title="{{ row.document_name }}">
+                                {{ row.document_name }}
+                            </td>
+                            <td class="w-[70px] px-4 py-2 border border-white">
                                 <a href="/download/{{ row.id }}">
-                                    <button
-                                        class="bg-white text-purple-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">
+                                    <button class="bg-white text-purple-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">
                                         Download
                                     </button>
                                 </a>
                             </td>
+                            
                         </tr>
                         {% endfor %}
                     </tbody>
