@@ -6,9 +6,10 @@ import "@testing-library/jest-dom/vitest";
 // Utility function to set up mock props for each test case
 const setup = () => {
 	const handleSubmit = vi.fn(); // Mock function to simulate form submission
+	const handleCancel = vi.fn(); // Mock function to simulate form submission
 	const setInput = vi.fn(); // Mock function to simulate state update when typing
 	const input = ""; // Initial input value (empty by default)
-	return { handleSubmit, setInput, input };
+	return { handleSubmit, setInput, input, handleCancel };
 };
 
 describe("ChatBox Component", () => {
@@ -78,5 +79,28 @@ describe("ChatBox Component", () => {
 
 		// Verify that handleSubmit was called once when submitted
 		expect(handleSubmit).toHaveBeenCalled();
+	});
+
+	// Test if handleSubmit is called when the form is submitted
+	it("calls handleCancel when form is submitted", () => {
+		const { handleSubmit, setInput, input, handleCancel } = setup();
+		render(
+			<ChatBox
+				loading={true}
+				input={input}
+				setInput={setInput}
+				handleSubmit={handleSubmit}
+				handleCancel={handleCancel}
+			/>
+		);
+
+		// Select the form element
+		const cancel = screen.getByTestId("cancelButton");
+
+		// Simulate form submission
+		fireEvent.click(cancel);
+
+		// Verify that handleSubmit was called once when submitted
+		expect(handleCancel).toHaveBeenCalled();
 	});
 });
