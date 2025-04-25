@@ -7,6 +7,7 @@ from flask import (
     url_for,
     request,
     session,
+    current_app,
 )
 from app.main import bp
 from app.models import User
