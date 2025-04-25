@@ -407,10 +407,7 @@ def chat_message():
             print("---")
 
         # If doc_toggle is set to True, return the response regardless of document context
-        if data["doc_toggle"] is True:
-            filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
-        elif data["doc_toggle"] is False:
-            filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
         
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
@@ -461,24 +458,9 @@ def chat_message():
 
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                (
-                    "system",  # System message to set the context for the model
-                    "You are a Retrieval Augmented Generation (RAG) model.\n"
-                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
-                    "You are only to answer questions based on the provided context.\n"
-                    "You are not allowed to make up information.\n"
-                    "You are not allowed to answer questions that are not in the context.\n"
-                    "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
-                    "---\n"
-                    "Context:\n{context}\n"  # Insert relevent documents as 'context'
-                    "---",
-                ),
-                MessagesPlaceholder(
-                    variable_name="history"
-                ),  # Insert conversation history
-                ("human", "{user_message}"),  # Insert user query
-
+                ("system", system_message),
+                MessagesPlaceholder(variable_name="history"), 
+                ("human", "{user_message}"), 
             ]
         )
 
@@ -527,9 +509,18 @@ def handle_chat(data):
         if "conversationHistory" not in data:
             emit("error", {"error": "conversationHistory is required"})
             return
+        
+        if "doc_toggle" not in data:
+            emit("error", {"error": "doc_toggle is required"})
+            return
+        
+        if "stored_context" not in data:
+            emit("error", {"error": "stored_context is required"})
+            return
 
         # Extract user message from incoming data
         user_message = data["message"]
+        doc_toggle = data["doc_toggle"]
 
         # Query the database using the user message to find relevant documents
         Documents = query_database(user_message)
@@ -538,7 +529,7 @@ def handle_chat(data):
         filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
 
         # If no relevant documents are found, notify the user
-        if not filtered_docs:
+        if not filtered_docs and doc_toggle is False:
             emit("chunk", {"chunk": "No document found"})
             emit("done", {"status": "complete"})
             return
@@ -554,28 +545,49 @@ def handle_chat(data):
                 history.add_ai_message(chat["text"])
 
         # Prepare the context for the LLM by joining the filtered documents
-        context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        # if doc_toggle is False:
+        #     context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        #     active_sessions[sid] = {"context": context}
+        # else:
+        #     stored_context = active_sessions.get(sid, {}).get("context", "")
+        #     current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        #     context = f"{stored_context}\n\n---\n\n{current_context}"
+
+        # Prepare the context for the LLM by joining the filtered documents
+        if doc_toggle is False:
+            context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+            stored_context = context  # Store the context for this session
+        else:
+            stored_context = data
+            current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+            context = f"{stored_context}\n\n---\n\n{current_context}"
+
+        system_message = (
+            "You are a Retrieval Augmented Generation (RAG) model.\n"
+            "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+            "You are not allowed to make up information.\n"
+        )
+
+        if data["doc_toggle"] is False:
+            system_message += (
+                "You are not allowed to answer questions that are not in the context.\n"
+                "You are only to answer questions based on the provided context.\n"
+                "If a question is not in the context, you should say 'I don't know'.\n"
+            )
+        
+        system_message += (
+            "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+            "---\n"
+            "Context:\n{context}\n" # Insert relevent documents as 'context'
+            "---"
+        )
 
         # Create a prompt template to guide the LLM's response
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                (
-                    "system",  # System message that sets the context for the model
-                    "You are a Retrieval Augmented Generation (RAG) model.\n"
-                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
-                    "You are only to answer questions based on the provided context.\n"
-                    "You are not allowed to make up information.\n"
-                    "You are not allowed to answer questions that are not in the context.\n"
-                    "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
-                    "---\n"
-                    "Context:\n{context}\n"  # Insert relevant documents as 'context'
-                    "---",
-                ),
-                MessagesPlaceholder(
-                    variable_name="history"
-                ),  # Placeholder for conversation history
-                ("human", "{user_message}"),  # Insert the user query into the prompt
+                ("system", system_message),
+                MessagesPlaceholder(variable_name="history"), 
+                ("human", "{user_message}"), 
             ]
         )
 
@@ -594,6 +606,8 @@ def handle_chat(data):
             if not active_sessions.get(sid):
                 return  # Exit early if cancelled
             emit("chunk", {"chunk": chunk})  # Emit each chunk of the response
+
+        emit("stored_context", {"stored_context": stored_context})  # Emit the stored context
 
         # Emit the final status once the response is complete
         emit("done", {"status": "complete"})

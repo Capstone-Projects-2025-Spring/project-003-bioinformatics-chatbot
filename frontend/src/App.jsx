@@ -51,12 +51,11 @@ function App() {
 
 	const [position, setPosition] = useState({ x: 50, y: 50 });
 
-	const socketRef = useRef(null);
-
-	/**
-	 * State for managing the toggle for the document download options.
-	 * */
 	const [docToggle, setDocToggle] = useState(false);
+
+	const [context, setContext] = useState(null);
+
+	const socketRef = useRef(null);
 
 	/**
 	 * Load messages from sessionStorage on component mount.
@@ -227,6 +226,8 @@ function App() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		if (loading) return;
+
 		if (!input.trim()) {
 			handleError({
 				title: "Empty Query",
@@ -265,6 +266,8 @@ function App() {
 		socket.emit("chat", {
 			message: input,
 			conversationHistory: updatedMessages,
+			docToggle: docToggle,
+			context: context,
 		});
 
 		// Listener for streamed chunks
@@ -295,32 +298,6 @@ function App() {
 			});
 		};
 
-
-		setLoading(true);
-		axios
-			.post("http://localhost:444/chat", {
-				message: input,
-				conversationHistory: updatedMessages,
-				doc_toggle: docToggle,
-			})
-			.then((response) => {
-				const botResponse = {
-					id: messages.length + 1,
-					text: response.data.response,
-					type: "Response",
-					sender: "Chatbot",
-				};
-				setMessages((prevMessages) => [...prevMessages, botResponse]);
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.error("Error fetching chatbot response:", error);
-				handleError({
-					title: "Chatbot Error",
-					body: "Failed to fetch response from the chatbot.",
-				});
-				setLoading(false);
-
 		const handleDone = () => {
 			setLoading(false);
 			socket.off("chunk", handleChunk);
@@ -332,7 +309,6 @@ function App() {
 			handleError({
 				title: "Chatbot Error",
 				body: err?.error || "Something went wrong.",
-
 			});
 			setLoading(false);
 			socket.off("chunk", handleChunk);
@@ -340,8 +316,13 @@ function App() {
 			socket.off("error", handleErrorEvent);
 		};
 
+		const handleContext = (Newcontext) => {
+			setContext(Newcontext);
+		}
+
 		// Attach listeners
 		socket.on("chunk", handleChunk);
+		socket.on("stored_context", handleContext);
 		socket.on("done", handleDone);
 		socket.on("error", handleErrorEvent);
 
@@ -753,7 +734,9 @@ function App() {
 					</div>
 				</main>
 			) : (
-				<div className='flex justify-center h-full overflow-y-auto '>
+				<div
+					className='flex justify-center h-full overflow-y-auto '
+					data-testid='messageContainer'>
 					<div className='w-full py-2 px-4 max-w-7xl mx-auto mt-7'>
 						{messages.map((msg, index) =>
 							msg.type === "Question" ? (
