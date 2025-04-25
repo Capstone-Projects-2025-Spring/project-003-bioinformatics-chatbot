@@ -576,7 +576,7 @@ function App() {
 
 
 		{/* ─── New Chat Button ───────────────────────── */}
-		<div className="flex justify-end gap-4 p-4 sm:relative lg:absolute lg:top-0 lg:right-0  0 lg:pr-10">
+		<div className="flex justify-end gap-7 p-4 sm:relative lg:absolute lg:top-0 lg:right-0  0 lg:pr-10">
 		<button
 		data-testid="newChatButton"
 		onClick={handleNewChat}
@@ -842,7 +842,7 @@ function App() {
 				</main>
 			) : (
 				<div className='flex justify-center h-full overflow-y-auto '>
-					<div className='w-full py-2 px-21 max-w-7xl mx-auto mt-7'>
+					<div className='w-full py-2 px-25 max-w-7xl mx-auto mt-7'>
 						{messages.map((msg, index) =>
 							msg.type === "Question" ? (
 								<UserBubble
