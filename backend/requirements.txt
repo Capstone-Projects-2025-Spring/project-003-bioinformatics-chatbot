@@ -19,3 +19,4 @@ langchain-ollama==0.2.3
 flask_login==0.6.3
 coverage==7.8.0
 PyMuPDF==1.24.10
+flask-socketio==5.5.1

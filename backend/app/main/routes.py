@@ -10,34 +10,21 @@ from flask import (
 )
 from app.main import bp
 from app.models import User
-from app import db
-from flask import current_app
+from app import db, socketio, llm
 from app.models import Document
-
+from flask_socketio import emit, disconnect
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_ollama.llms import OllamaLLM
 from langchain_community.chat_message_histories import ChatMessageHistory
-
-import ollama
-from ollama import chat
-from ollama import ChatResponse
-from ollama import Client
-
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 from app.doc_indexer.retrieve_document import query_database
 from sqlalchemy import delete
-from sqlalchemy.exc import SQLAlchemyError
-
-
 from flask_login import login_required, current_user, logout_user, login_user
+from werkzeug.security import check_password_hash, generate_password_hash
 
 """
 Places for routes in the backend
 """
-
-llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -377,12 +364,10 @@ def upload_pdf():
                 jsonify(
                     {
                         "message": f"File '{uploaded_file.filename}' uploaded successfully!"
-                        ,"redirect_url": url_for("main.upload_pdf")
                     }
                 ),
                 200,
             )
-           
 
         else:
             return (
@@ -395,8 +380,7 @@ def upload_pdf():
             )
 
     # If it's a GET request, render the upload.html template
-    else:
-        return render_template("main/upload.html", form=form)
+    return render_template("main/upload.html", form=form)
 
     """
 
@@ -418,15 +402,6 @@ def chat_message():
         print("doc_toggle value:", data["doc_toggle"], flush=True)
 
         user_message = data["message"]
-
-        history = ChatMessageHistory()
-
-        for chat in data["conversationHistory"]:
-            if chat["sender"] == "User":
-                history.add_user_message(chat["text"])
-            elif chat["sender"] == "Chatbot":
-                history.add_ai_message(chat["text"])
-        print("Chat History:", history.messages, flush=True)
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
@@ -457,6 +432,15 @@ def chat_message():
                 ),
                 200,
             )
+
+        history = ChatMessageHistory()
+
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+        print("Chat History:", history.messages, flush=True)
 
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
@@ -520,8 +504,113 @@ def chat_message():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
-from flask import request, flash, redirect, render_template, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
+# Dictionary to keep track of active sessions by their socket ID
+active_sessions = {}
+
+
+# This event handler listens for 'chat' events from clients
+@socketio.on("chat")
+def handle_chat(data):
+    try:
+        # Get the socket ID for the current session
+        sid = request.sid
+        active_sessions[sid] = True  # Mark session as active
+
+        # Check if 'message' is present in the incoming data, else return an error
+        if not data or "message" not in data:
+            emit("error", {"error": "Message is required"})
+            return
+
+        # Check if 'conversationHistory' is present in the incoming data, else return an error
+        if "conversationHistory" not in data:
+            emit("error", {"error": "conversationHistory is required"})
+            return
+
+        # Extract user message from incoming data
+        user_message = data["message"]
+
+        # Query the database using the user message to find relevant documents
+        Documents = query_database(user_message)
+
+        # Filter documents that have a score of 0.5 or greater
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+
+        # If no relevant documents are found, notify the user
+        if not filtered_docs:
+            emit("chunk", {"chunk": "No document found"})
+            emit("done", {"status": "complete"})
+            return
+
+        # Initialize history to store conversation context
+        history = ChatMessageHistory()
+
+        # Add previous conversation messages to the history
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+
+        # Prepare the context for the LLM by joining the filtered documents
+        context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+        # Create a prompt template to guide the LLM's response
+        prompt_template = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",  # System message that sets the context for the model
+                    "You are a Retrieval Augmented Generation (RAG) model.\n"
+                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+                    "You are only to answer questions based on the provided context.\n"
+                    "You are not allowed to make up information.\n"
+                    "You are not allowed to answer questions that are not in the context.\n"
+                    "If a question is not in the context, you should say 'I don't know'.\n"
+                    "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
+                    "---\n"
+                    "Context:\n{context}\n"  # Insert relevant documents as 'context'
+                    "---",
+                ),
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Placeholder for conversation history
+                ("human", "{user_message}"),  # Insert the user query into the prompt
+            ]
+        )
+
+        # Chain the prompt template with the LLM
+        chain = prompt_template | llm
+
+        # Stream the response from the LLM
+        for chunk in chain.stream(
+            {
+                "context": context,
+                "history": history.messages,
+                "user_message": user_message,
+            }
+        ):
+            # Check if the session has been cancelled, exit early if true
+            if not active_sessions.get(sid):
+                return  # Exit early if cancelled
+            emit("chunk", {"chunk": chunk})  # Emit each chunk of the response
+
+        # Emit the final status once the response is complete
+        emit("done", {"status": "complete"})
+
+    except Exception as e:
+        # If an error occurs, emit the error message
+        emit("error", {"error": str(e)})
+
+    finally:
+        # Clean up the session, remove it from active_sessions
+        active_sessions.pop(request.sid, None)
+
+
+# This event handler listens for 'cancel' events from clients
+@socketio.on("cancel")
+def handle_cancel():
+    # Get the socket ID for the current session
+    sid = request.sid
+    active_sessions[sid] = False  # Mark this session as cancelled
 
 
 @bp.route("/change_password", methods=["POST"])
@@ -565,20 +654,3 @@ def logout():
     logout_user()  # Log out the current user
     db.session.commit()
     return redirect(url_for("main.index"))
-
-
-from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
-from app.doc_parsers.parse_pdf import split_documents
-from app.doc_indexer.index_doc import index_and_add_to_db
-from app.doc_indexer.retrieve_document import query_database
-
-
-@bp.route("/test_indexing", methods=["GET"])
-def test_indexing():
-    documents = load_documents(DATA_PATH)
-    chunks = split_documents(documents)
-    index_and_add_to_db(chunks)
-    doc = query_database("cell cycle")
-    print(doc)
-
-    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
