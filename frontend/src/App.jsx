@@ -503,10 +503,11 @@ function App() {
 	 * clears the session storage. 
 	 */
 	const handleNewChat = () => {
+		handleCancel();
 		setMessages([]);
 		setInput("");
 		setEditIndex(null);
-		sessionStorage.removeItem("messages");
+		sessionStorage.removeItem("messages"); 
 	};
 	
 
@@ -575,6 +576,7 @@ function App() {
 			{/* ─── New Chat Button ───────────────────────── */}
 			<div className="flex justify-end p-4">
 					<button
+						data-testid="newChatButton"
 						onClick={handleNewChat}
 						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
 					>
