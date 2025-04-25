@@ -1,5 +1,14 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request, current_app
+from flask import (
+    jsonify,
+    render_template,
+    redirect,
+    send_file,
+    url_for,
+    request,
+    session,
+    current_app,
+)
 from app.main import bp
 from app.models import User
 from app import db, socketio, llm
@@ -387,10 +396,13 @@ def chat_message():
 
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
+
         if not data or "doc_toggle" not in data:
             return jsonify({"error": "doc_toggle is required"}), 400
         
+        if "stored_context" not in data:
+            return jsonify("error", {"error": "stored_context is required"}), 400
+
         print("doc_toggle value:", data["doc_toggle"], flush=True)
 
         user_message = data["message"]
@@ -448,19 +460,21 @@ def chat_message():
                 "You are only to answer questions based on the provided context.\n"
                 "If a question is not in the context, you should say 'I don't know'.\n"
             )
-        
+
         system_message += (
-            "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+            "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
             "---\n"
-            "Context:\n{context}\n" # Insert relevent documents as 'context'
+            "Context:\n{context}\n"  # Insert relevent documents as 'context'
             "---"
         )
 
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                ("system", system_message),
-                MessagesPlaceholder(variable_name="history"), 
-                ("human", "{user_message}"), 
+                ("system", system_message),  # System message to set the context
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Insert conversation history
+                ("human", "{user_message}"),  # Insert user query
             ]
         )
 
@@ -488,10 +502,12 @@ def chat_message():
     except Exception as e:
         print(f"Error: {str(e)}", flush=True)
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    
+
 
 # Dictionary to keep track of active sessions by their socket ID
 active_sessions = {}
+
+
 # This event handler listens for 'chat' events from clients
 @socketio.on("chat")
 def handle_chat(data):
@@ -499,7 +515,7 @@ def handle_chat(data):
         # Get the socket ID for the current session
         sid = request.sid
         active_sessions[sid] = True  # Mark session as active
-        
+
         # Check if 'message' is present in the incoming data, else return an error
         if not data or "message" not in data:
             emit("error", {"error": "Message is required"})
@@ -615,10 +631,11 @@ def handle_chat(data):
     except Exception as e:
         # If an error occurs, emit the error message
         emit("error", {"error": str(e)})
-        
+
     finally:
         # Clean up the session, remove it from active_sessions
         active_sessions.pop(request.sid, None)
+
 
 # This event handler listens for 'cancel' events from clients
 @socketio.on("cancel")
@@ -626,6 +643,7 @@ def handle_cancel():
     # Get the socket ID for the current session
     sid = request.sid
     active_sessions[sid] = False  # Mark this session as cancelled
+
 
 @bp.route("/change_password", methods=["POST"])
 @login_required
@@ -639,10 +657,21 @@ def change_password():
         return jsonify({"success": False, "message": "Missing required fields."}), 400
 
     if not check_password_hash(current_user.password_hash, current):
-        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+        return (
+            jsonify({"success": False, "message": "Current password is incorrect."}),
+            400,
+        )
 
     if new == current:
-        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "New password cannot be the same as the current password.",
+                }
+            ),
+            400,
+        )
 
     current_user.password_hash = generate_password_hash(new)
     db.session.commit()

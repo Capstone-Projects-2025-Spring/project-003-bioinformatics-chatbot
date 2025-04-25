@@ -49,11 +49,9 @@ def test_md(mock_query_database, client, app):
             response = client.post(
                 "/admin", data=data, content_type="multipart/form-data"
             )
-
     response = client.post(
         "/chat", json={"message": "Tell me about DNA", "conversationHistory": [],  "doc_toggle": False, "stored_context": ""}
     )
-
     content = response.get_data(as_text=True)
     content = content.strip()
     content = content.replace("\r\n", "\n")  # Normalize line endings
@@ -84,4 +82,3 @@ def test_md(mock_query_database, client, app):
     # except Exception as e:
     #     pytest.fail(f"Markdown conversion failed: {e}")
     # assert response.status_code == 200
-
