@@ -1,5 +1,13 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request, session
+from flask import (
+    jsonify,
+    render_template,
+    redirect,
+    send_file,
+    url_for,
+    request,
+    session,
+)
 from app.main import bp
 from app.models import User
 from app import db
@@ -45,7 +53,7 @@ def index():
     Description: Added a admin login.
 
     """
-   # fetch all document from database
+    # fetch all document from database
     documents = db.session.query(Document).all()
 
     form = LoginForm()
@@ -61,7 +69,10 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password", documents=documents
+                "main/index.html",
+                form=form,
+                error="Invalid username or password",
+                documents=documents,
             )
     # Pass the forms here.
     return render_template("main/index.html", form=form, documents=documents)
@@ -106,8 +117,12 @@ def admin():
                 )
 
             # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+            file_name = uploaded_file.filename.rsplit(".", 1)[
+                0
+            ]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[
+                -1
+            ]  # File extension (should be 'pdf')
 
             # Check if a document with the same name and type already exists
             existing_document = (
@@ -118,9 +133,11 @@ def admin():
 
             if existing_document:
                 return (
-                    jsonify({
-                        "error": f"A document named '{uploaded_file.filename}' already exists."
-                    }),
+                    jsonify(
+                        {
+                            "error": f"A document named '{uploaded_file.filename}' already exists."
+                        }
+                    ),
                     409,
                 )
 
@@ -138,26 +155,33 @@ def admin():
             process_doc(new_document)
 
             return (
-                jsonify({
-                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
-                        "id": new_document.id,
-                        "name": file_name,
-                        "type": file_type,
-                        "size": len(new_document.file_contents)
-                        }
-                        }),
+                jsonify(
+                    {
+                        "message": f"File '{uploaded_file.filename}' uploaded successfully!",
+                        "document": {
+                            "id": new_document.id,
+                            "name": file_name,
+                            "type": file_type,
+                            "size": len(new_document.file_contents),
+                        },
+                    }
+                ),
                 200,
             )
         else:
             return (
-                jsonify({
-                    "error": "Invalid form data. Please ensure all fields are filled correctly."
-                }),
+                jsonify(
+                    {
+                        "error": "Invalid form data. Please ensure all fields are filled correctly."
+                    }
+                ),
                 400,
             )
 
     documents = db.session.query(Document).all()
-    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
+    return render_template(
+        "main/admin.html", user=current_user, documents=documents, upload_form=form
+    )
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -213,8 +237,14 @@ def delete_item(item_id):
 
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
-        return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
-    
+        return (
+            jsonify(
+                {"success": False, "message": "Failed to delete item", "error": str(e)}
+            ),
+            500,
+        )
+
+
 @bp.route("/download/<int:item_id>", methods=["GET"])
 def download_document(item_id):
     """
@@ -238,22 +268,33 @@ def download_document(item_id):
 
         # Send an error if the document could not be found
         if not document:
-            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+            return (
+                jsonify({"success": False, "message": f"Item {item_id} not found"}),
+                404,
+            )
 
         # Gets the fullname by combining the name and the type
         filename = f"{document.document_name}.{document.document_type}"
-        
+
         # Sends the document with the proper name and the content of the file for download
         return send_file(
             BytesIO(document.file_contents),
             mimetype="application/pdf",
             download_name=filename,
-            as_attachment=True
+            as_attachment=True,
         )
 
     except Exception as e:
-        return jsonify({'success': False, 'message': 'Failed to download document', 'error': str(e)}), 500
-
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Failed to download document",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
 
 
 @bp.route("/test", methods=["GET"])
@@ -267,6 +308,7 @@ def test():
         return jsonify({"message": f"Hello: {user.username}"}), 200
     else:
         return jsonify({"message": "No one is here :()."}), 200
+
 
 """
 @bp.route("/upload", methods=["GET", "POST"])
@@ -358,6 +400,7 @@ def upload_pdf():
 
     """
 
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -368,10 +411,10 @@ def chat_message():
 
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
-        
+
         if not data or "doc_toggle" not in data:
             return jsonify({"error": "doc_toggle is required"}), 400
-        
+
         print("doc_toggle value:", data["doc_toggle"], flush=True)
 
         user_message = data["message"]
@@ -399,9 +442,10 @@ def chat_message():
         # If doc_toggle is set to True, return the response regardless of document context
         if data["doc_toggle"] is True:
             filtered_docs = [(doc, score) for doc, score in Documents if score >= 0]
+
         elif data["doc_toggle"] is False:
             filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
-        
+
         # If no document meets the threshold, return a message to the frontend
         if not filtered_docs:
             return (
@@ -432,19 +476,21 @@ def chat_message():
                 "You are only to answer questions based on the provided context.\n"
                 "If a question is not in the context, you should say 'I don't know'.\n"
             )
-        
+
         system_message += (
-            "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
+            "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
             "---\n"
-            "Context:\n{context}\n" # Insert relevent documents as 'context'
+            "Context:\n{context}\n"  # Insert relevent documents as 'context'
             "---"
         )
 
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                ("system", system_message), # System message to set the context
-                MessagesPlaceholder(variable_name="history"), # Insert conversation history
-                ("human", "{user_message}"), # Insert user query
+                ("system", system_message),  # System message to set the context
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Insert conversation history
+                ("human", "{user_message}"),  # Insert user query
             ]
         )
 
@@ -477,6 +523,7 @@ def chat_message():
 from flask import request, flash, redirect, render_template, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
+
 @bp.route("/change_password", methods=["POST"])
 @login_required
 def change_password():
@@ -489,10 +536,21 @@ def change_password():
         return jsonify({"success": False, "message": "Missing required fields."}), 400
 
     if not check_password_hash(current_user.password_hash, current):
-        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+        return (
+            jsonify({"success": False, "message": "Current password is incorrect."}),
+            400,
+        )
 
     if new == current:
-        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "New password cannot be the same as the current password.",
+                }
+            ),
+            400,
+        )
 
     current_user.password_hash = generate_password_hash(new)
     db.session.commit()
