@@ -14,13 +14,13 @@ answering questions and creating tutorials, there needs to be a way to properly 
 One of the most popular, and powerful, methods of transforming documents
 into searchable objects by content is known as *Semantic Embedding*.
 
-Semantic Embedding is achieved by chunking dockuments, tokenizing words and placing
-them into a vectorspace. In order to transform the chunk of tokens into a vector space
+Semantic Embedding is achieved by chunking documents, tokenizing words and placing
+them into a vector-space. In order to transform the chunk of tokens into a vector space
 an embedding model is used, i our case the pre trained embedding model used is mxbai-embed-large.
 Once the chunks of data are send through the embedding model and vectorized the vectors are  saved
-and stored in langchain's created PGVector table on our database. Semantic embedding allows for 
-useful searches as each document has a unique space on the vecotrspace, allowing for complex queries 
-containing synonymns to retrieve documents.
+and stored in Langchain's created PGVector table on our database. Semantic embedding allows for 
+useful searches as each document has a unique space on the vector-space, allowing for complex queries 
+containing synonyms to retrieve documents.
 
 
 ## Query Translation
@@ -31,13 +31,13 @@ steps for this include tokenization and vectorization.
 
 In a similar fashion to document tokenization, 
 the user's query has to be tokenized and then ran through the embedding model which will
-vecotrize the query much like the documents.
+vectorize the query much like the documents.
 
 Once the query is translated, it will be used to retrieve the most relevant documents. 
 
-## Retreival Augmented Generation (RAG)
+## Retrieval Augmented Generation (RAG)
 
-### Retreival
+### Retrieval
 
 Retrieval uses the indexed documents described previously as a knowledge base.
 The translated query will then be compared against the indexed documents using a retrieval method.
