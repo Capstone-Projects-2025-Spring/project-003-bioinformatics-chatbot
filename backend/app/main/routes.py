@@ -576,7 +576,7 @@ def handle_chat(data):
             context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
             stored_context = context  # Store the context for this session
         else:
-            stored_context = data["stored_context"]
+            stored_context = data.get("stored_context", "")
             current_context = "\n\n---\n\n".join(
                 [doc.page_content for doc, _ in filtered_docs]
             )

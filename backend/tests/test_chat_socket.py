@@ -56,7 +56,7 @@ def test_handle_chat_with__message_and_history_no_doc(app, socketio_client, monk
     # Emit a valid 'chat' event
     socketio_client.emit(
         "chat",
-        {"conversationHistory": [], "message": "Hello"},
+        {"conversationHistory": [], "message": "Hello", "doc_toggle": False, "stored_context": "This is stored context."},
     )
 
     # Retrieve the messages received from the server
@@ -94,6 +94,8 @@ def test_handle_chat_with__message_and_history_doc(monkeypatch, socketio_client)
                 {"sender": "User", "text": "Hi"},
                 {"sender": "Chatbot", "text": "Hello"},
             ],
+            "doc_toggle": False, 
+            "stored_context": "This is stored context.",
         },
     )
 

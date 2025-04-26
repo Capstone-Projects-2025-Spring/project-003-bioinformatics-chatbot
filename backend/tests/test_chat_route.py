@@ -28,7 +28,7 @@ def test_chat_message_valid(client, app, monkeypatch):
             "message": "Tell me about BioInformatics.",
             "conversationHistory": [],
             "doc_toggle": False,
-            "stored_context": ""
+            "stored_context": "This is stored context.",
         },
     )
 
@@ -76,7 +76,7 @@ def test_no_doc_toggle(client):
     assert "error" in json_data
     assert json_data["error"] == "doc_toggle is required"
 
-def test_stored_context(client):
+def test_no_stored_context(client):
     # Test sending a request with no doc_toggle
     response = client.post("/chat", json={"message": "Hello, chatbot!", "conversationHistory": [], "doc_toggle": False})
 
