@@ -215,7 +215,6 @@ describe("Chat Page", () => {
     const submitButton = screen.getByTestId("submitButton");
 
 
-
     // Submit a message
     fireEvent.change(inputField, { target: { value: "Test cancel flow" } });
     fireEvent.click(submitButton);
