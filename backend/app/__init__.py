@@ -33,6 +33,7 @@ def create_app(config_class=Config):
     """
 
     app = Flask(__name__)
+    # PLEASE MODIFY BELOW THIS COMMENT LINE LIKE THIS { origins": "http://YOUR_HOSTING_MACHINE_IP:5173 } 
     CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
     app.config.from_object(config_class)
 
