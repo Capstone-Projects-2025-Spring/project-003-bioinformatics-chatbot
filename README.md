@@ -39,6 +39,8 @@ For the chatbot to deliver quality answers tailored towards Bioinformatics, ther
 
 ## How to run this project in your own environment?
 
+Note: You will need to add your own Document for the Chatbot to work
+
 1. Install and Open Docker Desktop and Vscode
 2. Download and unzip the source code in the most recent [project release](github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest)
 3. In Vscode open the project file after you unzip, in the backend folder create .env file and database.env
