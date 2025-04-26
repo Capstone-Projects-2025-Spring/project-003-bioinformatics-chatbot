@@ -576,11 +576,22 @@ def handle_chat(data):
             context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
             stored_context = context  # Store the context for this session
         else:
-            stored_context = data.get("stored_context", "")
-            current_context = "\n\n---\n\n".join(
-                [doc.page_content for doc, _ in filtered_docs]
-            )
-            context = f"{stored_context}\n\n---\n\n{current_context}"
+            stored_context = str(data.get("stored_context", ""))
+            current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+            # Split stored_context and current_context into chunks
+            stored_chunks = set(stored_context.split("\n\n---\n\n"))
+            current_chunks = set(current_context.split("\n\n---\n\n"))
+
+            # Add only new chunks from current_context to stored_context
+            new_chunks = [chunk for chunk in current_chunks if chunk not in stored_chunks]
+            if new_chunks:
+                context = f"{stored_context}\n\n---\n\n" + "\n\n---\n\n".join(new_chunks)
+            else:
+                context = stored_context  # No new chunks to add
+
+            stored_context = context  # Update stored_context with the appended context
+            # context = f"{stored_context}\n\n---\n\n{current_context}"
 
         system_message = (
             "You are a Retrieval Augmented Generation (RAG) model.\n"

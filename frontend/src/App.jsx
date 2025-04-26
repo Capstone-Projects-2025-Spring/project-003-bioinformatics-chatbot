@@ -551,6 +551,7 @@ function App() {
     "Answers bioinformatics questions using a RAG model",
     "Summarizes papers with domain-specific language",
     "Supports follow-up questions & interactive exploration",
+    "Context Toggle: Allows user to choose between reusing document context from the previous query (alongside new context) or using only context derived from the current query",
   ];
 
   const limitations = [
