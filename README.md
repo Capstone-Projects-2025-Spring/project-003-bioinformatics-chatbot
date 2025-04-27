@@ -75,7 +75,7 @@ Default Password is admin
 ### (Please check Hardware requirement below before proceeding)
 
 1. Click this link [Hosting](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/tree/Hosting) to access the branch purposely made for Hosting service 
-2. Then read this [documentation](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/Hosting) for more information.
+2. Then read this [documentation](https://capstone-projects-2025-spring.github.io/project-003-bioinformatics-chatbot/Hosting) for more information.
 
 ## Required Resources
 ### Hardware Requirements for local development
