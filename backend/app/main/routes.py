@@ -1,5 +1,5 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request, current_app
+from flask import jsonify, render_template, redirect, send_file, url_for, request, current_app, flash
 from app.main import bp
 from app.models import User
 from app import db, socketio, llm
@@ -583,28 +583,40 @@ def handle_cancel():
     sid = request.sid
     active_sessions[sid] = False  # Mark this session as cancelled
 
+
+@bp.route("/change_password", methods=["GET"])
+@login_required
+def change_password_form():
+    return render_template("main/changepassword.html")
+
 @bp.route("/change_password", methods=["POST"])
 @login_required
 def change_password():
-    data = request.get_json()
+    current = request.form.get("current_password")
+    new = request.form.get("new_password")
+    confirm = request.form.get("confirm_password")
 
-    current = data.get("old_password")
-    new = data.get("new_password")
+    if not current or not new or not confirm:
+        flash("Missing required fields.", "error")
+        return redirect(url_for("main.change_password"))
 
-    if not current or not new:
-        return jsonify({"success": False, "message": "Missing required fields."}), 400
+    if new != confirm:
+        flash("New password and confirmation do not match.", "error")
+        return redirect(url_for("main.change_password"))
 
     if not check_password_hash(current_user.password_hash, current):
-        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+        flash("Current password is incorrect.", "error")
+        return redirect(url_for("main.change_password"))
 
     if new == current:
-        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+        flash("New password cannot be the same as the current password.", "error")
+        return redirect(url_for("main.change_password"))
 
     current_user.password_hash = generate_password_hash(new)
     db.session.commit()
 
-    return jsonify({"success": True, "message": "Password changed successfully."}), 200
-
+    flash("Password changed successfully.", "success")
+    return redirect(url_for("main.admin"))
 
 @bp.route("/logout")
 @login_required  # Ensure user is logged in to access this route

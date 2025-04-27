@@ -53,6 +53,8 @@ function App() {
 
 	const socketRef = useRef(null);
 
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+
 	/**
 	 * Load messages from sessionStorage on component mount.
 	 */
@@ -221,6 +223,8 @@ function App() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (loading) return;
 
 		if (!input.trim()) {
 			handleError({
@@ -565,12 +569,140 @@ function App() {
 
 	return (
 		<div
-			className='flex flex-col h-screen overflow-hidden transition duration-300'
-			style={{ background: gradient }}>
-			{/* ─── Error (stays static) ───────────────────────── */}
-			{error.title && (
-				<ErrorBox title={error.title} body={error.body} setError={setError} />
-			)}
+		className='flex flex-col h-screen overflow-hidden transition duration-300'
+		style={{ background: gradient }}>
+		{/* ─── Error (stays static) ───────────────────────── */}
+		{error.title && (
+			<ErrorBox title={error.title} body={error.body} setError={setError} />
+		)}
+
+
+		{/* ─── New Chat Button ───────────────────────── */}
+		<div className="flex justify-end gap-7 p-4 sm:relative lg:absolute lg:top-0 lg:right-0  0 lg:pr-10">
+		<button
+		data-testid="newChatButton"
+		onClick={handleNewChat}
+		className="group relative flex items-center bg-primary text-white p-2 rounded-full overflow-hidden transition-all duration-300 hover:bg-accent">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				strokeWidth={1.5}
+				stroke="currentColor"
+				className="size-5 text-white"
+			>
+				<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+			</svg>
+
+
+			<span className="text-sm max-w-0 overflow-hidden opacity-0 group-hover:max-w-[150px] group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap group-hover:ml-1 group-hover:mr-2">
+				New Chat
+			</span>
+			</button>
+					
+				{/* ─── Download Button ───────────────────────── */}
+					{isDialogOpen && (
+								<div className='flex items-center gap-2'>
+									<button
+										data-testid='downloadButtontxt'
+										onClick={(e) => {
+											e.preventDefault(); // Prevent the default behavior
+											handleDownloadtxt();
+										}}
+										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
+										<svg
+											xmlns='http://www.w3.org/2000/svg'
+											viewBox='0 0 32 32'
+											className='size-5 text-white'>
+											<path
+												fill='currentColor'
+												d='M21 11h3v12h2V11h3V9h-8zm-1-2h-2l-2 6l-2-6h-2l2.75 7L12 23h2l2-6l2 6h2l-2.75-7zM3 11h3v12h2V11h3V9H3z'></path>
+										</svg>
+									</button>
+									<button
+										data-testid='downloadButtonpdf'
+										onClick={(e) => {
+											e.preventDefault(); // Prevent the default behavior
+											handleDownloadpdf();
+										}}
+										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
+										<svg
+											xmlns='http://www.w3.org/2000/svg'
+											viewBox='0 0 32 32'
+											className='size-5 text-white'>
+											<path
+												fill='currentColor'
+												d='M30 11V9h-8v14h2v-6h5v-2h-5v-4zM8 9H2v14h2v-5h4a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2m0 7H4v-5h4zm8 7h-4V9h4a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4m-2-2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2z'></path>
+										</svg>
+									</button>
+									<button
+										data-testid='downloadButtondoc'
+										onClick={(e) => {
+											e.preventDefault(); // Prevent the default behavior
+											handleDownloaddoc();
+										}}
+										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
+										<svg
+											xmlns='http://www.w3.org/2000/svg'
+											viewBox='0 0 32 32'
+											className='size-5 text-white'>
+											<path
+												fill='currentColor'
+												d='M30 23h-6a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2h6v2h-6v10h6zm-12 0h-4a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2m-4-12v10h4V11zM6 23H2V9h4a4.005 4.005 0 0 1 4 4v6a4.005 4.005 0 0 1-4 4m-2-2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H4z'></path>
+										</svg>
+									</button>
+								</div>
+							)}
+							{isDialogOpen ? (
+								<button
+									onClick={(e) => {
+										e.preventDefault(); // Prevent the default behavior
+										setIsDialogOpen(false);
+									}}
+									className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-5'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M6 18 18 6M6 6l12 12'
+										/>
+									</svg>
+								</button>
+							) : (
+								<button
+									data-testid='downloadButton'
+									onClick={(e) => {
+										e.preventDefault(); // prevent form submission
+										setIsDialogOpen(true); // or whatever this function does
+									}}
+									className='group relative flex items-center bg-primary text-white p-2 rounded-full overflow-hidden transition-all duration-300 hover:bg-accent'>
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'
+										strokeWidth={1.5}
+										stroke='currentColor'
+										className='size-5 text-white'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											d='M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0-3.75-3.75M17.25 21 21 17.25'
+										/>
+									</svg>
+
+									<span className='text-sm max-w-0 overflow-hidden opacity-0 group-hover:max-w-[150px] group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap group-hover:ml-1 group-hover:mr-2'>
+										Download Chat
+									</span>
+								</button>
+							)}
+							</div>
+
 
 			{/* ─── New Chat Button, LOGO, and Title ───────────────────────── */}
 			<div className="flex justify-end p-4">
@@ -633,6 +765,7 @@ function App() {
 					New Chat
 				</button>
 			</div>
+
 
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
@@ -773,7 +906,10 @@ function App() {
 					</div>
 				</main>
 			) : (
-				<div className='flex justify-center h-full overflow-y-auto '>
+
+				<div
+					className='flex justify-center h-full overflow-y-auto '
+					data-testid='messageContainer'>
 					<div className='w-full py-2 px-4 max-w-7xl mx-auto mt-7'>
 						{messages.map((msg, index) =>
 							msg.type === "Question" ? (
@@ -803,9 +939,6 @@ function App() {
 					handleEnterkey={handleEnterkey}
 					handleSubmit={handleSubmit}
 					handleCancel={handleCancel}
-					handleDownloadtxt={handleDownloadtxt}
-					handleDownloadpdf={handleDownloadpdf}
-					handleDownloaddoc={handleDownloaddoc}
 					cancelEdit={cancelEdit}
 					editIndex={editIndex}
 					loading={loading}
