@@ -507,10 +507,11 @@ function App() {
 	 * clears the session storage. 
 	 */
 	const handleNewChat = () => {
+		handleCancel();
 		setMessages([]);
 		setInput("");
 		setEditIndex(null);
-		sessionStorage.removeItem("messages");
+		sessionStorage.removeItem("messages"); 
 	};
 	
 
@@ -702,7 +703,6 @@ function App() {
 								</button>
 							)}
 							</div>
-
 
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
