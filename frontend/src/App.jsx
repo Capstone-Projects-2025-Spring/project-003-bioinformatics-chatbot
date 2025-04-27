@@ -589,7 +589,9 @@ function App() {
 
 
       {/* ─── New Chat Button ───────────────────────── */}
+
       <div className="flex justify-end gap-7 p-4 sm:relative lg:absolute lg:top-0 lg:right-0  0 lg:pr-10">
+      {!isDialogOpen && (
         <button
           data-testid="newChatButton"
           onClick={handleNewChat}
@@ -610,6 +612,7 @@ function App() {
             New Chat
           </span>
         </button>
+         )}
 
         {/* ─── Download Button ───────────────────────── */}
         {isDialogOpen && (
