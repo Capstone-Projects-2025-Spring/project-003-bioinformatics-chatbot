@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.3.2">
 <title data-rh="true">Integration tests | BioGenie</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/testing/integration-testing"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Integration tests | BioGenie"><meta data-rh="true" name="description" content="Backend"><meta data-rh="true" property="og:description" content="Backend"><link data-rh="true" rel="icon" href="/project-003-bioinformatics-chatbot/img/BioGenie.svg"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/testing/integration-testing"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/testing/integration-testing" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/testing/integration-testing" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-003-bioinformatics-chatbot/assets/css/styles.8c7eebe5.css">
-<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.80b6cbff.js" defer="defer"></script>
+<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.7429b4bf.js" defer="defer"></script>
 <script src="/project-003-bioinformatics-chatbot/assets/js/main.68e310d9.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -16,6 +16,219 @@ might need to test via the unittest module.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="frontend">Frontend<a href="#frontend" class="hash-link" aria-label="Direct link to Frontend" title="Direct link to Frontend">​</a></h2>
 <p>Vitest allows us to test components in a way that ensures their functionality when
 interacting with the backend. With Axios we can make real API requests to the backend using front
-end components and validate that the frontend correctly processes and displays the received data.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/edit/main/documentation/docs/testing/integration-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>korlovskiy</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-003-bioinformatics-chatbot/docs/testing/unit-testing"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Unit tests</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-003-bioinformatics-chatbot/docs/testing/acceptence-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Acceptance test</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#backend" class="table-of-contents__link toc-highlight">Backend</a></li><li><a href="#frontend" class="table-of-contents__link toc-highlight">Frontend</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE" style="width:50px;height:auto"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU" style="width:50px;height:auto"></div><div class="footer__copyright">Copyright © 2025 BioGenie, Inc. Built with Docusaurus.</div></div></div></footer></div>
+end components and validate that the frontend correctly processes and displays the received data.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-1">Integration Test for Use Case 1<a href="#integration-test-for-use-case-1" class="hash-link" aria-label="Direct link to Integration Test for Use Case 1" title="Direct link to Integration Test for Use Case 1">​</a></h2>
+<p>Users wants to ask the chatbot questions related to bioinformatics.</p>
+<ol>
+<li>
+<p>The user clicks on the weblink and is brought to our website&#x27;s front page.</p>
+</li>
+<li>
+<p>A question is inputted into the chatbox.</p>
+</li>
+<li>
+<p>The chatbot processes the question to understand how to answer.</p>
+</li>
+<li>
+<p>The chatbot determines the answer by the following criteria:</p>
+<ul>
+<li>
+<p>If the answer is found from the documentation:</p>
+<ul>
+<li>A tutorial will pop up with the method of choice for the user to use for his or her Bioinformatics Research.</li>
+</ul>
+</li>
+<li>
+<p>If the answer is not found in the documentation:</p>
+<ul>
+<li>The chatbot will say &quot;I don&#x27;t know&quot; as an answer for the user.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>
+<p>Runs <code>Frontend / Renders chat input and messages container</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend / Allows user to type in chat input</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend/ Submits a message and adds response</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend/ Displays error when submitting empty input</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend / Error message resets after 5 seconds</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend / Renders input field and submit button</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend/ Renders with the correct input value</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend/ Updates input value when user types</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Frontend / Calls handleSubmit when form is submitted</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_chat_message_valid</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_chat_message_missing</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_query_vector_db_with_doc</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_query_vector_db_no_doc</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_testing</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_handle_chat_with__message_and_history_doc</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_handle_chat_with_no_message</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_handle_chat_with_no_conversation</code> unit test.</p>
+</li>
+<li>
+<p>Runs <code>Backend/ Test_handle_chat_with__message_and_history_no_doc</code> unit test.</p>
+</li>
+<li>
+<p>Passes if all tests pass.</p>
+</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-2">Integration Test for Use Case 2<a href="#integration-test-for-use-case-2" class="hash-link" aria-label="Direct link to Integration Test for Use Case 2" title="Direct link to Integration Test for Use Case 2">​</a></h2>
+<p>User wants to download conversation.</p>
+<ol>
+<li>
+<p>A conversation between the user and chatbot has finished.</p>
+</li>
+<li>
+<p>The user selects the &quot;Download Conversation&quot; button and decides which format (.pdf, .txt, .doc, etc) to save the file as.</p>
+</li>
+<li>
+<p>A notification appears on the screen that the download is ready to be saved to the user&#x27;s computer.</p>
+</li>
+<li>
+<p>The user presses the &quot;Save&quot; button to save the history of the converstation with the chatbot file to their device.</p>
+</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Frontend / Displays error when downloading empty conversation for txt</code> unit test.</li>
+<li>Runs <code>Frontend / Displays error when downloading empty conversation for pdf</code> unit test.</li>
+<li>Runs <code>Frontend/ Displays error when downloading empty conversation for doc</code> unit test.</li>
+<li>Runs <code>Frontend/ Downloads chatbot conversation when there is at least one message for .txt</code> unit test.</li>
+<li>Runs <code>Frontend / Downloads chatbot conversation when there is at least one message for .pdf</code> unit test.</li>
+<li>Runs <code>Frontend/ Downloads chatbot conversation when there is at least one message for .doc</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-3">Integration Test for Use Case 3<a href="#integration-test-for-use-case-3" class="hash-link" aria-label="Direct link to Integration Test for Use Case 3" title="Direct link to Integration Test for Use Case 3">​</a></h2>
+<p>Users wants to view previous messages sent.</p>
+<ol>
+<li>The chatbot and the user are currently in conversation with one another.</li>
+<li>The user navigates to the scroll bar.</li>
+<li>He or she moves the bar up or down so that the past conversations are shown on the screen.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Frontend/ Stores messages in sessionStorage</code> unit test.</li>
+<li>Runs <code>Frontend / Renders previous messages from sessionStorage</code> unit test.</li>
+<li>Runs <code>Frontend/ Calls scrollIntoView when messages state updates</code> unit test.</li>
+<li>Runs <code>Frontend/ Renders with text (User Bubble)</code> unit test.</li>
+<li>Runs <code>Frontend/ Renders with text (Response Bubble)</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-4">Integration Test for Use Case 4<a href="#integration-test-for-use-case-4" class="hash-link" aria-label="Direct link to Integration Test for Use Case 4" title="Direct link to Integration Test for Use Case 4">​</a></h2>
+<p>A user wants to to edit and resend a message.</p>
+<ol>
+<li>The chatbot gave an answer that the user was unsatisfied with.</li>
+<li>The user highlights over the question asked.</li>
+<li>He or she selects the edit icon.</li>
+<li>The user has the option to update the message before resending.</li>
+<li>The user clicks send and the chatbot reanwers the question.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>
+<p>Runs <code>Frontend/ Calls onEdit function when edit button is clicked</code> unit test.</p>
+</li>
+<li>
+<p>Passes if all tests pass.</p>
+</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-5">Integration Test for Use Case 5<a href="#integration-test-for-use-case-5" class="hash-link" aria-label="Direct link to Integration Test for Use Case 5" title="Direct link to Integration Test for Use Case 5">​</a></h2>
+<p>The user wants to create a new chat.</p>
+<ol>
+<li>The user clicks on the + button in the type right-hand corner.</li>
+<li>He or she notices the chat is cleared.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Frontend / Renders previous messages from sessionStorage</code> unit test.</li>
+<li>Runs <code>Frontend / Clears state and stops loading when New Chat is clicked</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-6">Integration Test for Use Case 6<a href="#integration-test-for-use-case-6" class="hash-link" aria-label="Direct link to Integration Test for Use Case 6" title="Direct link to Integration Test for Use Case 6">​</a></h2>
+<p>An admin wants to upload a document for the chatbot to use.</p>
+<ol>
+<li>The user signs into the backend and then gets redirect to admin dashboard.</li>
+<li>The user then selects  the upload option and gets redirected to the upload page.</li>
+<li>The user selects ONLY pdf files to be loaded to the database.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Backend/ Test_upload_pdf_valid</code> unit test.</li>
+<li>Runs <code>Backend/ Test_upload_pdf_dup</code> unit test.</li>
+<li>Runs <code>Backend/ Test_validation</code> unit test.</li>
+<li>Runs <code>Backend/ Test_content_file</code> unit test.</li>
+<li>Runs <code>Backend/ Test_parse_pdf</code> unit test.</li>
+<li>Runs <code>Backend/ Test_index_doc</code> unit test.</li>
+<li>Runs <code>Backend/ Test_duplicate_chunks_ignored</code> unit test.</li>
+<li>Runs <code>Backend/ Test_empty_file</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-7">Integration Test for Use Case 7<a href="#integration-test-for-use-case-7" class="hash-link" aria-label="Direct link to Integration Test for Use Case 7" title="Direct link to Integration Test for Use Case 7">​</a></h2>
+<p>An admin wants to delete a document from the database.</p>
+<ol>
+<li>The user signs into the backend and then gets redirect to admin dashboard.</li>
+<li>User will see red color delete option in PDF UI table.</li>
+<li>User clicks on delete and PDF will be instantly deleted from Database.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Backend/ Test_delete_valid_document</code> unit test.</li>
+<li>Runs <code>Backend/ Test_delete_non_existent_document</code> unit test.</li>
+<li>Runs <code>Backend/ Test_delete_database_error</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-8">Integration Test for Use Case 8<a href="#integration-test-for-use-case-8" class="hash-link" aria-label="Direct link to Integration Test for Use Case 8" title="Direct link to Integration Test for Use Case 8">​</a></h2>
+<p>A user wants to download a document from the database.</p>
+<ol>
+<li>The user sees the red download button on the front page of the backend (no need to sign in).</li>
+<li>The user clicks the download button to retrieve the document.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Backend/ Test_download_valid_document</code> unit test.</li>
+<li>Runs <code>Backend/ Test_download_non_existent_document</code> unit test.</li>
+<li>Runs <code>Backend/ Test_download_database_error</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="integration-test-for-use-case-9">Integration Test for Use Case 9<a href="#integration-test-for-use-case-9" class="hash-link" aria-label="Direct link to Integration Test for Use Case 9" title="Direct link to Integration Test for Use Case 9">​</a></h2>
+<p>An admin should be able to log in and perform admin-only actions.</p>
+<ol>
+<li>The user signs into the backend and then gets redirect to admin dashboard.</li>
+</ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Runs <code>Backend/ Login_user</code> unit test.</li>
+<li>Runs <code>Backend/ Test_user_table</code> unit test.</li>
+<li>Runs <code>Backend/ Test_user_table_with_user</code> unit test.</li>
+<li>Runs <code>Backend/ Test_user_table_password</code> unit test.</li>
+<li>Runs <code>Backend/ Test_testing</code> unit test.</li>
+<li>Passes if all tests pass.</li>
+</ul></div></div></details></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/edit/main/documentation/docs/testing/integration-testing.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>korlovskiy</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-003-bioinformatics-chatbot/docs/testing/unit-testing"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Unit tests</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-003-bioinformatics-chatbot/docs/testing/acceptence-testing"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Acceptance test</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#backend" class="table-of-contents__link toc-highlight">Backend</a></li><li><a href="#frontend" class="table-of-contents__link toc-highlight">Frontend</a></li><li><a href="#integration-test-for-use-case-1" class="table-of-contents__link toc-highlight">Integration Test for Use Case 1</a></li><li><a href="#integration-test-for-use-case-2" class="table-of-contents__link toc-highlight">Integration Test for Use Case 2</a></li><li><a href="#integration-test-for-use-case-3" class="table-of-contents__link toc-highlight">Integration Test for Use Case 3</a></li><li><a href="#integration-test-for-use-case-4" class="table-of-contents__link toc-highlight">Integration Test for Use Case 4</a></li><li><a href="#integration-test-for-use-case-5" class="table-of-contents__link toc-highlight">Integration Test for Use Case 5</a></li><li><a href="#integration-test-for-use-case-6" class="table-of-contents__link toc-highlight">Integration Test for Use Case 6</a></li><li><a href="#integration-test-for-use-case-7" class="table-of-contents__link toc-highlight">Integration Test for Use Case 7</a></li><li><a href="#integration-test-for-use-case-8" class="table-of-contents__link toc-highlight">Integration Test for Use Case 8</a></li><li><a href="#integration-test-for-use-case-9" class="table-of-contents__link toc-highlight">Integration Test for Use Case 9</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE" style="width:50px;height:auto"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU" style="width:50px;height:auto"></div><div class="footer__copyright">Copyright © 2025 BioGenie, Inc. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
