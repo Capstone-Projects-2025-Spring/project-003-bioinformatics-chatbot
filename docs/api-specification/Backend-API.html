@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.3.2">
 <title data-rh="true">Backend-API | BioGenie</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Backend-API | BioGenie"><meta data-rh="true" name="description" content="Doucumentation of Backend API From Flask Server"><meta data-rh="true" property="og:description" content="Doucumentation of Backend API From Flask Server"><link data-rh="true" rel="icon" href="/project-003-bioinformatics-chatbot/img/BioGenie.svg"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-003-bioinformatics-chatbot/assets/css/styles.8c7eebe5.css">
-<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.7429b4bf.js" defer="defer"></script>
-<script src="/project-003-bioinformatics-chatbot/assets/js/main.1a49f586.js" defer="defer"></script>
+<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.423507c8.js" defer="defer"></script>
+<script src="/project-003-bioinformatics-chatbot/assets/js/main.ce63af9d.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/project-003-bioinformatics-chatbot/"><div class="navbar__logo"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">BioGenie</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a><a class="navbar__item navbar__link" href="/project-003-bioinformatics-chatbot/Hosting">Hosting</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/project-003-bioinformatics-chatbot/docs/intro">Introduction</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/requirements-specification">Requirements Specification</a><button aria-label="Expand sidebar category &#x27;Requirements Specification&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/system-architecture">System Architecture</a><button aria-label="Expand sidebar category &#x27;System Architecture&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/project-003-bioinformatics-chatbot/docs/category/api-specification">API Specification</a><button aria-label="Collapse sidebar category &#x27;API Specification&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/Frontend-API">Frontend-API</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API">Backend-API</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/project-003-bioinformatics-chatbot/docs/category/test-procedures">Test Procedures</a><button aria-label="Expand sidebar category &#x27;Test Procedures&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/project-003-bioinformatics-chatbot/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item"><a class="breadcrumbs__link" itemprop="item" href="/project-003-bioinformatics-chatbot/docs/category/api-specification"><span itemprop="name">API Specification</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Backend-API</span><meta itemprop="position" content="2"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><h1>Backend API</h1>
@@ -21,12 +21,33 @@
 </ul>
 </li>
 </ul></div></div></details>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-admin"><code>GET /admin</code><a href="#get-admin" class="hash-link" aria-label="Direct link to get-admin" title="Direct link to get-admin">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="getpost-admin"><code>GET/POST /admin</code><a href="#getpost-admin" class="hash-link" aria-label="Direct link to getpost-admin" title="Direct link to getpost-admin">​</a></h3>
 <details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
-<li>Renders the admin dashboard.<!-- -->
+<li>Admin dashboard with document list UI and file upload functionality.</li>
+<li><strong>Parameters:</strong>
 <ul>
-<li>Fetches and displays a list of documents.</li>
-<li>Ensures an admin user exists, creating one if necessary.</li>
+<li>No URL parameters.</li>
+<li>On <code>POST</code>: Expects a form upload with a PDF file under the field name <code>pdf_file</code>.</li>
+</ul>
+</li>
+<li><strong>Returns:</strong>
+<ul>
+<li>On <code>GET</code>: Renders the admin dashboard with a list of documents.</li>
+<li>On <code>POST</code> success (valid PDF upload):<!-- -->
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">{</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  &quot;message&quot;: &quot;File &#x27;{filename}&#x27; uploaded successfully!&quot;,</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  &quot;document&quot;: {</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    &quot;id&quot;: document_id,</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    &quot;name&quot;: document_name,</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    &quot;type&quot;: document_type,</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    &quot;size&quot;: file_size_in_bytes</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>If no file is uploaded:<!-- -->
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">{ &quot;error&quot;: &quot;No file uploaded&quot; }</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>If file type is invalid (not PDF):<!-- -->
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">{ &quot;error&quot;: &quot;Invalid file type. Only PDFs are allowed.&quot; }</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>If a document with the same name and type already exists:<!-- -->
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">{ &quot;error&quot;: &quot;A document named &#x27;{filename}&#x27; already exists.&quot; }</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>If form data is invalid:<!-- -->
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#bfc7d5;background-color:#292d3e"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">{ &quot;error&quot;: &quot;Invalid form data. Please ensure all fields are filled correctly.&quot; }</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
 </ul>
 </li>
 </ul></div></div></details>
@@ -41,27 +62,19 @@
 </ul>
 </li>
 </ul></div></div></details>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-upload"><code>GET /upload</code><a href="#get-upload" class="hash-link" aria-label="Direct link to get-upload" title="Direct link to get-upload">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-downloaditem_id"><code>GET /download/{item_id}</code><a href="#get-downloaditem_id" class="hash-link" aria-label="Direct link to get-downloaditem_id" title="Direct link to get-downloaditem_id">​</a></h3>
 <details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
-<li>Renders the PDF upload form.</li>
-<li>Method: <code>GET</code></li>
-<li>Returns:<!-- -->
+<li>Downloads a document from the database.</li>
+<li><strong>Parameters:</strong>
 <ul>
-<li>Renders the <code>upload.html</code> template with the upload form.</li>
+<li><code>item_id</code> (int): The ID of the document to download.</li>
 </ul>
 </li>
-</ul></div></div></details>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="post-upload"><code>POST /upload</code><a href="#post-upload" class="hash-link" aria-label="Direct link to post-upload" title="Direct link to post-upload">​</a></h3>
-<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
-<li>Handles PDF file uploads.</li>
-<li>Validates file type to ensure only PDFs are uploaded.</li>
-<li>Stores uploaded files in the database.</li>
-<li>Processes uploaded documents and sends them to a parser.</li>
-<li>Returns:<!-- -->
+<li><strong>Returns:</strong>
 <ul>
-<li>On success: <code>{ &quot;message&quot;: &quot;File &#x27;{filename}&#x27; uploaded successfully!&quot; }</code></li>
-<li>if no file is provided: <code>{ &quot;error&quot;: &quot;No file uploaded&quot; }</code> if no file is provided.</li>
-<li>if form validation fails: <code>{ &quot;error&quot;: &quot;Invalid form data. Please ensure all fields are filled correctly.&quot; }</code></li>
+<li>If download is successful: The PDF file as a downloadable attachment.</li>
+<li>If the document is not found: <code>{ &quot;success&quot;: false, &quot;message&quot;: &quot;Item {item_id} not found&quot; }</code></li>
+<li>If an error occurs: <code>{ &quot;success&quot;: false, &quot;message&quot;: &quot;Failed to download document&quot;, &quot;error&quot;: &quot;error details&quot; }</code></li>
 </ul>
 </li>
 </ul></div></div></details>
@@ -90,7 +103,114 @@
 <li>if an exception occurs: <code>{ &quot;error&quot;: &quot;An error occurred: &lt;error details&gt;&quot; }</code></li>
 </ul>
 </li>
-</ul></div></div></details>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketonchat"><code>socket.on(&quot;chat&quot;)</code><a href="#socketonchat" class="hash-link" aria-label="Direct link to socketonchat" title="Direct link to socketonchat">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Handles incoming chat messages from the client, streams an AI-generated response based on retrieved documents.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>data</code> (JSON object):<!-- -->
+<ul>
+<li><code>message</code> (string): The user&#x27;s query.</li>
+<li><code>conversationHistory</code> (list of objects): Previous conversation history, with each object containing:<!-- -->
+<ul>
+<li><code>sender</code> (string): Either <code>&quot;User&quot;</code> or <code>&quot;Chatbot&quot;</code>.</li>
+<li><code>text</code> (string): The message content.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Emits:</strong>
+<ul>
+<li>On missing fields:<!-- -->
+<ul>
+<li><code>&quot;error&quot;</code> with <code>{ &quot;error&quot;: &quot;Message is required&quot; }</code></li>
+<li><code>&quot;error&quot;</code> with <code>{ &quot;error&quot;: &quot;conversationHistory is required&quot; }</code></li>
+</ul>
+</li>
+<li>If no documents found:<!-- -->
+<ul>
+<li><code>&quot;chunk&quot;</code> with <code>{ &quot;chunk&quot;: &quot;No document found&quot; }</code></li>
+<li><code>&quot;done&quot;</code> with <code>{ &quot;status&quot;: &quot;complete&quot; }</code></li>
+</ul>
+</li>
+<li>On success:<!-- -->
+<ul>
+<li>Streams <code>&quot;chunk&quot;</code> events containing parts of the AI&#x27;s generated markdown response.</li>
+<li>Emits <code>&quot;done&quot;</code> event with <code>{ &quot;status&quot;: &quot;complete&quot; }</code> at the end.</li>
+</ul>
+</li>
+<li>On error:<!-- -->
+<ul>
+<li><code>&quot;error&quot;</code> with <code>{ &quot;error&quot;: &quot;error details&quot; }</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketoncancel"><code>socket.on(&quot;cancel&quot;)</code><a href="#socketoncancel" class="hash-link" aria-label="Direct link to socketoncancel" title="Direct link to socketoncancel">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Cancels an ongoing chat session.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li>No additional parameters (uses session ID automatically).</li>
+</ul>
+</li>
+<li><strong>Effect:</strong>
+<ul>
+<li>Marks the current session as cancelled, stopping any ongoing response streaming.</li>
+</ul>
+</li>
+</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-change_password"><code>GET /change_password</code><a href="#get-change_password" class="hash-link" aria-label="Direct link to get-change_password" title="Direct link to get-change_password">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Displays the change password form.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li>No parameters.</li>
+</ul>
+</li>
+<li><strong>Returns:</strong>
+<ul>
+<li>Renders the <code>changepassword.html</code> page containing the password change form.</li>
+</ul>
+</li>
+</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="post-change_password"><code>POST /change_password</code><a href="#post-change_password" class="hash-link" aria-label="Direct link to post-change_password" title="Direct link to post-change_password">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+<li>Handles password change request.</li>
+<li><strong>Parameters:</strong>
+<ul>
+<li>Form data:<!-- -->
+<ul>
+<li><code>current_password</code> (string): The user&#x27;s current password.</li>
+<li><code>new_password</code> (string): The new password the user wants to set.</li>
+<li><code>confirm_password</code> (string): Confirmation of the new password.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Returns:</strong>
+<ul>
+<li>On success: Redirects to the admin dashboard with a success message: <code>&quot;Password changed successfully.&quot;</code></li>
+<li>On missing fields:<!-- -->
+<ul>
+<li>Flash message: <code>&quot;Missing required fields.&quot;</code></li>
+</ul>
+</li>
+<li>On password mismatch (new and confirm):<!-- -->
+<ul>
+<li>Flash message: <code>&quot;New password and confirmation do not match.&quot;</code></li>
+</ul>
+</li>
+<li>On incorrect current password:<!-- -->
+<ul>
+<li>Flash message: <code>&quot;Current password is incorrect.&quot;</code></li>
+</ul>
+</li>
+<li>If the new password is the same as the current:<!-- -->
+<ul>
+<li>Flash message: <code>&quot;New password cannot be the same as the current password.&quot;</code></li>
+</ul>
+</li>
+<li>All errors redirect back to the password change form.</li>
+</ul>
+</li>
+</ul></div></div></details></div></div></details>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-logout"><code>GET /logout</code><a href="#get-logout" class="hash-link" aria-label="Direct link to get-logout" title="Direct link to get-logout">​</a></h3>
 <details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Logs the user out by redirecting to the login page.</li>
@@ -100,6 +220,6 @@
 <li>Redirects to <code>/index</code></li>
 </ul>
 </li>
-</ul></div></div></details></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/edit/main/documentation/docs/api-specification/Backend-API.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>korlovskiy</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-003-bioinformatics-chatbot/docs/api-specification/Frontend-API"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Frontend-API</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-003-bioinformatics-chatbot/docs/category/test-procedures"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Test Procedures</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#get-index" class="table-of-contents__link toc-highlight"><code>GET /index</code></a></li><li><a href="#get-admin" class="table-of-contents__link toc-highlight"><code>GET /admin</code></a></li><li><a href="#delete-deleteitem_id" class="table-of-contents__link toc-highlight"><code>DELETE /delete/{item_id}</code></a></li><li><a href="#get-upload" class="table-of-contents__link toc-highlight"><code>GET /upload</code></a></li><li><a href="#post-upload" class="table-of-contents__link toc-highlight"><code>POST /upload</code></a></li><li><a href="#post-chat" class="table-of-contents__link toc-highlight"><code>POST /chat</code></a></li><li><a href="#get-logout" class="table-of-contents__link toc-highlight"><code>GET /logout</code></a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE" style="width:50px;height:auto"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU" style="width:50px;height:auto"></div><div class="footer__copyright">Copyright © 2025 BioGenie, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</ul></div></div></details></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/edit/main/documentation/docs/api-specification/Backend-API.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"><details><summary>Revision History</summary><table><thead><tr><th scope="row">Author</th><th scope="row">Revision</th><th scope="row">Date</th></tr></thead><tbody>nothing</tbody></table></details><span class="theme-last-updated">Last updated<!-- --> by <b>Khanh Nguyen</b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/project-003-bioinformatics-chatbot/docs/api-specification/Frontend-API"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Frontend-API</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/project-003-bioinformatics-chatbot/docs/category/test-procedures"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Test Procedures</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#get-index" class="table-of-contents__link toc-highlight"><code>GET /index</code></a></li><li><a href="#getpost-admin" class="table-of-contents__link toc-highlight"><code>GET/POST /admin</code></a></li><li><a href="#delete-deleteitem_id" class="table-of-contents__link toc-highlight"><code>DELETE /delete/{item_id}</code></a></li><li><a href="#get-downloaditem_id" class="table-of-contents__link toc-highlight"><code>GET /download/{item_id}</code></a></li><li><a href="#post-chat" class="table-of-contents__link toc-highlight"><code>POST /chat</code></a></li><li><a href="#socketonchat" class="table-of-contents__link toc-highlight"><code>socket.on(&quot;chat&quot;)</code></a></li><li><a href="#socketoncancel" class="table-of-contents__link toc-highlight"><code>socket.on(&quot;cancel&quot;)</code></a></li><li><a href="#get-change_password" class="table-of-contents__link toc-highlight"><code>GET /change_password</code></a></li><li><a href="#post-change_password" class="table-of-contents__link toc-highlight"><code>POST /change_password</code></a></li><li><a href="#get-logout" class="table-of-contents__link toc-highlight"><code>GET /logout</code></a></li></ul></div></div></div></div></main></div></div></div><footer class="footer"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/project-003-bioinformatics-chatbot/docs/intro">Documentation</a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="margin-bottom--sm"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--light_NVdE" style="width:50px;height:auto"><img src="https://raw.githubusercontent.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/e631e760afa8739c8c61edf0687d2edffcf8e8b2/frontend/logo.svg" alt="My Site Logo" class="footer__logo themedComponent_mlkZ themedComponent--dark_xIcU" style="width:50px;height:auto"></div><div class="footer__copyright">Copyright © 2025 BioGenie, Inc. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
