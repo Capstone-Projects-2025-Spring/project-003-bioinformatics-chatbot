@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from flask import current_app
 from config import TestingConfig
 import pytest
-from app import create_app, db
+from app import create_app, db, socketio
 from sqlalchemy.sql import text
 from time import sleep
 from sqlalchemy import delete
@@ -41,6 +41,11 @@ def client(app):
     Description: pytest fixture to create a sample client ()
     """
     return app.test_client()
+
+
+@pytest.fixture()
+def socketio_client(app, client):
+    return socketio.test_client(app, flask_test_client=client)
 
 
 @pytest.fixture()

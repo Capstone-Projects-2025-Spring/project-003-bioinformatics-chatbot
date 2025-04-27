@@ -8,8 +8,9 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_postgres.vectorstores import PGVector
 from langchain_core.embeddings import DeterministicFakeEmbedding
 from langchain_ollama import OllamaEmbeddings
-
+from flask_socketio import SocketIO
 from flask_login import LoginManager
+from langchain_ollama.llms import OllamaLLM
 
 # load_dotenv()
 # print(os.getenv("SESSION_SECRET_KEY"))
@@ -18,6 +19,10 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
+socketio = SocketIO(
+    cors_allowed_origins="http://localhost:5173", async_mode="threading"
+)  # Use gevent async mode
+llm = OllamaLLM(model="llama3.2", base_url="http://ollama:11434")
 
 
 def create_app(config_class=Config):
@@ -44,7 +49,7 @@ def create_app(config_class=Config):
     #embeddings=OllamaEmbeddings(model="llama3")
     #embeddings=DeterministicFakeEmbedding(size=4096),
     login_manager.init_app(app)
-
+    # Initialize SocketIO
     """
     app.vector_db = PGVector(
         embeddings=OllamaEmbeddings(model="llama3.1", base_url="http://ollama:11434", num_ctx=4096, repeat_last_n=128, temperature=0.4, top_k=20, top_p=0.7, repeat_penalty=1.3, tfs_z=2.0),
@@ -66,6 +71,7 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
 
     app.register_blueprint(main_bp)
+    socketio.init_app(app)
 
     return app
 

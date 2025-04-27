@@ -1,29 +1,29 @@
 from io import BytesIO
-from flask import jsonify, render_template, redirect, send_file, url_for, request, session
+
+from flask import (
+    jsonify,
+    render_template,
+    redirect,
+    send_file,
+    url_for,
+    request,
+    session,
+    current_app,
+)
+
 from app.main import bp
 from app.models import User
-from app import db
-from flask import current_app
+from app import db, socketio, llm
 from app.models import Document
-
+from flask_socketio import emit, disconnect
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_ollama.llms import OllamaLLM
 from langchain_community.chat_message_histories import ChatMessageHistory
-
-import ollama
-from ollama import chat
-from ollama import ChatResponse
-from ollama import Client
-
 from app.main.forms import LoginForm, PDFUploadForm
 from app.doc_parsers.process_doc import process_doc
 from app.doc_indexer.retrieve_document import query_database
 from sqlalchemy import delete
-from sqlalchemy.exc import SQLAlchemyError
-
-
 from flask_login import login_required, current_user, logout_user, login_user
+from werkzeug.security import check_password_hash, generate_password_hash
 
 """
 Places for routes in the backend
@@ -45,7 +45,7 @@ def index():
     Description: Added a admin login.
 
     """
-   # fetch all document from database
+    # fetch all document from database
     documents = db.session.query(Document).all()
 
     form = LoginForm()
@@ -61,7 +61,10 @@ def index():
         else:
             # return error to index page
             return render_template(
-                "main/index.html", form=form, error="Invalid username or password", documents=documents
+                "main/index.html",
+                form=form,
+                error="Invalid username or password",
+                documents=documents,
             )
     # Pass the forms here.
     return render_template("main/index.html", form=form, documents=documents)
@@ -106,8 +109,12 @@ def admin():
                 )
 
             # Extract file name and type
-            file_name = uploaded_file.filename.rsplit(".", 1)[0]  # Name without extension
-            file_type = uploaded_file.filename.rsplit(".", 1)[-1]  # File extension (should be 'pdf')
+            file_name = uploaded_file.filename.rsplit(".", 1)[
+                0
+            ]  # Name without extension
+            file_type = uploaded_file.filename.rsplit(".", 1)[
+                -1
+            ]  # File extension (should be 'pdf')
 
             # Check if a document with the same name and type already exists
             existing_document = (
@@ -118,9 +125,11 @@ def admin():
 
             if existing_document:
                 return (
-                    jsonify({
-                        "error": f"A document named '{uploaded_file.filename}' already exists."
-                    }),
+                    jsonify(
+                        {
+                            "error": f"A document named '{uploaded_file.filename}' already exists."
+                        }
+                    ),
                     409,
                 )
 
@@ -138,26 +147,33 @@ def admin():
             process_doc(new_document)
 
             return (
-                jsonify({
-                    "message": f"File '{uploaded_file.filename}' uploaded successfully!", "document": {
-                        "id": new_document.id,
-                        "name": file_name,
-                        "type": file_type,
-                        "size": len(new_document.file_contents)
-                        }
-                        }),
+                jsonify(
+                    {
+                        "message": f"File '{uploaded_file.filename}' uploaded successfully!",
+                        "document": {
+                            "id": new_document.id,
+                            "name": file_name,
+                            "type": file_type,
+                            "size": len(new_document.file_contents),
+                        },
+                    }
+                ),
                 200,
             )
         else:
             return (
-                jsonify({
-                    "error": "Invalid form data. Please ensure all fields are filled correctly."
-                }),
+                jsonify(
+                    {
+                        "error": "Invalid form data. Please ensure all fields are filled correctly."
+                    }
+                ),
                 400,
             )
 
     documents = db.session.query(Document).all()
-    return render_template("main/admin.html", user=current_user, documents=documents, upload_form=form)
+    return render_template(
+        "main/admin.html", user=current_user, documents=documents, upload_form=form
+    )
 
 
 @bp.route("/delete/<int:item_id>", methods=["DELETE"])
@@ -214,8 +230,14 @@ def delete_item(item_id):
 
     except Exception as e:
         db.session.rollback()  # Rollback changes on failure
-        return jsonify({'success': False, 'message': 'Failed to delete item', 'error': str(e)}), 500
-    
+        return (
+            jsonify(
+                {"success": False, "message": "Failed to delete item", "error": str(e)}
+            ),
+            500,
+        )
+
+
 @bp.route("/download/<int:item_id>", methods=["GET"])
 def download_document(item_id):
     """
@@ -239,22 +261,33 @@ def download_document(item_id):
 
         # Send an error if the document could not be found
         if not document:
-            return jsonify({'success': False, 'message': f'Item {item_id} not found'}), 404
+            return (
+                jsonify({"success": False, "message": f"Item {item_id} not found"}),
+                404,
+            )
 
         # Gets the fullname by combining the name and the type
         filename = f"{document.document_name}.{document.document_type}"
-        
+
         # Sends the document with the proper name and the content of the file for download
         return send_file(
             BytesIO(document.file_contents),
             mimetype="application/pdf",
             download_name=filename,
-            as_attachment=True
+            as_attachment=True,
         )
 
     except Exception as e:
-        return jsonify({'success': False, 'message': 'Failed to download document', 'error': str(e)}), 500
-
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Failed to download document",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
 
 
 @bp.route("/test", methods=["GET"])
@@ -268,6 +301,7 @@ def test():
         return jsonify({"message": f"Hello: {user.username}"}), 200
     else:
         return jsonify({"message": "No one is here :()."}), 200
+
 
 """
 @bp.route("/upload", methods=["GET", "POST"])
@@ -359,6 +393,7 @@ def upload_pdf():
 
     """
 
+
 @bp.route("/chat", methods=["POST"])
 def chat_message():
     try:
@@ -370,16 +405,15 @@ def chat_message():
         if not data or "conversationHistory" not in data:
             return jsonify({"error": "conversationHistory is required"}), 400
 
+        if not data or "doc_toggle" not in data:
+            return jsonify({"error": "doc_toggle is required"}), 400
+
+        if "stored_context" not in data:
+            return jsonify("error", {"error": "stored_context is required"}), 400
+
+        print("doc_toggle value:", data["doc_toggle"], flush=True)
+
         user_message = data["message"]
-
-        history = ChatMessageHistory()
-
-        for chat in data["conversationHistory"]:
-            if chat["sender"] == "User":
-                history.add_user_message(chat["text"])
-            elif chat["sender"] == "Chatbot":
-                history.add_ai_message(chat["text"])
-        print("Chat History:", history.messages, flush=True)
 
         # Getting the documentation (chunks) based on the query
         Documents = query_database(user_message)
@@ -412,28 +446,48 @@ def chat_message():
                 200,
             )
 
+        history = ChatMessageHistory()
+
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+        print("Chat History:", history.messages, flush=True)
+
         # Joining the filtered chunks together
         context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
 
         # Using the LLM to generate a response based on the context and user message
         # Defined prompt template that is used when sending the LLM each query, to help refine answers
+
+        system_message = (
+            "You are a Retrieval Augmented Generation (RAG) model.\n"
+            "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+            "You are not allowed to make up information.\n"
+        )
+
+        if data["doc_toggle"] is False:
+            system_message += (
+                "You are not allowed to answer questions that are not in the context.\n"
+                "You are only to answer questions based on the provided context.\n"
+                "If a question is not in the context, you should say 'I don't know'.\n"
+            )
+
+        system_message += (
+            "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
+            "---\n"
+            "Context:\n{context}\n"  # Insert relevent documents as 'context'
+            "---"
+        )
+
         prompt_template = ChatPromptTemplate.from_messages(
             [
-                (
-                    "system", # System message to set the context for the model
-                    "You are a Retrieval Augmented Generation (RAG) model.\n"
-                    "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
-                    "You are only to answer questions based on the provided context.\n"
-                    "You are not allowed to make up information.\n"
-                    "You are not allowed to answer questions that are not in the context.\n"
-                    "If a question is not in the context, you should say 'I don't know'.\n"
-                    "Please give all responses in markdown (.md) format.\n" # Markdown format for better readability
-                    "---\n"
-                    "Context:\n{context}\n" # Insert relevent documents as 'context'
-                    "---",
-                ),
-                MessagesPlaceholder(variable_name="history"), # Insert conversation history
-                ("human", "{user_message}"), # Insert user query
+                ("system", system_message),  # System message to set the context
+                MessagesPlaceholder(
+                    variable_name="history"
+                ),  # Insert conversation history
+                ("human", "{user_message}"),  # Insert user query
             ]
         )
 
@@ -463,30 +517,196 @@ def chat_message():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
-from flask import request, flash, redirect, render_template, url_for
-from werkzeug.security import check_password_hash, generate_password_hash
+# Dictionary to keep track of active sessions by their socket ID
+active_sessions = {}
+
+
+# This event handler listens for 'chat' events from clients
+@socketio.on("chat")
+def handle_chat(data):
+    try:
+        # Get the socket ID for the current session
+        sid = request.sid
+        active_sessions[sid] = True  # Mark session as active
+
+        # Check if 'message' is present in the incoming data, else return an error
+        if not data or "message" not in data:
+            emit("error", {"error": "Message is required"})
+            return
+
+        # Check if 'conversationHistory' is present in the incoming data, else return an error
+        if "conversationHistory" not in data:
+            emit("error", {"error": "conversationHistory is required"})
+            return
+
+        if "doc_toggle" not in data:
+            emit("error", {"error": "doc_toggle is required"})
+            return
+
+        if "stored_context" not in data:
+            emit("error", {"error": "stored_context is required"})
+            return
+
+        # Extract user message from incoming data
+        user_message = data["message"]
+        doc_toggle = data["doc_toggle"]
+
+        # Query the database using the user message to find relevant documents
+        Documents = query_database(user_message)
+
+        # Filter documents that have a score of 0.5 or greater
+        filtered_docs = [(doc, score) for doc, score in Documents if score >= 0.5]
+
+        # If no relevant documents are found, notify the user
+        if not filtered_docs and doc_toggle is False:
+            emit("chunk", {"chunk": "No document found"})
+            emit("done", {"status": "complete"})
+            return
+
+        # Initialize history to store conversation context
+        history = ChatMessageHistory()
+
+        # Add previous conversation messages to the history
+        for chat in data["conversationHistory"]:
+            if chat["sender"] == "User":
+                history.add_user_message(chat["text"])
+            elif chat["sender"] == "Chatbot":
+                history.add_ai_message(chat["text"])
+
+        # Prepare the context for the LLM by joining the filtered documents
+        # if doc_toggle is False:
+        #     context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        #     active_sessions[sid] = {"context": context}
+        # else:
+        #     stored_context = active_sessions.get(sid, {}).get("context", "")
+        #     current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+        #     context = f"{stored_context}\n\n---\n\n{current_context}"
+
+        # Prepare the context for the LLM by joining the filtered documents
+        if doc_toggle is False:
+            context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+            stored_context = context  # Store the context for this session
+        else:
+            stored_context = str(data.get("stored_context", ""))
+            current_context = "\n\n---\n\n".join([doc.page_content for doc, _ in filtered_docs])
+
+            # Split stored_context and current_context into chunks
+            stored_chunks = set(stored_context.split("\n\n---\n\n"))
+            current_chunks = set(current_context.split("\n\n---\n\n"))
+
+            # Add only new chunks from current_context to stored_context
+            new_chunks = [chunk for chunk in current_chunks if chunk not in stored_chunks]
+            if new_chunks:
+                context = f"{stored_context}\n\n---\n\n" + "\n\n---\n\n".join(new_chunks)
+            else:
+                context = stored_context  # No new chunks to add
+
+            stored_context = context  # Update stored_context with the appended context
+            # context = f"{stored_context}\n\n---\n\n{current_context}"
+
+        system_message = (
+            "You are a Retrieval Augmented Generation (RAG) model.\n"
+            "You have access to a large set of documents regarding various subjects in BioInformatics.\n"
+            "You are not allowed to make up information.\n"
+        )
+
+        if data["doc_toggle"] is False:
+            system_message += (
+                "You are not allowed to answer questions that are not in the context.\n"
+                "You are only to answer questions based on the provided context.\n"
+                "If a question is not in the context, you should say 'I don't know'.\n"
+            )
+
+        system_message += (
+            "Please give all responses in markdown (.md) format.\n"  # Markdown format for better readability
+            "---\n"
+            "Context:\n{context}\n"  # Insert relevent documents as 'context'
+            "---"
+        )
+
+        # Create a prompt template to guide the LLM's response
+        prompt_template = ChatPromptTemplate.from_messages(
+            [
+                ("system", system_message),
+                MessagesPlaceholder(variable_name="history"),
+                ("human", "{user_message}"),
+            ]
+        )
+
+        # Chain the prompt template with the LLM
+        chain = prompt_template | llm
+
+        # Stream the response from the LLM
+        for chunk in chain.stream(
+            {
+                "context": context,
+                "history": history.messages,
+                "user_message": user_message,
+            }
+        ):
+            # Check if the session has been cancelled, exit early if true
+            if not active_sessions.get(sid):
+                return  # Exit early if cancelled
+            emit("chunk", {"chunk": chunk})  # Emit each chunk of the response
+
+        emit(
+            "stored_context", {"stored_context": stored_context}
+        )  # Emit the stored context
+
+        # Emit the final status once the response is complete
+        emit("done", {"status": "complete"})
+
+    except Exception as e:
+        # If an error occurs, emit the error message
+        emit("error", {"error": str(e)})
+
+    finally:
+        # Clean up the session, remove it from active_sessions
+        active_sessions.pop(request.sid, None)
+
+
+# This event handler listens for 'cancel' events from clients
+@socketio.on("cancel")
+def handle_cancel():
+    # Get the socket ID for the current session
+    sid = request.sid
+    active_sessions[sid] = False  # Mark this session as cancelled
+
+
+@bp.route("/change_password", methods=["GET"])
+@login_required
+def change_password_form():
+    return render_template("main/changepassword.html")
+
 
 @bp.route("/change_password", methods=["POST"])
 @login_required
 def change_password():
-    data = request.get_json()
+    current = request.form.get("current_password")
+    new = request.form.get("new_password")
+    confirm = request.form.get("confirm_password")
 
-    current = data.get("old_password")
-    new = data.get("new_password")
+    if not current or not new or not confirm:
+        flash("Missing required fields.", "error")
+        return redirect(url_for("main.change_password"))
 
-    if not current or not new:
-        return jsonify({"success": False, "message": "Missing required fields."}), 400
+    if new != confirm:
+        flash("New password and confirmation do not match.", "error")
+        return redirect(url_for("main.change_password"))
 
     if not check_password_hash(current_user.password_hash, current):
-        return jsonify({"success": False, "message": "Current password is incorrect."}), 400
+        flash("Current password is incorrect.", "error")
+        return redirect(url_for("main.change_password"))
 
     if new == current:
-        return jsonify({"success": False, "message": "New password cannot be the same as the current password."}), 400
+        flash("New password cannot be the same as the current password.", "error")
+        return redirect(url_for("main.change_password"))
 
     current_user.password_hash = generate_password_hash(new)
     db.session.commit()
 
-    return jsonify({"success": True, "message": "Password changed successfully."}), 200
+    flash("Password changed successfully.", "success")
+    return redirect(url_for("main.admin"))
 
 
 @bp.route("/logout")
@@ -496,20 +716,3 @@ def logout():
     logout_user()  # Log out the current user
     db.session.commit()
     return redirect(url_for("main.index"))
-
-
-from app.doc_parsers.parse_pdf import DATA_PATH, load_documents
-from app.doc_parsers.parse_pdf import split_documents
-from app.doc_indexer.index_doc import index_and_add_to_db
-from app.doc_indexer.retrieve_document import query_database
-
-
-@bp.route("/test_indexing", methods=["GET"])
-def test_indexing():
-    documents = load_documents(DATA_PATH)
-    chunks = split_documents(documents)
-    index_and_add_to_db(chunks)
-    doc = query_database("cell cycle")
-    print(doc)
-
-    return {"awesome": "it works :)", "doc": f"{doc[0][0].page_content}"}, 200
