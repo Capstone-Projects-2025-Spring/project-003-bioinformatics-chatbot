@@ -507,10 +507,11 @@ function App() {
 	 * clears the session storage. 
 	 */
 	const handleNewChat = () => {
+		handleCancel();
 		setMessages([]);
 		setInput("");
 		setEditIndex(null);
-		sessionStorage.removeItem("messages");
+		sessionStorage.removeItem("messages"); 
 	};
 	
 
@@ -704,6 +705,7 @@ function App() {
 							</div>
 
 
+
 			{/* ─── New Chat Button, LOGO, and Title ───────────────────────── */}
 			<div className="flex justify-end p-4">
 				
@@ -765,6 +767,7 @@ function App() {
 					New Chat
 				</button>
 			</div>
+
 
 
 			{messages.length == 0 ? (
