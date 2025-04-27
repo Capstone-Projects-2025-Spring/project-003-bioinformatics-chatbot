@@ -46,6 +46,8 @@ def test_cancel_chat_session(app, socketio_client, monkeypatch):
                 {"sender": "Chatbot", "text": "DNA is..."},
             ],
             "message": "Tell me more about DNA replication",
+            "doc_toggle": False, 
+            "stored_context": "This is stored context.",
         },
     )
 
