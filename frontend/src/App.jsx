@@ -704,18 +704,6 @@ function App() {
 							)}
 							</div>
 
-
-			<div className="flex justify-end p-4">
-					<button
-						data-testid="newChatButton"
-						onClick={handleNewChat}
-						className="bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white px-4 py-2 rounded-xl transition"
-					>
-					New Chat
-				</button>
-			</div>
-
-
 			{messages.length == 0 ? (
 				<main className='flex-1 overflow-y-auto'>
 					<div className='min-h-screen flex flex-col items-center px-10 justify-start lg:justify-center'>
