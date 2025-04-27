@@ -22,6 +22,7 @@ vi.mock("socket.io-client", () => ({
   })),
 }));
 
+
 describe("Chat Page", () => {
   // Runs before each test to set up mock functions
   beforeEach(() => {
@@ -202,36 +203,80 @@ describe("Chat Page", () => {
     fireEvent.change(inputField, { target: { value: "Second message" } });
     fireEvent.click(submitButton);
 
-    // ✅ Ensure the second message does NOT appear in the chat history (scoped to message container)
+    // Ensure the second message does NOT appear in the chat history (scoped to message container)
     const container = screen.getByTestId("messageContainer");
     expect(within(container).queryByText("Second message")).toBeNull();
   });
 
   it("submits a message then cancels the session", async () => {
-    render(<App />);
+	render(<App />);
+  
+	const inputField = screen.getByTestId("input");
+	const submitButton = screen.getByTestId("submitButton");
+  
+	// Submit a message
+	fireEvent.change(inputField, { target: { value: "Test cancel flow" } });
+	fireEvent.click(submitButton);
+  
+	const spinner = await screen.findByTestId("spinner");
+	expect(spinner).toBeInTheDocument();
+  
+	// Click the cancel button
+	const cancelButton = screen.getByTestId("cancelButton");
+	fireEvent.click(cancelButton);
+  
+	// Assertions
+	expect(emitMock).toHaveBeenCalledWith("cancel");
+	expect(disconnectMock).toHaveBeenCalled();
+  
+	// Spinner should disappear
+	await waitFor(() => {
+	  expect(screen.queryByTestId("spinner")).toBeNull();
+	});
+  });
 
-    const inputField = screen.getByTestId("input");
-    const submitButton = screen.getByTestId("submitButton");
-
-
-    // Submit a message
-    fireEvent.change(inputField, { target: { value: "Test cancel flow" } });
-    fireEvent.click(submitButton);
-
-    const spinner = await screen.findByTestId("spinner");
-    expect(spinner).toBeInTheDocument();
-
-    // Click the cancel button
-    const cancelButton = screen.getByTestId("cancelButton");
-    fireEvent.click(cancelButton);
-
-    // Assertions
-    expect(emitMock).toHaveBeenCalledWith("cancel");
-    expect(disconnectMock).toHaveBeenCalled();
-
-    // Spinner should disappear
-    await waitFor(() => {
-      expect(screen.queryByTestId("spinner")).toBeNull();
-    });
+  it("clears state and stops loading when New Chat is clicked", async () => {
+	// Set up mocks for sessionStorage and loading state
+	Storage.prototype.getItem = vi.fn(() =>
+	  JSON.stringify([
+		{ id: 1, text: "Old question", type: "Question" },
+		{ id: 2, text: "Old answer", type: "Response" },
+	  ])
+	);
+	const removeItemMock = vi.fn();
+	Storage.prototype.removeItem = removeItemMock;
+  
+	render(<App />);
+  
+	// Type a message to simulate activity
+	const inputField = screen.getByTestId("input");
+	const submitButton = screen.getByTestId("submitButton");
+  
+	fireEvent.change(inputField, { target: { value: "Hello" } });
+	fireEvent.click(submitButton);
+  
+	// Spinner should appear
+	expect(await screen.findByTestId("spinner")).toBeInTheDocument();
+  
+	// Click New Chat
+	const newChatButton = screen.getByTestId("newChatButton");
+	fireEvent.click(newChatButton);
+  
+	// Spinner should disappear
+	await waitFor(() => {
+	  expect(screen.queryByTestId("spinner")).not.toBeInTheDocument();
+	});
+  
+	// Input should be cleared
+	expect(screen.getByTestId("input").value).toBe("");
+  
+	// Messages should be cleared
+	expect(screen.queryByText("Old question")).not.toBeInTheDocument();
+	expect(screen.queryByText("Old answer")).not.toBeInTheDocument();
+  
+	// Ensure session was cleared and socket was disconnected
+	expect(removeItemMock).toHaveBeenCalledWith("messages");
+	expect(emitMock).toHaveBeenCalledWith("cancel");
+	expect(disconnectMock).toHaveBeenCalled();
   });
 });

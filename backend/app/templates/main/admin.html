@@ -60,17 +60,19 @@
                     newRow.setAttribute("id", `row-${doc.id}`);
                     newRow.className = "hover:bg-purple-900";
                     newRow.innerHTML = `
-                    <td class="px-4 py-2 border border-white">${doc.id}</td>
-                    <td class="px-4 py-2 border border-white">${doc.name}</td>
-                    <td class="px-4 py-2 border border-white">${doc.type}</td>
-                    <td class="px-4 py-2 border border-white">${doc.size}</td>
-                    <td class="px-4 py-2 border border-white space-x-2">
+                    <td class="w-[75px] px-4 py-2 border border-white">${doc.id}</td>
+                    <td class="w-[260px] px-4 py-2 border border-white truncate whitespace-nowrap overflow-hidden" title="${doc.name}"> ${doc.name} </td>
+                    <td class="w-[90px] px-4 py-2 border border-white">${doc.type}</td>
+                    <td class="w-[120px] px-4 py-2 border border-white">${doc.size}</td>
+                    <td class="w-[175px] px-4 py-2 border border-white">
+                    <div class="flex flex-wrap gap-2">
                         <button onclick="deleteItem('${doc.id}')" class="bg-[#f56b87] hover:bg-pink-600 text-white px-3 py-1 rounded transition">Delete</button>
-                        <a href="/download/${doc.id}">
-                            <button class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
-                        </a>
-                    </td>
-                `;
+                    <a href="/download/${doc.id}">
+                        <button class="bg-white text-indigo-700 hover:bg-[#e6eaff] px-3 py-1 rounded transition">Download</button>
+            </a>
+        </div>
+    </td>
+`;
                     table.appendChild(newRow);
 
                     resetFileInput();
