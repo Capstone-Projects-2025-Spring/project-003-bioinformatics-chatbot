@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Testing Setup 
 1. Install and Open Docker Desktop and Vscode
-2. Download and unzip the source code in the most recent [project release](github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest)
+2. Download and unzip the source code in the most recent [project release](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest).
 3. In Vscode open the project file after you unzip, in the backend folder create .env file and database.env
 4. In the .env file put this
 ```
