@@ -52,7 +52,7 @@ The system utilizes PostgreSQL for structured data management and PGVector for e
   
 ## Large Language Model (LLM)
 
-#### **Technology: DeepSeek / Llama**
+#### **Technology: Llama**
 The LLM generates answers by processing the prompt constructed using retrieved documents.  
 
 #### **Key Features:**

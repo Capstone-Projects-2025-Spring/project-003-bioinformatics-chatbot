@@ -117,6 +117,8 @@ Doucumentation of Backend API From Flask Server
   - On missing fields:
     - `"error"` with `{ "error": "Message is required" }`
     - `"error"` with `{ "error": "conversationHistory is required" }`
+    - `"error"` with `{ "error": "doc_toggle is required" }`
+    - `"error"` with `{ "error": "stored_context is required" }`
   - If no documents found:
     - `"chunk"` with `{ "chunk": "No document found" }`
     - `"done"` with `{ "status": "complete" }`

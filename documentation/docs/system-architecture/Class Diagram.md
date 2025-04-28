@@ -266,7 +266,7 @@ The database stores indexed documents and enables efficient retrieval based on u
 
 ## Large Language Model (LLM)
 
-### **Technology: DeepSeek / Llama**
+### **Technology: Llama**
 The LLM generates answers by processing the prompt constructed using retrieved documents.  
 
 #### **Key Features:**
