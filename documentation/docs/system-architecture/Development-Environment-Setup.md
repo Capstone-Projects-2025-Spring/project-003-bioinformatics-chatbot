@@ -10,7 +10,7 @@ This document shows to setup the Development Enviroment locally.
 Note: You will need to add your own Document for the Chatbot to work
 
 1. Install and Open Docker Desktop and your prefered text editor (i.e VsCode)
-2. Download and unzip the source code in the most recent [project release](github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest)
+2. Download and unzip the source code in the most recent [project release](https://github.com/Capstone-Projects-2025-Spring/project-003-bioinformatics-chatbot/releases/latest).
 3. In your text editor open the project file after you unzip, in the backend folder create .env file and database.env
 4. In the .env file put this
 ```
