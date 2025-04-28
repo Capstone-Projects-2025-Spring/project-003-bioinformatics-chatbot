@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.3.2">
 <title data-rh="true">Backend-API | BioGenie</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Backend-API | BioGenie"><meta data-rh="true" name="description" content="Doucumentation of Backend API From Flask Server"><meta data-rh="true" property="og:description" content="Doucumentation of Backend API From Flask Server"><link data-rh="true" rel="icon" href="/project-003-bioinformatics-chatbot/img/BioGenie.svg"><link data-rh="true" rel="canonical" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API" hreflang="en"><link data-rh="true" rel="alternate" href="https://Capstone-Projects-2025-Spring.github.io/project-003-bioinformatics-chatbot/docs/api-specification/Backend-API" hreflang="x-default"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script><link rel="stylesheet" href="/project-003-bioinformatics-chatbot/assets/css/styles.8c7eebe5.css">
-<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.119be4d9.js" defer="defer"></script>
+<script src="/project-003-bioinformatics-chatbot/assets/js/runtime~main.dee1274d.js" defer="defer"></script>
 <script src="/project-003-bioinformatics-chatbot/assets/js/main.ce63af9d.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -103,7 +103,9 @@
 <li>if an exception occurs: <code>{ &quot;error&quot;: &quot;An error occurred: &lt;error details&gt;&quot; }</code></li>
 </ul>
 </li>
-</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketonchat"><code>socket.on(&quot;chat&quot;)</code><a href="#socketonchat" class="hash-link" aria-label="Direct link to socketonchat" title="Direct link to socketonchat">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+</ul></div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketonchat"><code>socket.on(&quot;chat&quot;)</code><a href="#socketonchat" class="hash-link" aria-label="Direct link to socketonchat" title="Direct link to socketonchat">​</a></h3>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Handles incoming chat messages from the client, streams an AI-generated response based on retrieved documents.</li>
 <li><strong>Parameters:</strong>
 <ul>
@@ -149,7 +151,9 @@
 </li>
 </ul>
 </li>
-</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketoncancel"><code>socket.on(&quot;cancel&quot;)</code><a href="#socketoncancel" class="hash-link" aria-label="Direct link to socketoncancel" title="Direct link to socketoncancel">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+</ul></div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="socketoncancel"><code>socket.on(&quot;cancel&quot;)</code><a href="#socketoncancel" class="hash-link" aria-label="Direct link to socketoncancel" title="Direct link to socketoncancel">​</a></h3>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Cancels an ongoing chat session.</li>
 <li><strong>Parameters:</strong>
 <ul>
@@ -161,7 +165,9 @@
 <li>Marks the current session as cancelled, stopping any ongoing response streaming.</li>
 </ul>
 </li>
-</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-change_password"><code>GET /change_password</code><a href="#get-change_password" class="hash-link" aria-label="Direct link to get-change_password" title="Direct link to get-change_password">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+</ul></div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-change_password"><code>GET /change_password</code><a href="#get-change_password" class="hash-link" aria-label="Direct link to get-change_password" title="Direct link to get-change_password">​</a></h3>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Displays the change password form.</li>
 <li><strong>Parameters:</strong>
 <ul>
@@ -173,7 +179,9 @@
 <li>Renders the <code>changepassword.html</code> page containing the password change form.</li>
 </ul>
 </li>
-</ul></div></div></details><h3 class="anchor anchorWithStickyNavbar_LWe7" id="post-change_password"><code>POST /change_password</code><a href="#post-change_password" class="hash-link" aria-label="Direct link to post-change_password" title="Direct link to post-change_password">​</a></h3><details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
+</ul></div></div></details>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="post-change_password"><code>POST /change_password</code><a href="#post-change_password" class="hash-link" aria-label="Direct link to post-change_password" title="Direct link to post-change_password">​</a></h3>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Handles password change request.</li>
 <li><strong>Parameters:</strong>
 <ul>
@@ -212,7 +220,7 @@
 <li>All errors redirect back to the password change form.</li>
 </ul>
 </li>
-</ul></div></div></details></div></div></details>
+</ul></div></div></details>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="get-logout"><code>GET /logout</code><a href="#get-logout" class="hash-link" aria-label="Direct link to get-logout" title="Direct link to get-logout">​</a></h3>
 <details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Details</summary><div><div class="collapsibleContent_i85q"><ul>
 <li>Logs the user out by redirecting to the login page.</li>
