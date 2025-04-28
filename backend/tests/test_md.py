@@ -49,22 +49,28 @@ def test_md(mock_query_database, client, app):
             response = client.post(
                 "/admin", data=data, content_type="multipart/form-data"
             )
-
     response = client.post(
-        "/chat", json={"message": "Tell me about DNA", "conversationHistory": []}
+        "/chat", json={"message": "Tell me about DNA", "conversationHistory": [],  "doc_toggle": False, "stored_context": ""}
     )
     content = response.get_data(as_text=True)
-    print(content)
+    content = content.strip()
+    content = content.replace("\r\n", "\n")  # Normalize line endings
+    print(repr(content))
     md_format = False
     patterns = [
-        r"^\s*#+\s",  # Headers (allow leading spaces)
-        r"(\*\*|__)(.*?)\1",  # Bold text
-        r"(\*|_)(.*?)\1",  # Italic text
-        r"!?\[(.*?)\]\((.*?)\)",  # Images and links
-        r"`(.*?)`",  # Inline code
-        r"^-{3,}$",  # Horizontal rules
-        r"^\s*[-*\+]\s",  # Lists
-        r">",  # Blockquotes
+        r"^\s*#+\s",                    # Headers (allow leading spaces)
+        r"(\*\*|__)(.*?)\1",            # Bold text
+        r"(\*|_)(.*?)\1",               # Italic text
+        r"!?\[(.*?)\]\((.*?)\)",        # Images and links
+        r"`(.*?)`",                     # Inline code
+        r"^-{3,}$",                     # Horizontal rules
+        r"^\s*[-*\+]\s",                # Lists
+        r">",                           # Blockquotes
+        r"^\s*\d+\.\s",                 # Numbered lists
+        r"^```",                        # Fenced code blocks
+        r"^\|(.+)\|$",                  # Tables
+        r"\$\$(.*?)\$\$|\$(.*?)\$",     # Inline or block math
+        r"<[^>]+>",                     # HTML tags
     ]
     for pattern in patterns:
         if re.search(pattern, content, re.M):
@@ -76,4 +82,3 @@ def test_md(mock_query_database, client, app):
     # except Exception as e:
     #     pytest.fail(f"Markdown conversion failed: {e}")
     # assert response.status_code == 200
-

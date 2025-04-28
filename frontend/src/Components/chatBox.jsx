@@ -26,9 +26,6 @@ ChatBox.propTypes = {
 	handleCancel: PropTypes.func.isRequired,
 	editIndex: PropTypes.number,
 	cancelEdit: PropTypes.func.isRequired,
-	handleDownloadtxt: PropTypes.func.isRequired,
-	handleDownloadpdf: PropTypes.func.isRequired,
-	handleDownloaddoc: PropTypes.func.isRequired,
 	loading: PropTypes.bool.isRequired,
 };
 /**
@@ -57,6 +54,7 @@ export default function ChatBox({
 	handleDownloadpdf,
 	handleDownloaddoc,
 	loading,
+	setDocToggle,
 }) {
 	const textareaRef = useRef(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -180,11 +178,30 @@ export default function ChatBox({
 							</svg>
 							{!loading ? (
 								<h1 className='text-sm sm:text-lg font-bold text-primary font-heading mr-1'>
-									BioGenie
+									
 								</h1>
 							) : (
 								<LoadingSpinner />
 							)}
+							<label
+								data-testid='toggleButton' 
+								className="inline-flex items-center me-5 cursor-pointer ml-4">
+  								<input
+									type='checkbox'
+									value=''
+									className='sr-only peer'
+									onChange={(e) => {
+										console.log("Toggle state:", e.target.checked); // Debugging
+										setDocToggle(e.target.checked);
+									}}
+								/>
+								<div 
+									className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-primary dark:peer-focus:ring-primary peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600 dark:peer-checked:bg-purple-600">
+								</div>
+								<span className="ms-3 text-medium font-bold text-primary dark:text-primary flex items-center">
+									Reuse Document Context
+								</span>
+							</label>
 						</div>
 
 						<div className='flex items-center gap-2'>
@@ -230,106 +247,7 @@ export default function ChatBox({
 									</svg>
 								</button>
 							)}
-							{isDialogOpen && (
-								<div className='flex items-center gap-2'>
-									<button
-										data-testid='downloadButtontxt'
-										onClick={(e) => {
-											e.preventDefault(); // Prevent the default behavior
-											handleDownloadtxt();
-										}}
-										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
-										<svg
-											xmlns='http://www.w3.org/2000/svg'
-											viewBox='0 0 32 32'
-											className='size-5 text-white'>
-											<path
-												fill='currentColor'
-												d='M21 11h3v12h2V11h3V9h-8zm-1-2h-2l-2 6l-2-6h-2l2.75 7L12 23h2l2-6l2 6h2l-2.75-7zM3 11h3v12h2V11h3V9H3z'></path>
-										</svg>
-									</button>
-									<button
-										data-testid='downloadButtonpdf'
-										onClick={(e) => {
-											e.preventDefault(); // Prevent the default behavior
-											handleDownloadpdf();
-										}}
-										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
-										<svg
-											xmlns='http://www.w3.org/2000/svg'
-											viewBox='0 0 32 32'
-											className='size-5 text-white'>
-											<path
-												fill='currentColor'
-												d='M30 11V9h-8v14h2v-6h5v-2h-5v-4zM8 9H2v14h2v-5h4a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2m0 7H4v-5h4zm8 7h-4V9h4a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4m-2-2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2z'></path>
-										</svg>
-									</button>
-									<button
-										data-testid='downloadButtondoc'
-										onClick={(e) => {
-											e.preventDefault(); // Prevent the default behavior
-											handleDownloaddoc();
-										}}
-										className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
-										<svg
-											xmlns='http://www.w3.org/2000/svg'
-											viewBox='0 0 32 32'
-											className='size-5 text-white'>
-											<path
-												fill='currentColor'
-												d='M30 23h-6a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2h6v2h-6v10h6zm-12 0h-4a2 2 0 0 1-2-2V11a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2m-4-12v10h4V11zM6 23H2V9h4a4.005 4.005 0 0 1 4 4v6a4.005 4.005 0 0 1-4 4m-2-2h2a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H4z'></path>
-										</svg>
-									</button>
-								</div>
-							)}
-							{isDialogOpen ? (
-								<button
-									onClick={(e) => {
-										e.preventDefault(); // Prevent the default behavior
-										setIsDialogOpen(false);
-									}}
-									className='bg-primary text-white hover:bg-accent p-2 rounded-full transition duration-200'>
-									<svg
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'
-										strokeWidth={1.5}
-										stroke='currentColor'
-										className='size-5'>
-										<path
-											strokeLinecap='round'
-											strokeLinejoin='round'
-											d='M6 18 18 6M6 6l12 12'
-										/>
-									</svg>
-								</button>
-							) : (
-								<button
-									data-testid='downloadButton'
-									onClick={(e) => {
-										e.preventDefault(); // prevent form submission
-										setIsDialogOpen(true); // or whatever this function does
-									}}
-									className='group relative flex items-center bg-primary text-white p-2 rounded-full overflow-hidden transition-all duration-300 hover:bg-accent'>
-									<svg
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'
-										strokeWidth={1.5}
-										stroke='currentColor'
-										className='size-5 text-white'>
-										<path
-											strokeLinecap='round'
-											strokeLinejoin='round'
-											d='M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0-3.75-3.75M17.25 21 21 17.25'
-										/>
-									</svg>
-
-									<span className='text-sm max-w-0 overflow-hidden opacity-0 group-hover:max-w-[150px] group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap group-hover:ml-1 group-hover:mr-2'>
-										Download Chat
-									</span>
-								</button>
-							)}
+							
 						</div>
 					</div>
 				</div>
