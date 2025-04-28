@@ -101,7 +101,7 @@ Doucumentation of Backend API From Flask Server
    - if no message is provided: `{ "error": "Message is required" }` 
    - if no conversation history is provided: `{ "error": "conversationHistory is required" }` 
    - if an exception occurs: `{ "error": "An error occurred: <error details>" }`
-
+</details>
 
 ### `socket.on("chat")`
 <details open="true"> 
@@ -176,7 +176,6 @@ Doucumentation of Backend API From Flask Server
 
 </details>
 
-</details>
 		
 ### `GET /logout`
 <details open="True"> 
